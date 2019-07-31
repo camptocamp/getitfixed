@@ -1,0 +1,12 @@
+# Python bytecode
+*.pyc
+
+# Translations
+*.mo
+*.pot
+*.po~
+
+*.egg-info
+
+.build/
+node_modules

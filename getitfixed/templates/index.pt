@@ -1,0 +1,7 @@
+<metal:page tal:define="site load: site.pt" metal:use-macro="site">
+  <metal:content metal:fill-slot="content">
+    <metal:table tal:define="grid load: c2cgeoform:/templates/grid.pt">
+      <div metal:use-macro="grid">Here goes the table</div>
+    </metal:table>
+  </metal:content>
+</metal:page>

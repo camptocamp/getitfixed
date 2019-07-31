@@ -1,0 +1,169 @@
+<?python from translationstring import TranslationStringFactory ?>
+<form
+  tal:define="style style|field.widget.style;
+              css_class css_class|string:${field.widget.css_class or field.css_class or ''};
+              item_template item_template|field.widget.item_template;
+              autocomplete autocomplete|field.autocomplete;
+              title title|field.title;
+              errormsg errormsg|field.errormsg;
+              description description|field.description;
+              buttons buttons|field.buttons;
+              use_ajax use_ajax|field.use_ajax;
+              ajax_options ajax_options|field.ajax_options;
+              formid formid|field.formid;
+              action action|field.action or None;
+              method method|field.method;
+              _ TranslationStringFactory('pully');"
+  tal:attributes="autocomplete autocomplete;
+                  style style;
+                  class css_class;
+                  action action;"
+  id="${formid}"
+  method="${method}"
+  enctype="multipart/form-data"
+  accept-charset="utf-8"
+  i18n:domain="deform"
+  >
+    <input type="hidden" name="_charset_" />
+    <input type="hidden" name="__formid__" value="${formid}"/>
+    <input type="hidden" name="__custom_data__" id="${formid}_custom_data" value="${custom_data}"/>
+    <input type="hidden" name="__only_validate__" id="${formid}_only_validate" value="1"/>
+
+    <div id="${formid}_error" class="alert alert-danger" tal:condition="field.error">
+      <div class="error-msg-lbl" i18n:translate="">There was a problem with your submission</div>
+      <div class="error-msg-detail" i18n:translate="">Errors have been highlighted below</div>
+      <p class="error-msg">${field.errormsg}</p>
+    </div>
+
+    <p class="section first" tal:condition="description">
+      ${description}
+    </p>
+
+    <div id="steps-${formid}">
+
+    <h3 i18n:domain="pully" i18n:translate="">Basic</h3>
+    <section>
+      <div tal:replace="structure field['id'].render_template(item_template)"/>
+      <div tal:replace="structure field['request_date'].render_template(item_template)"/>
+      <div tal:replace="structure field['description'].render_template(item_template)"/>
+      <div tal:replace="structure field['motif'].render_template(item_template)"/>
+      <div tal:replace="structure field['situations'].render_template(item_template)"/>
+      <div tal:replace="structure field['contact_persons'].render_template(item_template)"/>
+    </section>
+
+    <h3 i18n:domain="pully" i18n:translate="">Location</h3>
+    <section>
+      <div tal:replace="structure field['location_district_id'].render_template(item_template)"/>
+      <div tal:replace="structure field['location_street'].render_template(item_template)"/>
+      <div class="row">
+        <div class="col-xs-2">
+          <div tal:replace="structure field['location_postal_code'].render_template(item_template)"/>
+        </div>
+        <div class="col-xs-5">
+          <div tal:replace="structure field['location_town'].render_template(item_template)"/>
+        </div>
+      </div>
+      <div tal:replace="structure field['address_id'].render_template(item_template)"/>
+      <div tal:replace="structure field['location_position'].render_template(item_template)"/>
+    </section>
+
+    <h3 i18n:domain="pully" i18n:translate="">Person in Charge for the Work</h3>
+    <section>
+      <div class="row">
+        <div class="col-xs-2">
+          <div tal:replace="structure field['responsible_title'].render_template(item_template)"/>
+        </div>
+        <div class="col-xs-4">
+          <div tal:replace="structure field['responsible_name'].render_template(item_template)"/>
+        </div>
+        <div class="col-xs-4">
+          <div tal:replace="structure field['responsible_first_name'].render_template(item_template)"/>
+        </div>
+      </div>
+      <div tal:replace="structure field['responsible_company'].render_template(item_template)"/>
+      <div tal:replace="structure field['responsible_mobile'].render_template(item_template)"/>
+      <div tal:replace="structure field['responsible_mail'].render_template(item_template)"/>
+    </section>
+
+    <h3 i18n:domain="pully" i18n:translate="">Footprint</h3>
+    <section>
+      <div tal:replace="structure field['work_footprint'].render_template(item_template)"/>
+      <div tal:replace="structure field['photos'].render_template(item_template)"/>
+    </section>
+    </div>
+
+    <div class="form-group" tal:condition="False">
+      <tal:loop tal:repeat="button buttons">
+        <button
+              tal:define="btn_disposition repeat.button.start and 'btn-primary' or 'btn-default';
+              btn_icon button.icon|None"
+              tal:attributes="disabled button.disabled if button.disabled else None"
+              id="${formid+button.name}"
+              name="${button.name}"
+              type="${button.type}"
+              class="btn ${btn_disposition} ${button.css_class}"
+              value="${button.value}">
+          <i tal:condition="btn_icon" class="${btn_icon}"> </i>
+          ${button.title}
+        </button>
+      </tal:loop>
+    </div>
+
+
+  <script type="text/javascript" tal:condition="use_ajax">
+   deform.addCallback(
+     '${formid}',
+     function(oid) {
+       var target = '#' + oid;
+       var options = {
+         target: target,
+         replaceTarget: true,
+         success: function() {
+           deform.processCallbacks();
+           deform.focusFirstInput(target);
+         },
+         beforeSerialize: function() {
+           // See http://bit.ly/1agBs9Z (hack to fix tinymce-related ajax bug)
+           if ('tinymce' in window) {
+             $(tinymce.get()).each(
+               function(i, el) {
+                 var content = el.getContent();
+                 var editor_input = document.getElementById(el.id);
+                 editor_input.value = content;
+             });
+           }
+         }
+       };
+       var extra_options = ${ajax_options} || {};
+       $('#' + oid).ajaxForm($.extend(options, extra_options));
+     }
+   );
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+      c2cgeoform.steps.init({
+
+        // c2cgeoform.steps specific properties (mandatory)
+        formId: '#${formid}',
+        stepsContainerId: '#steps-${formid}',
+        errorContainerId: '#${formid}_error',
+        customDataFieldId: '#${formid}_custom_data',
+        onlyValidateFieldId: '#${formid}_only_validate',
+
+        // jQuery.steps properties
+        headerTag: 'h3',
+        bodyTag: 'section',
+        labels: {
+          'cancel': '${_('Cancel')}',
+          'current': '${_('current step:')}',
+          'pagination': '${_('Pagination')}',
+          'finish': '${_('Proceed')}',
+          'next': '${_('Next')}',
+          'previous': '${_('Previous')}',
+          'loading': '${_('Loading ...')}'
+        }
+      });
+    });
+  </script>
+
+</form>

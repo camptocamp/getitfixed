@@ -1,0 +1,3 @@
+<metal:page tal:define="site load: site.pt" metal:use-macro="site">
+  <metal:content metal:fill-slot="content">${structure: form}</metal:content>
+</metal:page>

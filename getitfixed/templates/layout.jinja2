@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="{{request.locale_name}}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="pyramid web application">
+    <meta name="author" content="Camptocamp">
+
+    <title>getitfixed</title>
+    <link rel="shortcut icon" href="{{request.static_url('getitfixed:static/favicon.ico')}}">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{request.static_url('getitfixed:node_modules/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table.min.css')}}" rel="stylesheet">
+    <link href="{{request.static_url('getitfixed:node_modules/jquery-steps/demo/css/jquery.steps.css')}}" rel="stylesheet">
+    <link href="{{request.static_url('c2cgeoform:static/theme.css')}}" rel="stylesheet">
+
+    <!-- Deform dependecies CSS -->
+    {% if deform_dependencies %}
+    <link rel="stylesheet" href="{{request.static_url('deform:static/css/form.css')}}" type="text/css" />
+    {% for css in deform_dependencies['css'] %}
+    <link rel="stylesheet" type="text/css" href="{{request.static_url(css)}}"/>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Custom styles for this scaffold -->
+    <link href="{{request.static_url('getitfixed:static/theme.css')}}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js" integrity="sha384-0s5Pv64cNZJieYFkXYOTId2HMA2Lfb6q2nAcx2n0RTLUnCAoTTsS0nKEO27XyKcY" crossorigin="anonymous"></script>
+      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js" integrity="sha384-f1r2UzjsxZ9T4V1f2zBO/evUqSEOpeaUUZcMTz1Up63bl4ruYnFYeM+BxI4NhyI0" crossorigin="anonymous"></script>
+    <![endif]-->
+
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/jquery/dist/jquery.min.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table.min.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table-locale-all.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/jquery.scrollintoview/jquery.scrollintoview.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/jquery-steps/build/jquery.steps.min.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('c2cgeoform:static/js/c2cgeoform.js')}}"></script>
+
+    <!-- Deform JavaScript -->
+    {% if deform_dependencies %}
+    <script type="text/javascript" src="{{request.static_url('deform:static/scripts/deform.js')}}" type="text/css" />
+    {% for js in deform_dependencies['js'] %}
+    <script type="text/javascript" src="{{request.static_url(js)}}"></script>
+    {% endfor %}
+    {% endif %}
+  </head>
+
+  <body>
+
+    {% include 'c2cgeoform:/templates/navigation.jinja2' %}
+
+    {% block content %}
+      <p>No content</p>
+    {% endblock content %}
+
+  </body>
+</html>

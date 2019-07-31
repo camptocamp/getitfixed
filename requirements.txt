@@ -1,0 +1,15 @@
+c2cgeoform
+colander
+ColanderAlchemy>=0.3.2
+geoalchemy2
+plaster_pastedeploy
+psycopg2-binary
+pyproj<2
+pyramid_debugtoolbar
+pyramid_retry
+pyramid_tm
+shapely
+SQLAlchemy
+transaction
+zope.sqlalchemy
+waitress

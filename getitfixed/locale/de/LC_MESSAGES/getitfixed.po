@@ -1,0 +1,190 @@
+#
+# German translations for PACKAGE package
+# German messages for PACKAGE
+# This file is distributed under the same license as the PACKAGE package.
+# Arnaud Morvan <contact@camptocamp.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE 1.0\n"
+"POT-Creation-Date: 2016-02-17 11:07+0100\n"
+"PO-Revision-Date: 2016-01-29 14:19+0100\n"
+"Last-Translator: Arnaud Morvan <contact@camptocamp.com>\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Lingua 4.7\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: getitfixed/models.py:54
+msgid "Contact Person"
+msgstr ""
+
+#: getitfixed/models.py:63
+msgid "First name"
+msgstr ""
+
+#: getitfixed/models.py:67
+msgid "Last name"
+msgstr ""
+
+#: getitfixed/models.py:81 getitfixed/models.py:284
+msgid "Photo"
+msgstr ""
+
+#: getitfixed/models.py:111
+msgid "Application form for permission to carry out excavation work"
+msgstr ""
+
+#: getitfixed/models.py:118
+msgid "Permission Number"
+msgstr ""
+
+#: getitfixed/models.py:128
+msgid "Reference Number"
+msgstr ""
+
+#: getitfixed/models.py:132
+msgid "Request Date"
+msgstr ""
+
+#: getitfixed/models.py:138
+msgid "Description of the Work"
+msgstr ""
+
+#: getitfixed/models.py:143
+msgid "Motive for the Work"
+msgstr ""
+
+#: getitfixed/models.py:153
+msgid "Situation"
+msgstr ""
+
+#: getitfixed/models.py:173
+msgid "Contact Persons"
+msgstr ""
+
+#: getitfixed/models.py:177
+msgid "District"
+msgstr ""
+
+#: getitfixed/models.py:189 getitfixed/models.py:233
+msgid "- Select -"
+msgstr ""
+
+#: getitfixed/models.py:194
+msgid "Street"
+msgstr ""
+
+#: getitfixed/models.py:198
+msgid "Postal Code"
+msgstr ""
+
+#: getitfixed/models.py:202
+msgid "Town"
+msgstr ""
+
+#: getitfixed/models.py:207
+msgid "Address"
+msgstr ""
+
+#: getitfixed/models.py:221
+msgid "Position"
+msgstr ""
+
+#: getitfixed/models.py:230
+msgid "Title"
+msgstr ""
+
+#: getitfixed/models.py:234
+msgid "Mr."
+msgstr ""
+
+#: getitfixed/models.py:235
+msgid "Mrs."
+msgstr ""
+
+#: getitfixed/models.py:240
+msgid "Name"
+msgstr ""
+
+#: getitfixed/models.py:245
+msgid "First Name"
+msgstr ""
+
+#: getitfixed/models.py:250
+msgid "Mobile Phone"
+msgstr ""
+
+#: getitfixed/models.py:254
+msgid "Mail"
+msgstr ""
+
+#: getitfixed/models.py:259
+msgid "Company"
+msgstr ""
+
+#: getitfixed/models.py:264
+msgid "Validation"
+msgstr ""
+
+#: getitfixed/models.py:265
+msgid "Validated"
+msgstr ""
+
+#: getitfixed/models.py:272
+msgid "Footprint for the Work"
+msgstr ""
+
+#: getitfixed/templates/form.pt:33
+msgid "There was a problem with your submission"
+msgstr ""
+
+#: getitfixed/templates/form.pt:34
+msgid "Errors have been highlighted below"
+msgstr ""
+
+#: getitfixed/templates/form.pt:44
+msgid "Basic"
+msgstr ""
+
+#: getitfixed/templates/form.pt:54
+msgid "Location"
+msgstr ""
+
+#: getitfixed/templates/form.pt:70
+msgid "Person in Charge for the Work"
+msgstr ""
+
+#: getitfixed/templates/form.pt:88
+msgid "Footprint"
+msgstr ""
+
+#: getitfixed/templates/form.pt:285
+msgid "Cancel"
+msgstr ""
+
+#: getitfixed/templates/form.pt:285
+msgid "current step:"
+msgstr ""
+
+#: getitfixed/templates/form.pt:285
+msgid "Pagination"
+msgstr ""
+
+#: getitfixed/templates/form.pt:285
+msgid "Proceed"
+msgstr ""
+
+#: getitfixed/templates/form.pt:285
+msgid "Next"
+msgstr ""
+
+#: getitfixed/templates/form.pt:285
+msgid "Previous"
+msgstr ""
+
+#: getitfixed/templates/form.pt:285
+msgid "Loading ..."
+msgstr ""

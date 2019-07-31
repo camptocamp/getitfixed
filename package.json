@@ -1,0 +1,18 @@
+{
+  "name": "getitfixed",
+  "version": "1.0.0",
+  "description": "getitfixed ...",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-table": "1.11.2",
+    "jquery": "^3.2.1",
+    "jquery.scrollintoview": "1.9.4",
+    "jquery-steps": "^1.1.0",
+    "openlayers": "=4.6.5",
+    "typeahead.js": "=0.10.5"
+  }
+}

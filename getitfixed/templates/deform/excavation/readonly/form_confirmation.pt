@@ -1,0 +1,47 @@
+<form
+  tal:define="style style|field.widget.style;
+              css_class css_class|string:${field.widget.css_class or field.css_class or ''};
+              item_template item_template|field.widget.readonly_item_template;
+              title title|field.title;
+              errormsg errormsg|field.errormsg;
+              description description|field.description;
+              buttons buttons|field.buttons;
+              use_ajax use_ajax|field.use_ajax;
+              ajax_options ajax_options|field.ajax_options;
+              formid formid|field.formid;
+              method method|field.method;
+              submission_id submission_id|None"
+  tal:attributes="style style;
+                  class css_class;"
+  id="${formid}"
+  method="${method}"
+  enctype="multipart/form-data"
+  accept-charset="utf-8"
+  i18n:domain="deform"
+  >
+  <input type="hidden" name="__submission_id__" id="${formid}_submission_id" value="${submission_id}"/>
+  <input type="hidden" name="__store_form__" id="${formid}_store_form" value="1"/>
+  <h2 i18n:domain="c2cgeoform" i18n:translate="">Confirmation</h2>
+  <p i18n:domain="c2cgeoform" i18n:translate="">Please confirm your details and submit the form.</p>
+
+  <fieldset class="deform-form-fieldset">
+
+    <legend tal:condition="title">${title}</legend>
+
+    <p class="section first" tal:condition="description">
+      ${description}
+    </p>
+
+    <div tal:repeat="child field"
+         tal:replace="structure child.render_template(item_template)"/>
+
+  </fieldset>
+
+  <div class="form-group">
+    <button id="${formid}_submit" name="submit" type="submit" class="btn btn-primary"
+      i18n:domain="c2cgeoform" i18n:translate="">Submit</button>
+    <a class="btn btn-primary" href="${back_link}"
+       i18n:domain="c2cgeoform" i18n:translate="">Back to form</a>
+  </div>
+
+</form>

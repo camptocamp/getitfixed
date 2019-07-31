@@ -1,0 +1,7 @@
+<metal:page tal:define="site load: site.pt" metal:use-macro="site">
+  <metal:content metal:fill-slot="content">
+    <h3>${_("Edit")}</h3>
+    <p><a href="${request.route_url('c2cgeoform_index')}">${_("Back to overview")}</a></p>
+    ${structure: form}
+  </metal:content>
+</metal:page>
