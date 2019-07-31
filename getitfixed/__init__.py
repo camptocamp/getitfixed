@@ -9,9 +9,6 @@ search_paths = ((resource_filename('getitfixed', 'templates/widgets'),) +
 c2cgeoform.default_search_paths = search_paths
 
 
-def includeme():
-    pass
-
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
