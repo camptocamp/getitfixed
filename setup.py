@@ -7,6 +7,8 @@ with open(os.path.join(here, 'README.txt')) as f:
     README = f.read()
 with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
+with open(os.path.join(here, 'requirements.txt')) as f:
+    REQUIRES = f.read()
 
 setup(name='getitfixed',
       version='0.0',
@@ -26,6 +28,7 @@ setup(name='getitfixed',
       include_package_data=True,
       zip_safe=False,
       test_suite='getitfixed',
+      install_requires=REQUIRES,
       entry_points="""\
       [paste.app_factory]
       main = getitfixed:main
