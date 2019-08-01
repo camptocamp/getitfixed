@@ -1,8 +1,8 @@
 import os
 
 from c2cgeoform.routes import register_application
-from .models.c2cgeoform_demo import (
-    Excavation,
+from getitfixed.models.getitfixed import (
+    Issue,
 )
 
 
@@ -20,6 +20,6 @@ def includeme(config):
     register_application(
         'getitfixed',
         [
-            ('excavations', Excavation)
+            ('issues', Issue)
         ]
     )
