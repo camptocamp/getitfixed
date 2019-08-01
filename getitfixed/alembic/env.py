@@ -72,9 +72,19 @@ def run_migrations_online():
         poolclass=pool.NullPool,
     )
 
+    def include_object(obj, name, type_, reflected, compare_to):  # pylint: disable=unused-argument
+        if type_ == 'table':
+            return obj.schema == conf.get('version_table_schema')
+        else:
+            return obj.table.schema == conf.get('version_table_schema')
+
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata, **conf
+            connection=connection,
+            target_metadata=target_metadata,
+            include_schemas=True,
+            include_object=include_object,
+            **conf
         )
 
         with context.begin_transaction():
