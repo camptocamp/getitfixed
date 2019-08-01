@@ -4,13 +4,8 @@ import sys
 import transaction
 from datetime import date, timedelta
 
-from pyramid.paster import (
-    get_appsettings,
-    setup_logging,
-    )
-
-from pyramid.scripts.common import parse_vars
-
+from pyramid.scripts.common import parse_vars, get_config_loader
+import sqlalchemy
 
 from ..models.meta import Base
 from ..models import (
@@ -19,14 +14,9 @@ from ..models import (
     get_tm_session,
     )
 
-from ..models.c2cgeoform_demo import (
+from getitfixed.models.getitfixed import (
     schema,
-    Address,
-    BusStop,
-    District,
-    Excavation,
-    Situation,
-    ContactPerson
+    Issue,
     )
 
 
@@ -42,8 +32,10 @@ def main(argv=sys.argv):
         usage(argv)
     config_uri = argv[1]
     options = parse_vars(argv[2:])
-    setup_logging(config_uri)
-    settings = get_appsettings(config_uri, options=options)
+
+    loader = get_config_loader(config_uri)
+    loader.setup_logging()
+    settings = loader.get_wsgi_app_settings(defaults=options)
 
     engine = get_engine(settings)
 
@@ -80,101 +72,20 @@ WHERE schema_name = '{}';
 
 
 def setup_test_data(dbsession):
-    if dbsession.query(District).count() == 0:
-        dbsession.add(District(id=0, name="Pully"))
-        dbsession.add(District(id=1, name="Paudex"))
-        dbsession.add(District(id=2, name="Belmont-sur-Lausanne"))
-        dbsession.add(District(id=3, name="Trois-Chasseurs"))
-        dbsession.add(District(id=4, name="La Claie-aux-Moines"))
-        dbsession.add(District(id=5, name="Savigny"))
-        dbsession.add(District(id=6, name="Mollie-Margot"))
-
-    if dbsession.query(Situation).count() == 0:
-        dbsession.add(Situation(id=0, name="Road", name_fr="Route"))
-        dbsession.add(Situation(id=1, name="Sidewalk", name_fr="Trottoir"))
-        dbsession.add(Situation(id=2, name="Berm", name_fr="Berme"))
-        dbsession.add(Situation(
-            id=3, name="Vegetated berm", name_fr=u"Berme végétalisée"))
-        dbsession.add(Situation(id=4, name="Green zone", name_fr="Zone verte"))
-        dbsession.add(Situation(id=5, name="Cobblestone", name_fr="Pavés"))
-
-    if dbsession.query(BusStop).count() == 0:
-        _add_bus_stops(dbsession)
-
-    if dbsession.query(Address).count() == 0:
-        dbsession.add(Address(id=0, label="Bern"))
-        dbsession.add(Address(id=1, label="Lausanne"))
-        dbsession.add(Address(id=2, label="Genève"))
-        dbsession.add(Address(id=3, label="Zurich"))
-        dbsession.add(Address(id=4, label="Lugano"))
-
-    dbsession.flush()
-
-    if dbsession.query(Excavation).count() == 0:
+    if dbsession.query(Issue).count() == 0:
         for i in range(100):
-            dbsession.add(_excavation(i, dbsession))
+            dbsession.add(_issue(i, dbsession))
 
+DESCRIPTIONS = (
+    'Déchets sur la voie publique',
+    'Nit de poule',
+)
 
-def _excavation(i, dbsession):
-    situations = dbsession.query(Situation).all()
-    addresses = dbsession.query(Address).all()
-
-    contact = ContactPerson()
-    contact.first_name = 'Leonard'
-    contact.last_name = 'Michalon'
-
-    excavation = Excavation(
-        reference_number='ref{:04d}'.format(i),
+def _issue(i, dbsession):
+    issue = Issue(
         request_date=date.today() - timedelta(days=100 - i),
-        description="Installation d'un réseau AEP",
-        motif="Création d'un lotissement",
-        location_district_id=0,
-        location_street="48 avenue du Lac du Bourget",
-        location_postal_code="73370",
-        location_town="LE BOURGET DU LAC",
-        # address_id=ForeignKey('c2cgeoform_demo.address.id'),
+        description=DESCRIPTIONS[i % len(DESCRIPTIONS)],
         # location_position = Column(geoalchemy2.Geometry('POINT'
-        responsible_title="mr",
-        responsible_name="Morvan",
-        responsible_first_name="Arnaud",
-        responsible_mobile="555-55555",
-        responsible_mail="arnaud.morvan@camptocamp.com",
-        responsible_company="Camptocamp",
-        validated=True,
-        # work_footprint=geoalchemy2.Geometry('MULTIPOLYGON'
         # photos = relationship(Photo,
     )
-    for j in range(0, 3):
-        excavation.situations.append(situations[(i + j) % len(situations)])
-    excavation.contact_persons = [contact]
-    excavation.address_id = addresses[i % len(addresses)].id
-    return excavation
-
-
-def _add_bus_stops(dbsession):
-    """
-    Load test data from a GeoJSON file.
-    """
-    import json
-    from shapely.geometry import shape
-
-    file = open(os.path.join(os.path.dirname(__file__),
-                             '..',
-                             'data',
-                             'osm-lausanne-bus-stops.geojson'))
-    geojson = json.load(file)
-    file.close()
-
-    bus_stops = []
-    for feature in geojson['features']:
-        id = feature['id'].replace('node/', '')
-        geometry = shape(feature['geometry'])
-        name = feature['properties']['name'] \
-            if 'name' in feature['properties'] else ''
-        bus_stop = BusStop(
-            id=int(float(id)),
-            geom='SRID=4326;' + geometry.wkt,
-            name=name)
-        bus_stops.append(bus_stop)
-
-    dbsession.add_all(bus_stops)
+    return issue

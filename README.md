@@ -94,8 +94,21 @@ Here is it: https://localhost:8484/getitfixed
 Now you need to create the GetItFixed: database schema and tables:
 
 ```
+sudo -u postgres psql -d demo_geomapfish -c 'DROP SCHEMA IF EXISTS getitfixed CASCADE;'
 sudo -u postgres psql -d demo_geomapfish -c 'CREATE SCHEMA getitfixed AUTHORIZATION "www-data";'
 docker-compose exec geoportal alembic -c alembic.ini -n getitfixed upgrade head
 ```
 
+Add test data:
+
+```
+docker-compose exec geoportal initialize_getitfixed_db c2cgeoportal://development.ini#app
+```
+
 Now you should be able to create new issues in the form.
+
+## Generate a new alembic revision
+
+```
+docker-compose exec geoportal alembic -c alembic.ini -n getitfixed revision --autogenerate -m 'First revision'
+```
