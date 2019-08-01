@@ -64,6 +64,12 @@ Create a docker-compose.override.yaml file:
 cp docker-compose.override.sample.yaml docker-compose.override.yaml
 ```
 
+Create the GetItFixed! tables:
+
+```
+docker-compose exec geoportal initialize_getitfixed_db c2cgeoportal://development.ini
+```
+
 Add volumes for source files:
 
 ```
@@ -84,3 +90,12 @@ Build, run and watch the logs:
 ```
 
 Here is it: https://localhost:8484/getitfixed
+
+Now you need to create the GetItFixed: database schema and tables:
+
+```
+sudo -u postgres psql -d demo_geomapfish -c 'CREATE SCHEMA getitfixed AUTHORIZATION "www-data";'
+docker-compose exec geoportal alembic -c alembic.ini -n getitfixed upgrade head
+```
+
+Now you should be able to create new issues in the form.

@@ -28,9 +28,9 @@ from getitfixed.i18n import _
 from getitfixed.models.meta import Base
 
 
-schema = 'c2cgeoform_demo'
+schema = 'getitfixed'
 
-EXCAV_ID = 'c2cgeoform_demo.excavation.id'
+EXCAV_ID = 'getitfixed.excavation.id'
 
 
 # FIXME a file upload memory store is not appropriate for production
@@ -119,7 +119,7 @@ class Situation(Base):
 situation_for_permission = Table(
     "situation_for_permission",
     Base.metadata,
-    Column("situation_id", Integer, ForeignKey('c2cgeoform_demo.situation.id'),
+    Column("situation_id", Integer, ForeignKey('{}.situation.id'.format(schema)),
            primary_key=True),
     Column("permission_id", Integer, ForeignKey(EXCAV_ID), primary_key=True),
     schema=schema
@@ -198,7 +198,7 @@ class Excavation(Base):
         }})
     location_district_id = Column(
         Integer,
-        ForeignKey('c2cgeoform_demo.district.id'),
+        ForeignKey('{}.district.id'.format(schema)),
         info={
             'colanderalchemy': {
                 'title': _('District'),
@@ -234,7 +234,7 @@ class Excavation(Base):
     # this is a search field to search for an address
     address_id = Column(
         Integer,
-        ForeignKey('c2cgeoform_demo.address.id'),
+        ForeignKey('{}.address.id'.format(schema)),
         info={
             'colanderalchemy': {
                 'title': _('Address'),
@@ -385,7 +385,7 @@ class Comment(Base):
             'widget': deform.widget.TextAreaWidget(rows=3),
         }})
     bus_stop_id = Column(BigInteger,
-                         ForeignKey('c2cgeoform_demo.bus_stops.id'),
+                         ForeignKey('{}.bus_stops.id'.format(schema)),
                          info={'colanderalchemy': {
                              'title': 'Bus stop',
                              'widget': RelationSelectMapWidget(
