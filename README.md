@@ -64,12 +64,6 @@ Create a docker-compose.override.yaml file:
 cp docker-compose.override.sample.yaml docker-compose.override.yaml
 ```
 
-Create the GetItFixed! tables:
-
-```
-docker-compose exec geoportal initialize_getitfixed_db c2cgeoportal://development.ini
-```
-
 Add volumes for source files:
 
 ```
