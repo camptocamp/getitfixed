@@ -62,8 +62,7 @@ class Issue(Base):
         {"schema": schema}
     )
     __colanderalchemy_config__ = {
-        'title':
-        _('Issue'),
+        'title': _('Issue'),
         'plural': _('Issues')
     }
 

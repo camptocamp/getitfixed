@@ -8,5 +8,5 @@
 
 *.egg-info
 
-.build/
-node_modules
+.env
+docker-compose.override.yaml

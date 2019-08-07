@@ -1,6 +1,7 @@
 #
 # This file defines the requirements.txt for development.
 #
+c2c.template
 flake8==2.2.2
 pep8-naming==0.2.2
 pytest==3.2.3

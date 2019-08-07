@@ -1,118 +1,149 @@
-INSTANCE_ID ?= main
-APACHE_ENTRY_POINT ?= /
+
+# Customisable environment variables
+
+DEVELOPMENT = TRUE
+export DEVELOPMENT
+
+DOCKER_BASE ?= camptocamp/getitfixed
+DOCKER_TAG ?= latest
+DOCKER_PORT ?= 8080
+export DOCKER_BASE
+export DOCKER_TAG
+export DOCKER_PORT
+
+PGHOST ?= postgresql
+PGHOST_SLAVE ?= postgresql
+PGPORT ?= 5432
+PGDATABASE ?= getitfixed
+PGUSER ?= getitfixed
+PGPASSWORD ?= getitfixed
+export PGHOST
+export PGHOST_SLAVE
+export PGPORT
+export PGDATABASE
+export PGUSER
+export PGPASSWORD
+
+VISIBLE_WEB_PROTOCOL ?= http
+VISIBLE_WEB_HOST ?= localhost
+VISIBLE_ENTRY_POINT ?= /
+export VISIBLE_WEB_PROTOCOL
+export VISIBLE_WEB_HOST
+export VISIBLE_ENTRY_POINT
+
+SMTP_USER ?= truite
+SMTP_PASSWORD ?= brochet
+export SMTP_USER
+export SMTP_PASSWORD
+
+# End of customisable environment variables
 
 MO_FILES = $(addprefix getitfixed/locale/, fr/LC_MESSAGES/getitfixed.mo de/LC_MESSAGES/getitfixed.mo)
 
-ifneq (,$(findstring CYGWIN, $(shell uname)))
-PYTHON3 =
-VENV_BIN = .build/venv/Scripts
-PIP_UPGRADE = python.exe -m pip install --upgrade pip setuptools
-else
-PYTHON3 = -p python3
-VENV_BIN = .build/venv/bin
-PIP_UPGRADE = pip install --upgrade pip==9.0.1 setuptools==36.5.0
-endif
+COMMON_DOCKER_RUN_OPTIONS ?= \
+	--name="getitfixed-build" \
+	--volume="${PWD}:/src" \
+	--user=$(shell id -u) \
+	${DOCKER_BASE}-build:${DOCKER_TAG}
+
+DOCKER_MAKE_CMD = docker run --rm ${COMMON_DOCKER_RUN_OPTIONS} make -f $(firstword $(MAKEFILE_LIST))
+
+default: help
 
 .PHONY: help
-help:
+help: ## Display this help message
 	@echo "Usage: make <target>"
 	@echo
 	@echo "Possible targets:"
-	@echo
-	@echo "- build                   Install getitfixed"
-	@echo "- initdb                  (Re-)initialize the database"
-	@echo "- serve                   Run the dev server"
-	@echo "- check                   Check the code with flake8"
-	@echo "- modwsgi                 Create files for Apache mod_wsgi"
-	@echo "- test                    Run the unit tests"
-	@echo "- dist                    Build a source distribution"
-	@echo "- update-catalog          Update message catalog"
-	@echo "- compile-catalog         Compile message catalog"
-	@echo
+	@grep -Eh '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "    %-20s%s\n", $$1, $$2}'
+
+.PHONY: meacoffe
+meacoffe: ## Build, run and show logs
+meacoffe: build initdb
+	docker-compose up -d && docker-compose logs -f getitfixed
 
 .PHONY: build
+build: ## Build runtime files and docker images
 build: \
-		.build/requirements.timestamp \
-		.build/node_modules.timestamp \
-		compile-catalog
+		docker-build-postgresql \
+		docker-build-getitfixed \
+		docker-compose-env
+
+.PHONY: docker-compose-env
+docker-compose-env: ## Build docker-compose environment file
+	$(DOCKER_MAKE_CMD) .env
 
 .PHONY: initdb
-initdb: .build/requirements.timestamp
-	$(VENV_BIN)/initialize_getitfixed_db development.ini
-
-.PHONY: serve
-serve: build
-	$(VENV_BIN)/pserve --reload development.ini
+initdb:
+	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini
 
 .PHONY: check
-check: flake8
+check: ## Check the code with flake8
+	docker run --rm ${COMMON_DOCKER_RUN_OPTIONS} flake8 getitfixed
 
-.PHONY: flake8
-flake8: .build/requirements-dev.timestamp
-	$(VENV_BIN)/flake8 getitfixed
-
-.PHONY: modwsgi
-modwsgi: build .build/getitfixed.wsgi .build/apache.conf
+.PHONY: bash
+bash: ## Open bash in build container
+bash: docker-build-build
+	docker run --rm -ti ${COMMON_DOCKER_RUN_OPTIONS} bash
 
 .PHONY: test
-test: build .build/requirements-dev.timestamp
-	$(VENV_BIN)/pytest
+test:
+	docker-compose run --rm ${COMMON_DOCKER_RUN_OPTIONS} getitfixed pytest
+
+.PHONY: clean
+clean: ## Clean generated files
+clean:
+	rm -f $(MO_FILES)
+
+.PHONY: cleanall
+cleanall: ## Clean everything including docker containers and images
+cleanall: clean
+	docker-compose down
+	docker rmi \
+		${DOCKER_BASE}-postgresql:${DOCKER_TAG} \
+		${DOCKER_BASE}-build:${DOCKER_TAG} \
+		${DOCKER_BASE}-getitfixed:${DOCKER_TAG} || true
+
+# Docker images
+
+.PHONY: docker-build-postgresql
+docker-build-postgresql:
+	docker build -t ${DOCKER_BASE}-postgresql:${DOCKER_TAG} postgresql
+
+.PHONY: docker-build-build
+docker-build-build:
+	docker build -t ${DOCKER_BASE}-build:${DOCKER_TAG} build
+
+.PHONY: docker-build-getitfixed
+docker-build-getitfixed: docker-build-build
+	$(DOCKER_MAKE_CMD) compile-catalog
+	docker build --build-arg GIT_HASH=${GIT_HASH} -t ${DOCKER_BASE}-getitfixed:${DOCKER_TAG} .
+
+# Targets used inside docker build container
 
 .PHONY: update-catalog
-update-catalog: .build/requirements.timestamp
-	$(VENV_BIN)/pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
-	    getitfixed/models/ \
-	    getitfixed/views/ \
-	    getitfixed/templates/
+update-catalog:
+	pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
+		getitfixed/models/ \
+		getitfixed/views/ \
+		getitfixed/templates/
 	msgmerge --update getitfixed/locale/fr/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
 	msgmerge --update getitfixed/locale/de/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
 
 .PHONY: compile-catalog
 compile-catalog: $(MO_FILES)
 
-.PHONY: dist
-dist: .build/venv.timestamp compile-catalog
-	$(VENV_BIN)/python setup.py sdist
+# .env depends on user makefile
+.env: $(MAKEFILE_LIST)
+
+# Rules
 
 %.mo: %.po
 	msgfmt $< --output-file=$@
 
-.build/node_modules.timestamp: package.json
-	npm install
-	touch $@
-
-.build/venv.timestamp:
-	# Create a Python virtual environment.
-	virtualenv $(PYTHON3) .build/venv
-	# Upgrade packaging tools.
-	$(VENV_BIN)/$(PIP_UPGRADE)
-	touch $@
-
-.build/requirements.timestamp: .build/venv.timestamp requirements.txt
-	$(VENV_BIN)/pip install -r requirements.txt -e .
-	touch $@
-
-.build/requirements-dev.timestamp: .build/venv.timestamp requirements-dev.txt
-	$(VENV_BIN)/pip install -r requirements-dev.txt > /dev/null 2>&1
-	touch $@
-
-.build/getitfixed.wsgi: getitfixed.wsgi
-	sed 's#\[DIR\]#$(CURDIR)#' $< > $@
-	chmod 755 $@
-
-.build/apache.conf: apache.conf .build/venv.timestamp
-	sed -e 's#\[PYTHONPATH\]#$(shell $(VENV_BIN)/python -c "import distutils.sysconfig; print(distutils.sysconfig.get_python_lib())")#' \
-        -e 's#\[WSGISCRIPT\]#$(abspath .build/getitfixed.wsgi)#' \
-        -e 's#\[INSTANCE_ID\]#$(INSTANCE_ID)#' \
-        -e 's#\[APACHE_ENTRY_POINT\]#$(APACHE_ENTRY_POINT)#' $< > $@
-
-.PHONY: clean
-clean:
-	rm -f .build/venv/getitfixed.wsgi
-	rm -f .build/apache.conf
-	rm -f $(MO_FILES)
-
-.PHONY: cleanall
-cleanall:
-	rm -rf .build
-	rm -rf node_modules
+%: %.mako
+	c2c-template \
+		--runtime-environment-pattern '$${{{}}}' \
+		--vars vars.yaml \
+		--engine mako \
+		--files $<

@@ -1,0 +1,9 @@
+.env
+.env.mako
+.gitignore
+.travis.yml
+docker-compose.*
+Dockerfile
+Makefile
+MANIFEST.in
+vars.yaml

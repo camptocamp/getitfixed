@@ -19,6 +19,8 @@ from getitfixed.models.getitfixed import (
     Issue,
     )
 
+from getitfixed.scripts import wait_for_db
+
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -38,6 +40,7 @@ def main(argv=sys.argv):
     settings = loader.get_wsgi_app_settings(defaults=options)
 
     engine = get_engine(settings)
+    wait_for_db(engine)
 
     with engine.begin() as connection:
         init_db(connection, force='--force' in options)

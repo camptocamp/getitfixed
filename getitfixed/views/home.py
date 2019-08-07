@@ -6,4 +6,4 @@ from pyramid.httpexceptions import HTTPFound
 def getitfixed(request):
     return HTTPFound(request.route_url('c2cgeoform_index',
                                        application='getitfixed',
-                                       table='excavations'))
+                                       table='issues'))
