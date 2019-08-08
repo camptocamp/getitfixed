@@ -16,6 +16,8 @@ from ..models import (
 from getitfixed.models.getitfixed import (
     schema,
     Issue,
+    Category,
+    Type,
     )
 
 from getitfixed.scripts import wait_for_db
@@ -78,6 +80,12 @@ def setup_test_data(dbsession):
     if dbsession.query(Issue).count() == 0:
         for i in range(100):
             dbsession.add(_issue(i, dbsession))
+    if dbsession.query(Category).count() == 0:
+        for i in range(5):
+            dbsession.add(Category(label_fr='Catégorie «{}»'.format(i)))
+    if dbsession.query(Type).count() == 0:
+        for i in range(15):
+            dbsession.add(Type(label_fr='Type «{}»'.format(i)))
 
 
 DESCRIPTIONS = (
