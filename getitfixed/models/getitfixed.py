@@ -47,7 +47,70 @@ class Photo(FileData, Base):
     issue_id = Column(Integer, ForeignKey('{}.issue.id'.format(schema)))
 
 
-# This is the main model class which is used to register a schema.
+class Category(Base):
+    __tablename__ = 'category'
+    __table_args__ = (
+        {"schema": schema}
+    )
+    __colanderalchemy_config__ = {
+        'title': _('Category'),
+        'plural': _('Categories')
+    }
+
+    id = Column(Integer, primary_key=True, info={
+        'colanderalchemy': {
+            'title': _('Identifier'),
+            'widget': HiddenWidget()
+        }})
+    label_fr = Column(Text, nullable=True, info={
+        'colanderalchemy': {
+            'title': _('Label(fr)'),
+            'widget': TextInputWidget(),
+        }})
+    label_en = Column(Text, nullable=True, info={
+        'colanderalchemy': {
+            'title': _('Label(en)'),
+            'widget': TextInputWidget(),
+        }})
+
+
+class Type(Base):
+    __tablename__ = 'type'
+    __table_args__ = (
+        {"schema": schema}
+    )
+    __colanderalchemy_config__ = {
+        'title': _('Type'),
+        'plural': _('Types')
+    }
+
+    id = Column(Integer, primary_key=True, info={
+        'colanderalchemy': {
+            'title': _('Identifier'),
+            'widget': HiddenWidget()
+        }})
+    label_fr = Column(Text, nullable=True, info={
+        'colanderalchemy': {
+            'title': _('Label(fr)'),
+            'widget': TextInputWidget(),
+        }})
+    label_en = Column(Text, nullable=True, info={
+        'colanderalchemy': {
+            'title': _('Label(en)'),
+            'widget': TextInputWidget(),
+        }})
+    category_id = Column(Integer, ForeignKey('{}.category.id'.format(schema)), info={
+        'colanderalchemy': {
+            'title': _('Category'),
+            'widget': RelationSelect2Widget(
+                Category,
+                'id',
+                'label_fr',
+                order_by='label_fr',
+                default_value=('', _('- Select -'))
+                )}})
+
+
 class Issue(Base):
     __tablename__ = 'issue'
     __table_args__ = (
@@ -72,6 +135,16 @@ class Issue(Base):
         'c2cgeoform': {
             'duplicate': False
         }})
+    type_id = Column(Integer, ForeignKey('{}.type.id'.format(schema)), info={
+        'colanderalchemy': {
+            'title': _('Type'),
+            'widget': RelationSelect2Widget(
+                Type,
+                'id',
+                'label_fr',
+                order_by='label_fr',
+                default_value=('', _('- Select -'))
+                )}})
     request_date = Column(Date, nullable=True, info={
         'colanderalchemy': {
             'title': _('Request Date')
@@ -80,7 +153,7 @@ class Issue(Base):
         'colanderalchemy': {
             'title': _('Description of the Work'),
             'description': _('exemple de description'),
-            'widget': deform.widget.TextAreaWidget(rows=3),
+            'widget': TextAreaWidget(rows=3),
         }})
     geometry = Column(
         geoalchemy2.Geometry('POINT', 4326, management=True), info={
