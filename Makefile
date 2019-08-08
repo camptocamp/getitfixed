@@ -82,12 +82,8 @@ check: ## Check the code with flake8
 check: docker-build-build
 	docker run --rm ${COMMON_DOCKER_RUN_OPTIONS} flake8 getitfixed
 
-.PHONY: bash
-bash: ## Open bash in build container
-bash: docker-build-build
-	docker run --rm -ti ${COMMON_DOCKER_RUN_OPTIONS} bash
-
 .PHONY: test
+test: ## Run tests
 test:
 	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://tests.ini --force=1
 	docker-compose run --rm getitfixed pytest
@@ -106,6 +102,18 @@ cleanall: clean
 		${DOCKER_BASE}-postgresql:${DOCKER_TAG} \
 		${DOCKER_BASE}-build:${DOCKER_TAG} \
 		${DOCKER_BASE}-getitfixed:${DOCKER_TAG} || true
+
+# Development tools
+
+.PHONY: bash
+bash: ## Open bash in build container
+bash: docker-build-build
+	docker run --rm -ti ${COMMON_DOCKER_RUN_OPTIONS} bash
+
+.PHONY: psql
+psql: ## Launch psql in postgres image
+psql:
+	docker-compose exec -u postgres postgresql psql getitfixed
 
 # Docker images
 
