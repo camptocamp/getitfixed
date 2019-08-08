@@ -10,8 +10,12 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 
 import geoalchemy2
-import deform
-from deform.widget import HiddenWidget
+
+from deform.widget import HiddenWidget, TextAreaWidget, TextInputWidget
+from c2cgeoform.ext.deform_ext import (
+    RelationSelect2Widget,
+)
+
 from c2cgeoform.ext import colander_ext, deform_ext
 from c2cgeoform.models import FileData
 
