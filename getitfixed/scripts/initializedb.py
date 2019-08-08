@@ -82,7 +82,7 @@ def setup_test_data(dbsession):
 
 DESCRIPTIONS = (
     'Déchets sur la voie publique',
-    'Nit de poule',
+    'Nid de poule',
 )
 
 
