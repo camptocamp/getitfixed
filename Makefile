@@ -115,6 +115,11 @@ psql: ## Launch psql in postgres image
 psql:
 	docker-compose exec -u postgres postgresql psql getitfixed
 
+.PHONY: pshell
+pshell: ## Launch getitfixed pshell
+pshell:
+	docker-compose run --rm getitfixed pshell c2c://development.ini
+
 # Docker images
 
 .PHONY: docker-build-postgresql
