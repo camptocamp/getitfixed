@@ -6,7 +6,7 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get clean && \
     rm --recursive --force /var/lib/apt/lists/*
 
-RUN pip3 install pydevd pyramid_ipython ipdb webtest # For development
+RUN pip3 install pydevd pyramid_ipython ipdb webtest ipython==5.8.0 # For development
 
 RUN mkdir /app
 
