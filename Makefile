@@ -89,7 +89,7 @@ bash: docker-build-build
 
 .PHONY: test
 test:
-	docker-compose run --rm ${COMMON_DOCKER_RUN_OPTIONS} getitfixed pytest
+	docker-compose run --rm getitfixed pytest
 
 .PHONY: clean
 clean: ## Clean generated files
