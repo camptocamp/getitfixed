@@ -84,7 +84,7 @@ check: docker-build-build
 
 .PHONY: test
 test: ## Run tests
-test:
+test: build
 	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://tests.ini --force=1
 	docker-compose run --rm getitfixed pytest
 
