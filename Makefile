@@ -11,8 +11,8 @@ export DOCKER_BASE
 export DOCKER_TAG
 export DOCKER_PORT
 
-PGHOST ?= postgresql
-PGHOST_SLAVE ?= postgresql
+PGHOST ?= db
+PGHOST_SLAVE ?= db
 PGPORT ?= 5432
 PGDATABASE ?= getitfixed
 PGUSER ?= getitfixed
@@ -57,9 +57,9 @@ help: ## Display this help message
 	@echo "Possible targets:"
 	@grep -Eh '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "    %-20s%s\n", $$1, $$2}'
 
-.PHONY: meacoffe
-meacoffe: ## Build, run and show logs
-meacoffe: build initdb
+.PHONY: meacoffee
+meacoffee: ## Build, run and show logs
+meacoffee: build initdb
 	docker-compose up -d && docker-compose logs -f getitfixed
 
 .PHONY: build
@@ -75,7 +75,7 @@ docker-compose-env: ## Build docker-compose environment file
 
 .PHONY: initdb
 initdb:
-	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini
+	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini --with-data=1
 
 .PHONY: check
 check: ## Check the code with flake8
@@ -89,7 +89,8 @@ bash: docker-build-build
 
 .PHONY: test
 test:
-	docker-compose run --rm ${COMMON_DOCKER_RUN_OPTIONS} getitfixed pytest
+	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://tests.ini --force=1
+	docker-compose run --rm getitfixed pytest
 
 .PHONY: clean
 clean: ## Clean generated files
