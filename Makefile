@@ -98,7 +98,8 @@ clean:
 .PHONY: cleanall
 cleanall: ## Clean everything including docker containers and images
 cleanall: clean
-	docker-compose down
+	docker-compose down --remove-orphans
+	rm -f .env
 	docker rmi \
 		${DOCKER_BASE}-postgresql:${DOCKER_TAG} \
 		${DOCKER_BASE}-build:${DOCKER_TAG} \
