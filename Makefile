@@ -79,6 +79,7 @@ initdb:
 
 .PHONY: check
 check: ## Check the code with flake8
+check: docker-build-build
 	docker run --rm ${COMMON_DOCKER_RUN_OPTIONS} flake8 getitfixed
 
 .PHONY: bash

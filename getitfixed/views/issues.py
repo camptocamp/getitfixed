@@ -2,15 +2,9 @@ from pyramid.view import view_config
 from pyramid.view import view_defaults
 from functools import partial
 
-from sqlalchemy.orm import subqueryload
-
-import colander
 from c2cgeoform.schema import (
     GeoFormSchemaNode,
-    GeoFormManyToManySchemaNode,
-    manytomany_validator,
 )
-from c2cgeoform.ext.deform_ext import RelationCheckBoxListWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
 from getitfixed.models.getitfixed import Issue
