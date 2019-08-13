@@ -14,13 +14,14 @@ fileConfig(context.config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from getitfixed import models
+from getitfixed import models  # noqa
 target_metadata = models.meta.Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
 
 def get_config():
     config.init(context.config.get_main_option('app.cfg'))

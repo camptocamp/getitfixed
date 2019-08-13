@@ -5,7 +5,6 @@ import transaction
 from datetime import date, timedelta
 
 from pyramid.scripts.common import parse_vars, get_config_loader
-import sqlalchemy
 
 from ..models.meta import Base
 from ..models import (
@@ -79,10 +78,12 @@ def setup_test_data(dbsession):
         for i in range(100):
             dbsession.add(_issue(i, dbsession))
 
+
 DESCRIPTIONS = (
     'Déchets sur la voie publique',
     'Nit de poule',
 )
+
 
 def _issue(i, dbsession):
     issue = Issue(

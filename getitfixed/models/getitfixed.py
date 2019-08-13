@@ -4,23 +4,14 @@ from uuid import uuid4
 from sqlalchemy import (
     Column,
     Integer,
-    BigInteger,
     Text,
-    Boolean,
     Date,
-    Table,
     ForeignKey)
 from sqlalchemy.orm import relationship
 
 import geoalchemy2
-import colander
 import deform
 from deform.widget import HiddenWidget
-from c2cgeoform.ext.deform_ext import (
-    RelationSelect2Widget,
-    RelationSearchWidget,
-    RelationSelectMapWidget,
-)
 from c2cgeoform.ext import colander_ext, deform_ext
 from c2cgeoform.models import FileData
 
@@ -36,6 +27,7 @@ schema = 'getitfixed'
 class FileUploadTempStore(dict):
     def preview_url(self, name):
         return None
+
 
 _file_upload_temp_store = FileUploadTempStore()
 
