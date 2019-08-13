@@ -9,6 +9,7 @@ services:
   getitfixed:
     volumes:
       - ${PWD}/getitfixed:/app/getitfixed
+      - ${PWD}/acceptance_tests:/app/acceptance_tests
       - ${PWD}/../c2cgeoform/c2cgeoform:/usr/local/lib/python3.7/dist-packages/c2cgeoform
     environment:
       - GUNICORN_PARAMS=-b :8080 --worker-class gthread --threads 10 --workers 1 --max-requests 1000 --max-requests-jitter 50

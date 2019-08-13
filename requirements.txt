@@ -13,3 +13,4 @@ SQLAlchemy
 transaction
 zope.sqlalchemy
 waitress
+WebTest>=1.3.1

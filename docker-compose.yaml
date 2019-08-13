@@ -6,7 +6,7 @@ version: '2'
 
 services:
 
-  postgresql:
+  db:
      image: camptocamp/getitfixed-postgresql:latest
 
   getitfixed:
@@ -14,7 +14,7 @@ services:
     user: www-data
     restart: unless-stopped
     depends_on:
-      - postgresql
+      - db
     environment:
       - PGHOST
       - PGHOST_SLAVE

@@ -42,10 +42,10 @@ def main(argv=sys.argv):
     wait_for_db(engine)
 
     with engine.begin() as connection:
-        init_db(connection, force='--force' in options)
+        init_db(connection, force='--force' in options, with_data='--with-data' in options)
 
 
-def init_db(connection, force=False):
+def init_db(connection, force=False, with_data=False):
     if force:
         if schema_exists(connection, schema):
             connection.execute("DROP SCHEMA {} CASCADE;".format(schema))
@@ -59,7 +59,8 @@ def init_db(connection, force=False):
 
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
-        setup_test_data(dbsession)
+        if with_data:
+            setup_test_data(dbsession)
 
 
 def schema_exists(connection, schema_name):
