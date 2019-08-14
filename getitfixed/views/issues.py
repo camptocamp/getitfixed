@@ -2,28 +2,28 @@ from pyramid.view import view_config
 from pyramid.view import view_defaults
 from functools import partial
 
-import colander
-from c2cgeoform.schema import (
-    GeoFormSchemaNode,
-)
-from c2cgeoform.ext.deform_ext import (
-    RelationSelect2Widget,
-)
+# import colander
+from c2cgeoform.schema import GeoFormSchemaNode
+# from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.models.getitfixed import Issue, Category
+from getitfixed.models.getitfixed import (
+    Issue,
+    # Category,
+)
 
 _list_field = partial(ListField, Issue)
 
 base_schema = GeoFormSchemaNode(Issue)
 
+'''
 base_schema.add_before(
     'type_id',
     colander.SequenceSchema(
         colander.SchemaNode(colander.Int()),
         name='category',
         title='Category',
-        widget=RelationSelect2Widget(
+        widget=RelationSelectWidget(
             Category,
             'id',
             'label_fr',
@@ -31,6 +31,7 @@ base_schema.add_before(
         )
     )
 )
+'''
 
 
 @view_defaults(match_param='table=issues')

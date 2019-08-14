@@ -8,12 +8,12 @@ from sqlalchemy import (
     Date,
     ForeignKey)
 from sqlalchemy.orm import relationship
-
+from sqlalchemy.sql.expression import func
 import geoalchemy2
 
 from deform.widget import HiddenWidget, TextAreaWidget, TextInputWidget
 from c2cgeoform.ext.deform_ext import (
-    RelationSelect2Widget,
+    RelationSelectWidget,
 )
 
 from c2cgeoform.ext import colander_ext, deform_ext
@@ -106,13 +106,14 @@ class Type(Base):
     category_id = Column(Integer, ForeignKey('{}.category.id'.format(schema)), info={
         'colanderalchemy': {
             'title': _('Category'),
-            'widget': RelationSelect2Widget(
+            'widget': RelationSelectWidget(
                 Category,
                 'id',
                 'label_fr',
                 order_by='label_fr',
                 default_value=('', _('- Select -'))
                 )}})
+    category = relationship(Category, backref='types')
 
 
 class Issue(Base):
@@ -132,39 +133,42 @@ class Issue(Base):
             'title': _('Identifier'),
             'widget': HiddenWidget()
         }})
-    hash = Column(Text, unique=True, default=lambda: str(uuid4()), info={
+    hash = Column(Text, nullable=False, unique=True, default=lambda: str(uuid4()), info={
         'colanderalchemy': {
-            'widget': HiddenWidget()
+            'exclude': True
         },
         'c2cgeoform': {
             'duplicate': False
         }})
-    type_id = Column(Integer, ForeignKey('{}.type.id'.format(schema)), info={
+    request_date = Column(Date, nullable=False, server_default=func.now(), info={
+        'colanderalchemy': {
+            'exclude': True
+        }})
+    type_id = Column(Integer, ForeignKey('{}.type.id'.format(schema)), nullable=False, info={
         'colanderalchemy': {
             'title': _('Type'),
-            'widget': RelationSelect2Widget(
+            'widget': RelationSelectWidget(
                 Type,
                 'id',
                 'label_fr',
                 order_by='label_fr',
                 default_value=('', _('- Select -'))
                 )}})
-    request_date = Column(Date, nullable=True, info={
+    type = relationship(Type, info={
         'colanderalchemy': {
-            'title': _('Request Date')
+            'exclude': True
         }})
-    description = Column(Text, nullable=True, info={
+    description = Column(Text, nullable=False, info={
         'colanderalchemy': {
             'title': _('Description of the Work'),
-            'description': _('exemple de description'),
             'widget': TextAreaWidget(rows=3),
         }})
     geometry = Column(
-        geoalchemy2.Geometry('POINT', 4326, management=True), info={
+        geoalchemy2.Geometry('POINT', 4326, management=True),
+        info={
             'colanderalchemy': {
                 'title': _('Position'),
-                'typ':
-                colander_ext.Geometry('POINT', srid=4326, map_srid=3857),
+                'typ': colander_ext.Geometry('POINT', srid=4326, map_srid=3857),
                 'widget': deform_ext.MapWidget()
             }})
     photos = relationship(
