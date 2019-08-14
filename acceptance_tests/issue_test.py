@@ -1,6 +1,7 @@
 import pytest
 import re
 import datetime
+from random import randrange
 
 from getitfixed.models.getitfixed import (
     Category,
@@ -35,6 +36,12 @@ def issue_test_data(dbsession, transact):
             type=types[i % 15],
             description='{} truite sauvage'.format(i),
             address='{} rue du pont'.format(i),
+            firstname='Firstname{}'.format(i),
+            lastname='Lastname{}'.format(i),
+            phone='0{} {:02} {:02} {:02} {:02}'.format(
+                randrange(1, 10),
+                *[randrange(100) for i in range(4)]),
+            email='firstname{0}.lastname{0}@domain.net'.format(i),
         ))
     dbsession.add_all(issues)
 
@@ -104,10 +111,18 @@ class TestIssueViews():
         assert '' == form['type_id'].value
         assert '' == form['description'].value
         assert '' == form['address'].value
+        assert '' == form['firstname'].value
+        assert '' == form['lastname'].value
+        assert '' == form['phone'].value
+        assert '' == form['email'].value
 
         form['type_id'] = str(issue_test_data['types'][0].id)
         form['description'] = 'Description'
         form['address'] = 'Address'
+        form['firstname'] = 'Andreas'
+        form['lastname'] = 'Ford'
+        form['phone'] = '234 long street'
+        form['email'] = 'andreas.ford@domain.net'
 
         resp = form.submit('submit', status=302)
 
@@ -120,6 +135,10 @@ class TestIssueViews():
         assert issue_test_data['types'][0] is obj.type
         assert 'Description' == obj.description
         assert 'Address' == obj.address
+        assert 'Andreas' == obj.firstname
+        assert 'Ford' == obj.lastname
+        assert '234 long street' == obj.phone
+        assert 'andreas.ford@domain.net' == obj.email
 
         assert 'Your submission has been taken into account.' == \
             resp.follow().html.find('div', {'class': 'msg-lbl'}).getText()

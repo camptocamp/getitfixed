@@ -53,6 +53,10 @@ class IssueViews(AbstractViews):
                     filter_column=Type.label_fr),
         _list_field('description'),
         _list_field('address'),
+        _list_field('firstname'),
+        _list_field('lastname'),
+        _list_field('phone'),
+        _list_field('email'),
     ]
 
     def _base_query(self):

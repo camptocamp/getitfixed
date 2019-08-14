@@ -13,6 +13,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import func
 import geoalchemy2
 
+import colander
 from deform.widget import HiddenWidget, TextAreaWidget, TextInputWidget
 from c2cgeoform.ext.deform_ext import (
     RelationSelectWidget,
@@ -185,3 +186,20 @@ class Issue(Base):
             'colanderalchemy': {
                 'title': _('Photo')
             }})
+    firstname = Column(String(100), nullable=False, info={
+        'colanderalchemy': {
+             'title': _('Firstname')
+        }})
+    lastname = Column(String(100), nullable=False, info={
+        'colanderalchemy': {
+             'title': _('Lastname')
+        }})
+    phone = Column(String(20), nullable=False, info={
+        'colanderalchemy': {
+            'title': _('Phone')
+        }})
+    email = Column(String(100), nullable=False, info={
+        'colanderalchemy': {
+            'title': _('Email'),
+            'validator': colander.Email()
+        }})
