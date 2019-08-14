@@ -1,13 +1,12 @@
 import pytest
 import re
-from datetime import datetime
-from pyramid.testing import DummyRequest
+import datetime
+
 from getitfixed.models.getitfixed import (
     Category,
     Issue,
     Type,
 )
-from getitfixed.views.issues import IssueViews
 
 
 @pytest.fixture(scope='function')
@@ -35,7 +34,6 @@ def issue_test_data(dbsession, transact):
         issue = Issue()
         issue.type = types[i % 15]
         issue.description = '{} truite sauvage'.format(i)
-        issue.request_date = datetime.now()
         issues.append(issue)
     dbsession.add_all(issues)
 
@@ -51,9 +49,9 @@ def issue_test_data(dbsession, transact):
 @pytest.mark.usefixtures('issue_test_data', 'test_app')
 class TestIssueViews():
 
-    def _obj_by_hash(self, dbsession, hash):
+    def _obj_by_hash(self, dbsession, hash_):
         return dbsession.query(Issue). \
-            filter(Issue.hash == hash). \
+            filter(Issue.hash == hash_). \
             one_or_none()
 
     def test_index(self, test_app):
@@ -92,10 +90,10 @@ class TestIssueViews():
         assert 10 == json['total']
 
         row = json['rows'][5]
-        exc = dbsession.query(Issue).get(row['id'])
-        assert exc.hash == row['_id_']
-        assert exc.request_date.strftime('%Y-%m-%d %H:%M:%S.%f') == row['request_date']
-        assert exc.description == row['description']
+        obj = dbsession.query(Issue).get(row['id'])
+        assert obj.hash == row['_id_']
+        assert obj.request_date.isoformat() == row['request_date']
+        assert obj.description == row['description']
 
     def test_new_then_save(self, dbsession, test_app, issue_test_data):
         resp = test_app.get('/getitfixed/issues/new', status=200)
@@ -115,6 +113,7 @@ class TestIssueViews():
             resp.location).group(1)
 
         obj = self._obj_by_hash(dbsession, hash_)
+        assert datetime.date.today() == obj.request_date
         assert 'Description' == obj.description
         assert issue_test_data['types'][0] is obj.type
 
