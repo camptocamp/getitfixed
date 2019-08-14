@@ -103,6 +103,25 @@ Now you should be able to create new issues in the form.
 
 ## Generate a new alembic revision
 
+Before the first release we will overwrite the first migration:
+
 ```
-docker-compose exec geoportal alembic -c alembic.ini -n getitfixed revision --autogenerate -m 'First revision'
+rm -rf getitfixed/alembic/versions/*.py
+cat <<<EOF | docker-compose exec --user postgres db psql -d getitfixed
+DROP SCHEMA getitfixed CASCADE;
+CREATE SCHEMA getitfixed;
+GRANT ALL ON SCHEMA getitfixed TO getitfixed;
+EOF
+```
+
+```
+docker-compose run --rm --user `id -u ` getitfixed \
+    alembic -c /app/alembic.ini -n getitfixed revision --autogenerate -m 'First revision'
+```
+
+Now try it:
+
+```
+docker-compose run --rm --user `id -u ` getitfixed \
+    alembic -c /app/alembic.ini -n getitfixed upgrade head
 ```

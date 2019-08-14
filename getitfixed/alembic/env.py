@@ -1,12 +1,10 @@
-
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-
-from c2c.template.config import config
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -24,16 +22,22 @@ target_metadata = models.meta.Base.metadata
 
 
 def get_config():
-    config.init(context.config.get_main_option('app.cfg'))
-    settings = {}
-    settings.update(config.get_config())
-    settings.update({
-        'script_location': context.config.get_main_option('script_location'),
-        'version_table': context.config.get_main_option('version_table'),
-        'version_locations': context.config.get_main_option('version_locations'),
-        'version_table_schema': settings.get('schema_getitfixed', 'getitfixed')
+    conf = context.config.get_section(context.config.config_ini_section)
+
+    # Load config from c2cgeoportal if available
+    app_cfg = context.config.get_main_option('app.cfg')
+    if app_cfg:
+        from c2c.template.config import config
+        config.init(context.config.get_main_option('app.cfg'))
+        conf.update(config.get_config())
+
+    if 'sqlalchemy.url' not in conf:
+        conf['sqlalchemy.url'] = 'postgresql://{PGUSER}:{PGPASSWORD}@{PGHOST}:{PGPORT}/{PGDATABASE}'. \
+                                 format(**os.environ)
+    conf.update({
+        'version_table_schema': context.config.get_main_option('schema'),
     })
-    return settings
+    return conf
 
 
 def run_migrations_offline():
@@ -75,9 +79,9 @@ def run_migrations_online():
 
     def include_object(obj, name, type_, reflected, compare_to):  # pylint: disable=unused-argument
         if type_ == 'table':
-            return obj.schema == conf.get('version_table_schema')
+            return obj.schema == conf.get('schema')
         else:
-            return obj.table.schema == conf.get('version_table_schema')
+            return obj.table.schema == conf.get('schema')
 
     with connectable.connect() as connection:
         context.configure(
