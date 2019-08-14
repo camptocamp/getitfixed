@@ -97,51 +97,6 @@ class TestIssueViews():
         assert exc.request_date.strftime('%Y-%m-%d %H:%M:%S.%f') == row['request_date']
         assert exc.description == row['description']
 
-    '''def test_grid_filter(self, test_app):
-        json = test_app.post(
-            '/getitfixed/issue/grid.json',
-            params={
-                'offset': 0,
-                'limit': 10,
-                'sort': 'id',
-                'order': 'asc',
-                'search': 'Poule'
-            },
-            status=200
-        ).json
-
-        assert 10 == len(json['rows'])
-        assert 50 == json['total']
-
-        row = json['rows'][0]
-        assert 'Poule' in row['description']
-
-    def test_edit_then_save(self, dbsession, test_app):
-        obj = dbsession.query(Issue).first()
-        resp = test_app.get('/getitfixed/issues/{}'.format(obj.id), status=200)
-
-        form = resp.form
-        assert str(obj.id) == form['id'].value
-        assert obj.hash == form['hash'].value
-        assert str(obj.request_date) == form['date'].value
-        assert obj.description == form['description'].value
-        # assert obj.photos == form['photos'].value
-
-        form['description'] = 'New description'
-
-        resp = form.submit('submit')
-
-        dbsession.expire(obj)
-
-        assert obj.hash == re.match(
-            'http://localhost/getitfixed/issues/(.*)\?msg_col=submit_ok',
-            resp.location).group(1)
-
-        assert 'New description' == obj.description
-
-        assert 'Your submission has been taken into account.' == \
-               resp.follow().html.find('div', {'class': 'msg-lbl'}).getText()'''
-
     def test_new_then_save(self, dbsession, test_app, issue_test_data):
         resp = test_app.get('/getitfixed/issues/new', status=200)
 
@@ -155,11 +110,11 @@ class TestIssueViews():
 
         resp = form.submit('submit', status=302)
 
-        hash = re.match(
-            'http://localhost/getitfixed/issues/(.*)\?msg_col=submit_ok',
+        hash_ = re.match(
+            r'http://localhost/getitfixed/issues/(.*)\?msg_col=submit_ok',
             resp.location).group(1)
 
-        obj = self._obj_by_hash(dbsession, hash)
+        obj = self._obj_by_hash(dbsession, hash_)
         assert 'Description' == obj.description
         assert issue_test_data['types'][0] is obj.type
 

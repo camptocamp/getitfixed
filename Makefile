@@ -86,7 +86,7 @@ check: docker-build-build
 test: ## Run tests
 test:
 	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://tests.ini --force=1
-	docker-compose run --rm getitfixed pytest /app/acceptance_tests
+	docker-compose run --rm --user=$(shell id -u) getitfixed pytest /app/acceptance_tests
 
 .PHONY: clean
 clean: ## Clean generated files
