@@ -3,10 +3,12 @@ from uuid import uuid4
 
 from sqlalchemy import (
     Column,
-    Integer,
-    Text,
     Date,
-    ForeignKey)
+    Integer,
+    ForeignKey,
+    String,
+    Text,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import func
 import geoalchemy2
@@ -66,12 +68,12 @@ class Category(Base):
             'title': _('Identifier'),
             'widget': HiddenWidget()
         }})
-    label_fr = Column(Text, nullable=True, info={
+    label_fr = Column(String(50), info={
         'colanderalchemy': {
             'title': _('Label(fr)'),
             'widget': TextInputWidget(),
         }})
-    label_en = Column(Text, nullable=True, info={
+    label_en = Column(String(50), info={
         'colanderalchemy': {
             'title': _('Label(en)'),
             'widget': TextInputWidget(),
@@ -93,12 +95,12 @@ class Type(Base):
             'title': _('Identifier'),
             'widget': HiddenWidget()
         }})
-    label_fr = Column(Text, nullable=True, info={
+    label_fr = Column(String(50), info={
         'colanderalchemy': {
             'title': _('Label(fr)'),
             'widget': TextInputWidget(),
         }})
-    label_en = Column(Text, nullable=True, info={
+    label_en = Column(String(50), info={
         'colanderalchemy': {
             'title': _('Label(en)'),
             'widget': TextInputWidget(),
@@ -142,6 +144,7 @@ class Issue(Base):
         }})
     request_date = Column(Date, nullable=False, server_default=func.now(), info={
         'colanderalchemy': {
+            'title': _('Request date'),
             'exclude': True
         }})
     type_id = Column(Integer, ForeignKey('{}.type.id'.format(schema)), nullable=False, info={
@@ -162,6 +165,10 @@ class Issue(Base):
         'colanderalchemy': {
             'title': _('Description of the Work'),
             'widget': TextAreaWidget(rows=3),
+        }})
+    address = Column(String(254), nullable=False, info={
+        'colanderalchemy': {
+            'title': _('Address')
         }})
     geometry = Column(
         geoalchemy2.Geometry('POINT', 4326, management=True),

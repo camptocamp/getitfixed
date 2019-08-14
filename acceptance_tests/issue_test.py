@@ -31,10 +31,11 @@ def issue_test_data(dbsession, transact):
 
     issues = []
     for i in range(0, 10):
-        issue = Issue()
-        issue.type = types[i % 15]
-        issue.description = '{} truite sauvage'.format(i)
-        issues.append(issue)
+        issues.append(Issue(
+            type=types[i % 15],
+            description='{} truite sauvage'.format(i),
+            address='{} rue du pont'.format(i),
+        ))
     dbsession.add_all(issues)
 
     dbsession.flush()
@@ -102,9 +103,11 @@ class TestIssueViews():
         assert '' == form['id'].value
         assert '' == form['type_id'].value
         assert '' == form['description'].value
+        assert '' == form['address'].value
 
         form['type_id'] = str(issue_test_data['types'][0].id)
         form['description'] = 'Description'
+        form['address'] = 'Address'
 
         resp = form.submit('submit', status=302)
 
@@ -114,8 +117,9 @@ class TestIssueViews():
 
         obj = self._obj_by_hash(dbsession, hash_)
         assert datetime.date.today() == obj.request_date
-        assert 'Description' == obj.description
         assert issue_test_data['types'][0] is obj.type
+        assert 'Description' == obj.description
+        assert 'Address' == obj.address
 
         assert 'Your submission has been taken into account.' == \
             resp.follow().html.find('div', {'class': 'msg-lbl'}).getText()

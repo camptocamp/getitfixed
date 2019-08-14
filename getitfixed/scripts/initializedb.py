@@ -97,8 +97,9 @@ DESCRIPTIONS = (
 def _issue(i, type_id, dbsession):
     issue = Issue(
         request_date=date.today() - timedelta(days=100 - i),
-        description=DESCRIPTIONS[i % len(DESCRIPTIONS)],
         type_id=type_id,
+        description=DESCRIPTIONS[i % len(DESCRIPTIONS)],
+        address='{} rue du pont'.format(i),
         # location_position = Column(geoalchemy2.Geometry('POINT'
         # photos = relationship(Photo,
     )
