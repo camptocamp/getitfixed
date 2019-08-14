@@ -113,7 +113,7 @@ bash: docker-build-build
 .PHONY: psql
 psql: ## Launch psql in postgres image
 psql:
-	docker-compose exec -u postgres postgresql psql getitfixed
+	docker-compose exec -u postgres db psql getitfixed
 
 .PHONY: pshell
 pshell: ## Launch getitfixed pshell
