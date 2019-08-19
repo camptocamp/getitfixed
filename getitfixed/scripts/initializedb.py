@@ -3,6 +3,7 @@ import os
 import sys
 import transaction
 from datetime import date, timedelta
+from random import randrange
 
 from pyramid.scripts.common import parse_vars, get_config_loader
 
@@ -16,6 +17,8 @@ from ..models import (
 from getitfixed.models.getitfixed import (
     schema,
     Issue,
+    Category,
+    Type,
     )
 
 from getitfixed.scripts import wait_for_db
@@ -75,22 +78,56 @@ WHERE schema_name = '{}';
 
 
 def setup_test_data(dbsession):
+    if dbsession.query(Category).count() == 0:
+        for i in range(5):
+            dbsession.add(Category(label_fr='Catégorie «{}»'.format(i)))
+    if dbsession.query(Type).count() == 0:
+        for i in range(15):
+            dbsession.add(Type(label_fr='Type «{}»'.format(i), category_id=(i % 3) + 1))
     if dbsession.query(Issue).count() == 0:
         for i in range(100):
-            dbsession.add(_issue(i, dbsession))
+            dbsession.add(_issue(i, (i % 15) + 1, dbsession))
 
 
 DESCRIPTIONS = (
     'Déchets sur la voie publique',
-    'Nit de poule',
+    'Nid de poule',
+)
+
+FIRSTNAMES = (
+    'Dale',
+    'Teresa',
+    'Beatrice',
+    'Darcie',
+)
+
+LASTNAMES = (
+    'Lamb',
+    'Evans',
+    'Alexander',
+    'Rowe',
+    'Ford',
 )
 
 
-def _issue(i, dbsession):
+def get_value(col, i):
+    return col[i % len(col)]
+
+
+def _issue(i, type_id, dbsession):
     issue = Issue(
         request_date=date.today() - timedelta(days=100 - i),
-        description=DESCRIPTIONS[i % len(DESCRIPTIONS)],
-        # location_position = Column(geoalchemy2.Geometry('POINT'
-        # photos = relationship(Photo,
+        type_id=type_id,
+        description=get_value(DESCRIPTIONS, i),
+        localisation='{} rue du pont'.format(i),
+        # position
+        # photos
+        firstname=get_value(FIRSTNAMES, i),
+        lastname=get_value(LASTNAMES, i),
+        phone='0{} {:02} {:02} {:02} {:02}'.format(
+            randrange(1, 10),
+            *[randrange(100) for i in range(4)]),
     )
+    issue.email = '{}.{}@domain.net'.format(issue.firstname.lower(),
+                                            issue.lastname.lower())
     return issue
