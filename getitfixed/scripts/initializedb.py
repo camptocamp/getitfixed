@@ -119,7 +119,7 @@ def _issue(i, type_id, dbsession):
         request_date=date.today() - timedelta(days=100 - i),
         type_id=type_id,
         description=get_value(DESCRIPTIONS, i),
-        address='{} rue du pont'.format(i),
+        localisation='{} rue du pont'.format(i),
         # position
         # photos
         firstname=get_value(FIRSTNAMES, i),

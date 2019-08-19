@@ -167,9 +167,9 @@ class Issue(Base):
             'title': _('Description of the Work'),
             'widget': TextAreaWidget(rows=3),
         }})
-    address = Column(String(254), nullable=False, info={
+    localisation = Column(String(254), nullable=False, info={
         'colanderalchemy': {
-            'title': _('Address')
+            'title': _('Localisation')
         }})
     geometry = Column(
         geoalchemy2.Geometry('POINT', 4326, management=True),

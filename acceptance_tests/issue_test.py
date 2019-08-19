@@ -35,7 +35,7 @@ def issue_test_data(dbsession, transact):
         issues.append(Issue(
             type=types[i % 15],
             description='{} truite sauvage'.format(i),
-            address='{} rue du pont'.format(i),
+            localisation='{} rue du pont'.format(i),
             firstname='Firstname{}'.format(i),
             lastname='Lastname{}'.format(i),
             phone='0{} {:02} {:02} {:02} {:02}'.format(
@@ -110,7 +110,7 @@ class TestIssueViews():
         assert '' == form['id'].value
         assert '' == form['type_id'].value
         assert '' == form['description'].value
-        assert '' == form['address'].value
+        assert '' == form['localisation'].value
         assert '' == form['firstname'].value
         assert '' == form['lastname'].value
         assert '' == form['phone'].value
@@ -118,10 +118,10 @@ class TestIssueViews():
 
         form['type_id'] = str(issue_test_data['types'][0].id)
         form['description'] = 'Description'
-        form['address'] = 'Address'
+        form['localisation'] = '234 long street'
         form['firstname'] = 'Andreas'
         form['lastname'] = 'Ford'
-        form['phone'] = '234 long street'
+        form['phone'] = '04 58 48 20 00'
         form['email'] = 'andreas.ford@domain.net'
 
         resp = form.submit('submit', status=302)
@@ -134,10 +134,10 @@ class TestIssueViews():
         assert datetime.date.today() == obj.request_date
         assert issue_test_data['types'][0] is obj.type
         assert 'Description' == obj.description
-        assert 'Address' == obj.address
+        assert '234 long street' == obj.localisation
         assert 'Andreas' == obj.firstname
         assert 'Ford' == obj.lastname
-        assert '234 long street' == obj.phone
+        assert '04 58 48 20 00' == obj.phone
         assert 'andreas.ford@domain.net' == obj.email
 
         assert 'Your submission has been taken into account.' == \

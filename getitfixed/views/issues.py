@@ -52,7 +52,7 @@ class IssueViews(AbstractViews):
                     sort_column=Type.label_fr,
                     filter_column=Type.label_fr),
         _list_field('description'),
-        _list_field('address'),
+        _list_field('localisation'),
         _list_field('firstname'),
         _list_field('lastname'),
         _list_field('phone'),
