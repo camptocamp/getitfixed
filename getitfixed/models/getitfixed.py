@@ -146,7 +146,6 @@ class Issue(Base):
     request_date = Column(Date, nullable=False, server_default=func.now(), info={
         'colanderalchemy': {
             'title': _('Request date'),
-            'exclude': True
         }})
     type_id = Column(Integer, ForeignKey('{}.type.id'.format(schema)), nullable=False, info={
         'colanderalchemy': {
