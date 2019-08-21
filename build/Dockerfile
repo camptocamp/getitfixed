@@ -4,7 +4,6 @@ FROM camptocamp/c2cwsgiutils:3
 RUN \
   . /etc/os-release && \
   apt-get update && \
-  # To be removed at sometime
   apt-get install --assume-yes --no-install-recommends apt-file && apt-file update
 
 RUN \
