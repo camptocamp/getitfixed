@@ -1,5 +1,7 @@
 # GetItFixed! README
 
+Demo : https://geomapfish-demo.camptocamp.com/getitfixed/getitfixed/issues
+
 ## Create a development instance
 
 Copy the `gmf_demo` database locally:
