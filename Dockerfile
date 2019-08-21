@@ -16,7 +16,7 @@ RUN cd app && npm install
 COPY requirements.txt /app
 RUN pip3 install -r /app/requirements.txt
 
-COPY * /app/
+COPY . /app/
 WORKDIR /app
 
 RUN pip3 install --no-deps -e .
