@@ -10,4 +10,4 @@ python:
 install:
 - make build
 
-script: make check # && make test
+script: make check && make test
