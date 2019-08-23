@@ -8,7 +8,7 @@ from getitfixed.models.getitfixed import (
 
 def includeme(config):
     config.add_static_view('getitfixed_static', 'getitfixed:static', cache_max_age=3600)
-    config.add_static_view('node_modules', 'getitfixed:node_modules/')
+    config.add_static_view('getitfixed_node_modules', 'getitfixed:node_modules/')
     config.override_asset(to_override='getitfixed:node_modules/',
                           override_with=os.path.join(os.path.dirname(__file__),
                                                      '..',
