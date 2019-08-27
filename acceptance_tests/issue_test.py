@@ -71,7 +71,7 @@ class TestIssueViews():
         html_en = resp_en.html
         news_en = html_en.select('a[href$="/getitfixed/issues/new"]')
         assert 1 == len(news_en)
-        assert 'New' == news_en[0].string
+        assert ['New'] == list(news_en[0].stripped_strings)
 
         reference_numbers = html_en.select('th[data-field=id]')
         assert 1 == len(reference_numbers)
@@ -82,7 +82,7 @@ class TestIssueViews():
         html_fr = resp_fr.html
         news_fr = html_fr.select('a[href$="/getitfixed/issues/new"]')
         assert 1 == len(news_fr)
-        assert 'Nouveau' == news_fr[0].string
+        assert ['Nouveau'] == list(news_fr[0].stripped_strings)
 
     def test_grid(self, test_app, dbsession):
         json = test_app.post(
