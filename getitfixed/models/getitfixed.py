@@ -14,7 +14,7 @@ from sqlalchemy.sql.expression import func
 import geoalchemy2
 
 import colander
-from deform.widget import HiddenWidget, TextAreaWidget, TextInputWidget
+from deform.widget import FormWidget, HiddenWidget, TextAreaWidget, TextInputWidget
 from c2cgeoform.ext.deform_ext import (
     RelationSelectWidget,
 )
@@ -146,7 +146,10 @@ class Issue(Base):
     )
     __colanderalchemy_config__ = {
         'title': _('Issue'),
-        'plural': _('Issues')
+        'plural': _('Issues'),
+        'widget': FormWidget(
+            fields_template='issue_fields'
+        )
     }
 
     id = Column(Integer, primary_key=True, info={
