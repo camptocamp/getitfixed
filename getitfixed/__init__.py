@@ -20,8 +20,21 @@ def main(global_config, **settings):
     config.include('.routes')
     c2cgeoform.routes.register_routes(config)
 
+    init_deform(config)
+
     config.add_translation_dirs('locale')
 
     config.scan()
 
     return config.make_wsgi_app()
+
+
+def init_deform(config):
+    from deform import widget
+    node_modules_root = '{}:node_modules'.format(config.root_package.__name__)
+    registry = widget.default_resource_registry
+    registry.set_js_resources(
+        'openlayers', '3.0.0',
+        '{}/openlayers/dist/ol.js'.format(node_modules_root),
+        '{}/proj4/dist/proj4.js'.format(node_modules_root),
+        'getitfixed:static/epsg-21781.js')

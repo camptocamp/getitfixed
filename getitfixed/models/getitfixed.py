@@ -14,7 +14,7 @@ from sqlalchemy.sql.expression import func
 import geoalchemy2
 
 import colander
-from deform.widget import HiddenWidget, TextAreaWidget, TextInputWidget
+from deform.widget import FormWidget, HiddenWidget, TextAreaWidget, TextInputWidget
 from c2cgeoform.ext.deform_ext import (
     RelationSelectWidget,
 )
@@ -25,8 +25,28 @@ from c2cgeoform.models import FileData
 from getitfixed.i18n import _
 from getitfixed.models.meta import Base
 
-
 schema = 'getitfixed'
+
+gmf_demo_map = '''new ol.layer.Tile({
+    source: new ol.source.WMTS({
+        capabilities: "https://geomapfish-demo-2-4.camptocamp.com/tiles/1.0.0/WMTSCapabilities.xml",
+        url: "https://geomapfish-demo-2-4.camptocamp.com/tiles/1.0.0/{Layer}/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+        requestEncoding: "REST",
+        layer: "map",
+        matrixSet: "swissgrid_005",
+        dimensions: {},
+        style: "default",
+        projection: new ol.proj.Projection({
+            code: "EPSG:21781"
+        }),
+        tileGrid: new ol.tilegrid.WMTS({
+            origin: [420000, 350000],
+            resolutions: [1000, 500, 250, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.05],
+            matrixIds: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"],
+        }),
+        attributions: []
+    })
+})'''  # noqa
 
 
 # FIXME a file upload memory store is not appropriate for production
@@ -126,7 +146,10 @@ class Issue(Base):
     )
     __colanderalchemy_config__ = {
         'title': _('Issue'),
-        'plural': _('Issues')
+        'plural': _('Issues'),
+        'widget': FormWidget(
+            fields_template='issue_fields'
+        )
     }
 
     id = Column(Integer, primary_key=True, info={
@@ -146,7 +169,6 @@ class Issue(Base):
     request_date = Column(Date, nullable=False, server_default=func.now(), info={
         'colanderalchemy': {
             'title': _('Request date'),
-            'exclude': True
         }})
     type_id = Column(Integer, ForeignKey('{}.type.id'.format(schema)), nullable=False, info={
         'colanderalchemy': {
@@ -177,7 +199,11 @@ class Issue(Base):
             'colanderalchemy': {
                 'title': _('Position'),
                 'typ': colander_ext.Geometry('POINT', srid=4326, map_srid=3857),
-                'widget': deform_ext.MapWidget()
+                'widget': deform_ext.MapWidget(
+                    base_layer=gmf_demo_map,
+                    center=[738260, 5864270],
+                    zoom=12,
+                )
             }})
     photos = relationship(
         Photo,

@@ -1,0 +1,6 @@
+<div tal:repeat="child field.children"
+     tal:replace="structure child.render_template(field.widget.item_template)" >
+</div>
+<script>
+console.error('here goes your javascript')
+</script>

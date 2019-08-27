@@ -8,6 +8,7 @@ from getitfixed.models.getitfixed import (
     Issue,
     Type,
 )
+from getitfixed.views.issues import IssueViews
 
 
 @pytest.fixture(scope='function')
@@ -126,6 +127,9 @@ class TestIssueViews():
 
         resp = form.submit('submit', status=302)
 
+        assert IssueViews.MSG_COL['submit_ok'] == \
+            resp.follow().html.find('div', {'class': 'msg-lbl'}).getText()
+
         hash_ = re.match(
             r'http://localhost/getitfixed/issues/(.*)\?msg_col=submit_ok',
             resp.location).group(1)
@@ -139,6 +143,3 @@ class TestIssueViews():
         assert 'Ford' == obj.lastname
         assert '04 58 48 20 00' == obj.phone
         assert 'andreas.ford@domain.net' == obj.email
-
-        assert 'Your submission has been taken into account.' == \
-            resp.follow().html.find('div', {'class': 'msg-lbl'}).getText()

@@ -14,10 +14,24 @@ from getitfixed.models.getitfixed import (
     Issue,
     Type,
 )
+from getitfixed.i18n import _
 
 _list_field = partial(ListField, Issue)
 
-base_schema = GeoFormSchemaNode(Issue)
+new_schema = GeoFormSchemaNode(
+    Issue,
+    excludes=[
+        'request_date',
+    ])
+
+follow_schema = GeoFormSchemaNode(
+    Issue,
+    includes=['request_date',
+              'type_id',
+              'description',
+              'localisation',
+              'geometry',
+              ])
 
 '''
 base_schema.add_before(
@@ -41,7 +55,7 @@ base_schema.add_before(
 class IssueViews(AbstractViews):
 
     _model = Issue
-    _base_schema = base_schema
+    _base_schema = new_schema
     _id_field = 'hash'
 
     _list_fields = [
@@ -59,6 +73,13 @@ class IssueViews(AbstractViews):
         _list_field('email'),
     ]
 
+    MSG_COL = {
+        'submit_ok': _('Thank you for your report, '
+                       'it has been registered with following details, '
+                       'and will be treated as soon as possible.'),
+        'copy_ok': _('Please check that the copy fits before submitting.'),
+    }
+
     def _base_query(self):
         return super()._base_query(). \
             outerjoin(Issue.type). \
@@ -74,17 +95,25 @@ class IssueViews(AbstractViews):
     def grid(self):
         return super().grid()
 
+    def _item_actions(self, item):
+        return []
+
     @view_config(route_name='c2cgeoform_item',
                  request_method='GET',
                  renderer='../templates/edit.jinja2')
     def edit(self):
-        return super().edit()
+        if self._is_new():
+            return super().edit()
+        else:
+            return super().edit(schema=follow_schema,
+                                readonly=True)
 
-    @view_config(route_name='c2cgeoform_item',
-                 request_method='DELETE',
-                 renderer='json')
-    def delete(self):
-        return super().delete()
+    # For development/testing purpose
+    @view_config(route_name='c2cgeoform_item_duplicate',
+                 request_method='GET',
+                 renderer='../templates/edit.jinja2')
+    def duplicate(self):
+        return super().duplicate()
 
     @view_config(route_name='c2cgeoform_item',
                  request_method='POST',
