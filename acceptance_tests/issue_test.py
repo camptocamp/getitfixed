@@ -19,13 +19,15 @@ def issue_test_data(dbsession, transact):
     categories = []
     for i in range(5):
         categories.append(Category(
-            label_fr='Catégorie «{}»'.format(i)
+            label_en='Category «{}»'.format(i),
+            label_fr='Catégorie «{}»'.format(i),
         ))
     dbsession.add_all(categories)
 
     types = []
     for i in range(15):
         types.append(Type(
+            label_en='Type «{}»'.format(i),
             label_fr='Type «{}»'.format(i),
             category=categories[i % 3]
         ))
