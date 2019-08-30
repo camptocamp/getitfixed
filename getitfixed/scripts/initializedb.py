@@ -129,7 +129,7 @@ def _issue(i, type_id, dbsession):
         lastname=get_value(LASTNAMES, i),
         phone='0{} {:02} {:02} {:02} {:02}'.format(
             randrange(1, 10),
-            *[randrange(100) for i in range(4)]),
+            *[randrange(100) for i in range(4)])
     )
     issue.email = '{}.{}@domain.net'.format(issue.firstname.lower(),
                                             issue.lastname.lower())

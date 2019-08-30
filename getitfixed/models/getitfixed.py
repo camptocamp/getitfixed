@@ -4,17 +4,26 @@ from uuid import uuid4
 from sqlalchemy import (
     Column,
     Date,
+    DateTime,
+    Enum,
     Integer,
     ForeignKey,
     String,
     Text,
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql.expression import func
 import geoalchemy2
 
 import colander
-from deform.widget import FormWidget, HiddenWidget, TextAreaWidget, TextInputWidget
+from deform.widget import (
+    FormWidget,
+    HiddenWidget,
+    SelectWidget,
+    SequenceWidget,
+    TextAreaWidget,
+    TextInputWidget,
+)
 from c2cgeoform.ext.deform_ext import (
     RelationSelectWidget,
 )
@@ -47,6 +56,14 @@ gmf_demo_map = '''new ol.layer.Tile({
         attributions: []
     })
 })'''  # noqa
+
+
+STATUSES = {
+    'new': _('Nouveau'),
+    'in_progress': _('In progress'),
+    'waiting_for_customer': _('Waiting for customer'),
+    'resolved': _('Resolved'),
+}
 
 
 # FIXME a file upload memory store is not appropriate for production
@@ -184,6 +201,19 @@ class Issue(Base):
         'colanderalchemy': {
             'exclude': True
         }})
+    status = Column(
+        Enum(*tuple(STATUSES.keys()), native_enum=False, name='status'),
+        nullable=False,
+        default='new',
+        info={
+            'colanderalchemy': {
+                'title': _('Status'),
+                'widget': SelectWidget(
+                    values=STATUSES.items(),
+                    readonly=True
+                )
+            }
+        })
     description = Column(Text, nullable=False, info={
         'colanderalchemy': {
             'title': _('Description'),
@@ -228,4 +258,58 @@ class Issue(Base):
         'colanderalchemy': {
             'title': _('Email'),
             'validator': colander.Email()
+        }})
+    events = relationship(
+        'Event',
+        backref=backref('issue', info={
+            'colanderalchemy': {
+                'exclude': True
+            }}),
+        info={
+            'colanderalchemy': {
+                'title': _('Events'),
+                'widget': SequenceWidget(
+                    readonly=True
+                )
+            }})
+
+
+class Event(Base):
+    __tablename__ = 'event'
+    __table_args__ = (
+        {"schema": schema}
+    )
+    __colanderalchemy_config__ = {
+        'title': _('Event'),
+        'plural': _('Events'),
+    }
+    id = Column(Integer, primary_key=True, info={
+        'colanderalchemy': {
+            'title': _('Identifier'),
+            'widget': HiddenWidget(),
+        }})
+    issue_id = Column(Integer, ForeignKey('{}.issue.id'.format(schema)), nullable=False, info={
+        'colanderalchemy': {
+            'title': _('Type'),
+            'widget': HiddenWidget(),
+        }})
+    date = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), info={
+        'colanderalchemy': {
+            'title': _('Date'),
+            'widget': HiddenWidget(),
+        }})
+    status = Column(
+        Enum(*tuple(STATUSES.keys()), native_enum=False, name='status'),
+        nullable=False,
+        info={
+            'colanderalchemy': {
+                'title': _('Status'),
+                'widget': SelectWidget(
+                    values=STATUSES.items(),
+                )
+            }
+        })
+    comment = Column(Text, info={
+        'colanderalchemy': {
+            'title': _('Comment'),
         }})
