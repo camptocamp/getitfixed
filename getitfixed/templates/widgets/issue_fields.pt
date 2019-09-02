@@ -1,6 +1,19 @@
 <div tal:repeat="child field.children"
      tal:replace="structure child.render_template(field.widget.item_template)" >
 </div>
-<script>
-console.error('here goes your javascript')
+<script tal:condition="exists: deps">
+(function(){
+  const dependencies = ${deps}
+  if (!dependencies) return
+  const [parent, child] = [0,1].map(
+    i => $(`select[name=$${dependencies.fields[i]}]`)
+  )
+  parent.on('change', () => {
+    const options = dependencies.values.filter(v => v.cat == parent.val())
+    child.empty().append(
+      options.map(o =>`<option value="$${o.id}">$${o.label}</option>`)
+    )
+  })
+  parent.trigger('change')
+})()
 </script>
