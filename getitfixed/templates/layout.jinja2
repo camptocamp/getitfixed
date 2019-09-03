@@ -49,7 +49,7 @@
     {% endif %}
   </head>
 
-  <body>
+  <body class="app-{{applications[request.matchdict['application']].name()}}">
 
     <div class="content">
       {% block content %}
