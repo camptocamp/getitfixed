@@ -67,18 +67,20 @@ class IssueViews(AbstractViews):
     _id_field = 'hash'
 
     _list_fields = [
-        _list_field('id'),
-        _list_field('request_date'),
+        # _list_field('id'),
+        _list_field('description',
+            renderer= lambda issue: '<a href="/getitfixed/issues/{}">{}</a>'.format(issue.hash, issue.description)),
         _list_field('type_id',
                     renderer=lambda issue: issue.type.label_fr,
                     sort_column=Type.label_fr,
                     filter_column=Type.label_fr),
-        _list_field('description'),
         _list_field('localisation'),
-        _list_field('firstname'),
-        _list_field('lastname'),
-        _list_field('phone'),
-        _list_field('email'),
+        _list_field('request_date',
+                    renderer=lambda issue: issue.request_date.strftime('%d/%m/%Y')),
+        # _list_field('firstname'),
+        # _list_field('lastname'),
+        # _list_field('phone'),
+        # _list_field('email'),
     ]
 
     MSG_COL = {
@@ -102,6 +104,13 @@ class IssueViews(AbstractViews):
                  renderer='json')
     def grid(self):
         return super().grid()
+
+    def _grid_actions(self):
+        return []
+
+    def _grid_item_actions(self, item):
+        return {
+                'dropdown': []}
 
     def _item_actions(self, item):
         return []
