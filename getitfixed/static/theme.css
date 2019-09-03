@@ -1,0 +1,20 @@
+.jumbotron .small {
+  font-size: 65%;
+}
+.fixed-table-pagination {
+  padding: 0 0.75em;
+}
+
+.content {
+  padding-bottom: 6em;
+}
+footer {
+  border-top: 1px solid #ddd;
+  background: #f7f7f7;
+  position: fixed;
+  bottom: 0;
+  padding: 1em;
+  width: 100%;
+  height: 4em;
+  z-index: 100;
+}

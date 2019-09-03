@@ -51,11 +51,29 @@
 
   <body>
 
-    {% include 'c2cgeoform:/templates/navigation.jinja2' %}
+    <div class="content">
+      {% block content %}
+        <p>No content</p>
+      {% endblock content %}
+    </div>
 
-    {% block content %}
-      <p>No content</p>
-    {% endblock content %}
+    <footer class="footer text-muted">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <p>
+              Made by <a href="http://www.camptocamp.com">camptocamp</a>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="text-right">
+              <a href="{{request.route_url('locale', _query=(('language', 'en'),))}}" class="label label-{{'primary' if request.locale_name=='en' else 'default'}}">en</a>
+              <a href="{{request.route_url('locale', _query=(('language', 'fr'),))}}" class="label label-label label-{{'primary' if request.locale_name=='fr' else 'default'}}">fr</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
   </body>
 </html>
