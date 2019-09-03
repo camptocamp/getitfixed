@@ -1,9 +1,10 @@
 <div tal:repeat="child field.children"
      tal:replace="structure child.render_template(field.widget.item_template)" >
 </div>
+<?python import json ?>
 <script tal:condition="exists: deps">
 (function(){
-  const dependencies = ${deps}
+  const dependencies = ${structure: json.dumps(deps)}
   if (!dependencies) return
   const [parent, child] = [0,1].map(
     i => $(`select[name=$${dependencies.fields[i]}]`)

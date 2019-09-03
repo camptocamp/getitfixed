@@ -1,7 +1,6 @@
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 from functools import partial
-from json import dumps
 
 from sqlalchemy.orm import subqueryload
 
@@ -50,13 +49,13 @@ follow_schema = GeoFormSchemaNode(
               ])
 
 
-def get_types_json_string(request):
-    return dumps({
+def get_types(request):
+    return {
         "fields": ['category_id', 'type_id'],
         "values": [
             dict(id=o.id, cat=o.category_id, label=o.label_fr)
             for o in request.dbsession.query(Type)
-        ]})
+        ]}
 
 
 @view_defaults(match_param='table=issues')
@@ -113,7 +112,7 @@ class IssueViews(AbstractViews):
         if self._is_new():
             base_edit = super().edit()
             base_edit['form_render_kwargs'].update(
-                    {"deps": get_types_json_string(self._request)})
+                    {"deps": get_types(self._request)})
             return base_edit
         else:
             return super().edit(schema=follow_schema,
@@ -126,7 +125,7 @@ class IssueViews(AbstractViews):
     def duplicate(self):
         base_duplicate = super().duplicate()
         base_duplicate['form_render_kwargs'].update(
-                {"deps": get_types_json_string(self._request)})
+                {"deps": get_types(self._request)})
         return base_duplicate
 
     @view_config(route_name='c2cgeoform_item',
