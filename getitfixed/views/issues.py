@@ -51,7 +51,7 @@ base_schema.add_before(
 '''
 
 
-@view_defaults(match_param='table=issues')
+@view_defaults(match_param=('application=getitfixed', 'table=issues'))
 class IssueViews(AbstractViews):
 
     _model = Issue

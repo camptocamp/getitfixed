@@ -3,6 +3,8 @@ import re
 import datetime
 from random import randrange
 
+from c2cgeoform.testing.views import AbstractViewsTests
+
 from getitfixed.models.getitfixed import (
     Category,
     Issue,
@@ -19,13 +21,15 @@ def issue_test_data(dbsession, transact):
     categories = []
     for i in range(5):
         categories.append(Category(
-            label_fr='Catégorie «{}»'.format(i)
+            label_en='Category «{}»'.format(i),
+            label_fr='Catégorie «{}»'.format(i),
         ))
     dbsession.add_all(categories)
 
     types = []
     for i in range(15):
         types.append(Type(
+            label_en='Type «{}»'.format(i),
             label_fr='Type «{}»'.format(i),
             category=categories[i % 3]
         ))
@@ -56,7 +60,9 @@ def issue_test_data(dbsession, transact):
 
 
 @pytest.mark.usefixtures('issue_test_data', 'test_app')
-class TestIssueViews():
+class TestIssueViews(AbstractViewsTests):
+
+    _prefix = '/getitfixed/issues'
 
     def _obj_by_hash(self, dbsession, hash_):
         return dbsession.query(Issue). \
@@ -64,37 +70,29 @@ class TestIssueViews():
             one_or_none()
 
     def test_index(self, test_app):
-        resp = test_app.get('/getitfixed/issues', status=200)
+        resp = self.get(test_app, status=200)
 
-        resp_tmp = resp.click(verbose=True, href='language=en')
-        resp_en = resp_tmp.follow()
-        html_en = resp_en.html
-        news_en = html_en.select('a[href$="/getitfixed/issues/new"]')
-        assert 1 == len(news_en)
-        assert ['New'] == list(news_en[0].stripped_strings)
+        self.check_left_menu(resp, 'Issues')
 
-        reference_numbers = html_en.select('th[data-field=id]')
-        assert 1 == len(reference_numbers)
-        assert 'Identifier' == reference_numbers[0].string
-
-        resp_tmp = resp_en.click(verbose=True, href='language=fr')
-        resp_fr = resp_tmp.follow()
-        html_fr = resp_fr.html
-        news_fr = html_fr.select('a[href$="/getitfixed/issues/new"]')
-        assert 1 == len(news_fr)
-        assert ['Nouveau'] == list(news_fr[0].stripped_strings)
+        expected = [('actions', '', 'false'),
+                    ('id', 'Identifier', 'true'),
+                    ('request_date', 'Request date', 'true'),
+                    ('type_id', 'Type', 'true'),
+                    ('description', 'Description', 'true'),
+                    ('localisation', 'Localisation', 'true'),
+                    ('firstname', 'Firstname', 'true'),
+                    ('lastname', 'Lastname', 'true'),
+                    ('phone', 'Phone', 'true'),
+                    ('email', 'Email', 'true'),
+                    ]
+        self.check_grid_headers(resp, expected)
 
     def test_grid(self, test_app, dbsession):
-        json = test_app.post(
-            '/getitfixed/issues/grid.json',
-            params={
-                'offset': 0,
-                'limit': 10,
-                'sort': 'identifier',
-                'order': 'asc'
-            },
-            status=200
-        ).json
+        json = self.check_search(test_app,
+                                 limit=10,
+                                 sort='identifier',
+                                 order='asc',
+                                 total=10)
         assert 10 == len(json['rows'])
         assert 10 == json['total']
 

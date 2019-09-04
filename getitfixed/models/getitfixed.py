@@ -176,8 +176,8 @@ class Issue(Base):
             'widget': RelationSelectWidget(
                 Type,
                 'id',
-                'label_fr',
-                order_by='label_fr',
+                'label_en',
+                order_by='label_en',
                 default_value=('', _('- Select -'))
                 )}})
     type = relationship(Type, info={
@@ -186,7 +186,7 @@ class Issue(Base):
         }})
     description = Column(Text, nullable=False, info={
         'colanderalchemy': {
-            'title': _('Description of the Work'),
+            'title': _('Description'),
             'widget': TextAreaWidget(rows=3),
         }})
     localisation = Column(String(254), nullable=False, info={

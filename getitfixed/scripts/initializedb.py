@@ -80,10 +80,13 @@ WHERE schema_name = '{}';
 def setup_test_data(dbsession):
     if dbsession.query(Category).count() == 0:
         for i in range(5):
-            dbsession.add(Category(label_fr='Catégorie «{}»'.format(i)))
+            dbsession.add(Category(label_en='Category «{}»'.format(i),
+                                   label_fr='Catégorie «{}»'.format(i)))
     if dbsession.query(Type).count() == 0:
         for i in range(15):
-            dbsession.add(Type(label_fr='Type «{}»'.format(i), category_id=(i % 3) + 1))
+            dbsession.add(Type(label_en='Type «{}»'.format(i),
+                               label_fr='Type «{}»'.format(i),
+                               category_id=(i % 3) + 1))
     if dbsession.query(Issue).count() == 0:
         for i in range(100):
             dbsession.add(_issue(i, (i % 15) + 1, dbsession))

@@ -23,3 +23,9 @@ def includeme(config):
             ('issues', Issue)
         ]
     )
+    register_application(
+        'admin',
+        [
+            ('issues', Issue)
+        ]
+    )
