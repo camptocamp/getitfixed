@@ -15,8 +15,6 @@ def includeme(config):
                                                      '..',
                                                      'node_modules'))
     config.add_route('getitfixed', '/getitfixed')
-    config.add_route('bus_stops', '/bus_stops')
-    config.add_route('addresses', '/addresses')
 
     register_application(
         'getitfixed',

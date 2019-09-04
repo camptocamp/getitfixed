@@ -4,13 +4,13 @@ from functools import partial
 
 from sqlalchemy.orm import subqueryload
 
-# import colander
+from colander import SchemaNode, Int
 from c2cgeoform.schema import GeoFormSchemaNode
-# from c2cgeoform.ext.deform_ext import RelationSelectWidget
+from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
 from getitfixed.models.getitfixed import (
-    # Category,
+    Category,
     Issue,
     Type,
 )
@@ -25,6 +25,21 @@ new_schema = GeoFormSchemaNode(
         'events',
     ])
 
+new_schema.add_before(
+    'type_id',
+    SchemaNode(
+        Int(),
+        name='category_id',
+        title='Category',
+        widget=RelationSelectWidget(
+            Category,
+            'id',
+            'label_fr',
+            order_by='label_fr'
+        ),
+    )
+)
+
 follow_schema = GeoFormSchemaNode(
     Issue,
     includes=['request_date',
@@ -34,22 +49,14 @@ follow_schema = GeoFormSchemaNode(
               'geometry',
               ])
 
-'''
-base_schema.add_before(
-    'type_id',
-    colander.SequenceSchema(
-        colander.SchemaNode(colander.Int()),
-        name='category',
-        title='Category',
-        widget=RelationSelectWidget(
-            Category,
-            'id',
-            'label_fr',
-            order_by='label_fr'
-        )
-    )
-)
-'''
+
+def get_types(request):
+    return {
+        "fields": ['category_id', 'type_id'],
+        "values": [
+            dict(id=o.id, cat=o.category_id, label=o.label_fr)
+            for o in request.dbsession.query(Type)
+        ]}
 
 
 @view_defaults(match_param=('application=getitfixed', 'table=issues'))
@@ -104,7 +111,10 @@ class IssueViews(AbstractViews):
                  renderer='../templates/edit.jinja2')
     def edit(self):
         if self._is_new():
-            return super().edit()
+            base_edit = super().edit()
+            base_edit['form_render_kwargs'].update(
+                    {"deps": get_types(self._request)})
+            return base_edit
         else:
             return super().edit(schema=follow_schema,
                                 readonly=True)
@@ -114,7 +124,10 @@ class IssueViews(AbstractViews):
                  request_method='GET',
                  renderer='../templates/edit.jinja2')
     def duplicate(self):
-        return super().duplicate()
+        base_duplicate = super().duplicate()
+        base_duplicate['form_render_kwargs'].update(
+                {"deps": get_types(self._request)})
+        return base_duplicate
 
     @view_config(route_name='c2cgeoform_item',
                  request_method='POST',
