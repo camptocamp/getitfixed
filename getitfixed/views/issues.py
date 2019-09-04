@@ -134,10 +134,12 @@ class IssueViews(AbstractViews):
             base_edit = super().edit()
             base_edit['form_render_kwargs'].update(
                     {"deps": get_types(self._request)})
+            base_edit['item_name'] = _('New')
             return base_edit
         else:
-            return super().edit(schema=follow_schema,
-                                readonly=True)
+            base_edit = super().edit(schema=follow_schema, readonly=True)
+            base_edit['item_name'] = self._get_object().description
+            return base_edit
 
     # For development/testing purpose
     @view_config(route_name='c2cgeoform_item_duplicate',

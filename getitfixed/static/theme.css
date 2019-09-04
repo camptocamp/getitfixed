@@ -1,6 +1,9 @@
 .jumbotron .small {
   font-size: 65%;
 }
+.breadcrumb {
+  margin-top: 2em;
+}
 .fixed-table-pagination {
   padding: 0 0.75em;
 }
