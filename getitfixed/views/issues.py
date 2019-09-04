@@ -22,6 +22,7 @@ new_schema = GeoFormSchemaNode(
     Issue,
     excludes=[
         'request_date',
+        'events',
     ])
 
 follow_schema = GeoFormSchemaNode(

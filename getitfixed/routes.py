@@ -2,6 +2,7 @@ import os
 
 from c2cgeoform.routes import register_application
 from getitfixed.models.getitfixed import (
+    Event,
     Issue,
 )
 
@@ -20,12 +21,13 @@ def includeme(config):
     register_application(
         'getitfixed',
         [
-            ('issues', Issue)
+            ('issues', Issue),
         ]
     )
     register_application(
         'admin',
         [
-            ('issues', Issue)
+            ('issues', Issue),
+            ('event', Event),
         ]
     )

@@ -5,10 +5,14 @@ from pyramid.httpexceptions import HTTPNotFound
 
 from sqlalchemy.orm import subqueryload
 
+from deform import Button, Form
+
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
+from getitfixed.i18n import _
 from getitfixed.models.getitfixed import (
+    Event,
     Issue,
     Type,
 )
@@ -38,6 +42,7 @@ class IssueViews(AbstractViews):
         _list_field('lastname'),
         _list_field('phone'),
         _list_field('email'),
+        _list_field('status'),
     ]
 
     def _base_query(self):
@@ -61,32 +66,32 @@ class IssueViews(AbstractViews):
     def _item_actions(self, item):
         return []
 
-    def _form(self, *args, **kwargs):
-        form = super()._form(*args, **kwargs)
-        for child in form:
-            if child.name in (
-                'request_date',
-                'type_id',
-                'description',
-                'localisation',
-                'geometry',
-                'photos',
-                'firstname',
-                'lastname',
-                'phone',
-                'email',
-            ):
-                child.widget.readonly = True
-        return form
-
     @view_config(route_name='c2cgeoform_item',
                  request_method='GET',
-                 renderer='../../templates/edit.jinja2')
+                 renderer='../../templates/admin/issue/edit.jinja2')
     def edit(self):
         if self._is_new():
             return HTTPNotFound()
         else:
-            return super().edit()
+            # Return readonly issue form and new event form
+            resp = super().edit(readonly=True)
+
+            issue = self._get_object()
+            event = Event(issue_id=issue.id)
+            event.status = issue.status
+            event_form = Form(
+                GeoFormSchemaNode(Event),
+                formid='new_event_form',
+                buttons=[Button(name='formsubmit', title=_('Submit'))],
+                action=self._request.route_url('c2cgeoform_item', table='events', id='new')
+            )
+            resp.update({
+                'event_form': event_form,
+                'event_form_render_args': (event_form.schema.dictify(event),),
+                'event_form_render_kwargs': {
+                    'request': self._request,
+                }})
+            return resp
 
     @view_config(route_name='c2cgeoform_item',
                  request_method='POST',
