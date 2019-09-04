@@ -1,5 +1,6 @@
 from pyramid.view import view_config
 from pyramid.view import view_defaults
+from pyramid.threadlocal import get_current_request
 from functools import partial
 
 from sqlalchemy.orm import subqueryload
@@ -59,6 +60,17 @@ def get_types(request):
         ]}
 
 
+def get_issue_link(issue):
+    # Request isn't available here without breaking changes in c2cgeoform
+    # use of get_current_request should be safe here, cf
+    # https://docs.pylonsproject.org/projects/pyramid/en/latest/api/threadlocal.html
+    request = get_current_request()
+    if request is None:
+        return issue.description
+    uri = request.route_url('c2cgeoform_item', id=issue.hash)
+    return '<a href="{}">{}</a>'.format(uri, issue.description)
+
+
 @view_defaults(match_param=('application=getitfixed', 'table=issues'))
 class IssueViews(AbstractViews):
 
@@ -68,8 +80,7 @@ class IssueViews(AbstractViews):
 
     _list_fields = [
         # _list_field('id'),
-        _list_field('description',
-            renderer= lambda issue: '<a href="/getitfixed/issues/{}">{}</a>'.format(issue.hash, issue.description)),
+        _list_field('description', renderer=get_issue_link),
         _list_field('type_id',
                     renderer=lambda issue: issue.type.label_fr,
                     sort_column=Type.label_fr,
