@@ -75,11 +75,11 @@ docker-compose-env: ## Build docker-compose environment file
 
 .PHONY: initdb
 initdb:
-	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini --with-data=1
+	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini#app --with-data=1
 
 .PHONY: reinitdb
 reinitdb: ## Drop schema and regenerate it with development dataset
-	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini --force=1 --with-data=1
+	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini#app --force=1 --with-data=1
 
 .PHONY: check
 check: ## Check the code with flake8

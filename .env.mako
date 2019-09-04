@@ -24,3 +24,5 @@ C2CWSGIUTILS_CONFIG=${'/app/development.ini' if os.environ['DEVELOPMENT'] == 'TR
 
 SMTP_USER=${os.environ['SMTP_USER']}
 SMTP_PASSWORD=${os.environ['SMTP_PASSWORD']}
+
+PROXY_PREFIX=${os.environ['PROXY_PREFIX']}

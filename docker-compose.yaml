@@ -31,5 +31,6 @@ services:
       - C2CWSGIUTILS_CONFIG
       - SMTP_USER
       - SMTP_PASSWORD
+      - PROXY_PREFIX
     ports:
       - ${DOCKER_PORT}:8080
