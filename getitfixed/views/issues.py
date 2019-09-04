@@ -4,7 +4,7 @@ from functools import partial
 
 from sqlalchemy.orm import subqueryload
 
-from colander import SequenceSchema, SchemaNode, Int, Invalid
+from colander import SchemaNode, Int
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
