@@ -7,7 +7,7 @@
     <meta name="description" content="pyramid web application">
     <meta name="author" content="Camptocamp">
 
-    <title>getitfixed</title>
+    <title>{{_('getitfixed')}}</title>
     <link rel="shortcut icon" href="{{request.static_url('getitfixed:static/favicon.ico')}}">
 
     <!-- Bootstrap core CSS -->
@@ -50,6 +50,10 @@
   </head>
 
   <body class="app-{{applications[request.matchdict['application']].name()}}">
+
+    <header class="container">
+      <h3>{{request.localizer.translate('getitfixed.title')}}</h3>
+    </header>
 
     <div class="content">
       {% block content %}
