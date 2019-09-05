@@ -1,2 +1,5 @@
 vars:
    project: getitfixed
+
+   smtp:
+      host: smtp

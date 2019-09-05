@@ -2,6 +2,7 @@
 !acceptance_tests
 !getitfixed
 !alembic.ini
+!config.yaml
 !CHANGES.txt
 !development.ini
 !package.json

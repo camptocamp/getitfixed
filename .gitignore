@@ -9,4 +9,5 @@
 *.egg-info
 
 .env
+config.yaml
 docker-compose.override.yaml

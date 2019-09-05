@@ -136,7 +136,7 @@ docker-build-build:
 
 .PHONY: docker-build-getitfixed
 docker-build-getitfixed: docker-build-build
-	$(DOCKER_MAKE_CMD) compile-catalog
+	$(DOCKER_MAKE_CMD) compile-catalog config.yaml
 	docker build --build-arg GIT_HASH=${GIT_HASH} -t ${DOCKER_BASE}-getitfixed:${DOCKER_TAG} .
 
 # Targets used inside docker build container
@@ -167,3 +167,6 @@ compile-catalog: $(MO_FILES)
 		--vars vars.yaml \
 		--engine mako \
 		--files $<
+
+config.yaml:
+	c2c-template --vars vars.yaml --get-config config.yaml project smtp
