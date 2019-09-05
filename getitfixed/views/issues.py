@@ -12,6 +12,8 @@ from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
 from getitfixed.models.getitfixed import Category, Issue, Type
+from getitfixed.emails.email_service import send_email
+
 from getitfixed.i18n import _
 
 _list_field = partial(ListField, Issue)
@@ -157,7 +159,18 @@ class IssueViews(AbstractViews):
         renderer="../templates/edit.jinja2",
     )
     def save(self):
-        base_save = super().save()
-        if not isinstance(base_save, HTTPFound):
-            base_save["item_name"] = _("New")
+
+        if self._is_new():
+            base_save = super().save()
+            if isinstance(base_save, HTTPFound):
+                base_save["item_name"] = _("New")
+                send_email(
+                    request=self._request,
+                    to=self._obj.email,
+                    template_name='welcome_email',
+                    template_kwargs={
+                        'issue': self._obj,
+                    }
+                )
+
         return base_save

@@ -4,6 +4,9 @@
 
 version: '2'
 
+volumes:
+  smtp_maildir:
+
 services:
 
   getitfixed:
@@ -14,3 +17,23 @@ services:
     environment:
       - GUNICORN_PARAMS=-b :8080 --worker-class gthread --threads 10 --workers 1 --max-requests 1000 --max-requests-jitter 50
       - GUNICORN_CMD_ARGS=--reload
+
+  smtp:
+    image: camptocamp/smtp-sink:latest
+    volumes:
+      - smtp_maildir:/home/smtp/Maildir/
+
+  courier-imap:
+    image: camptocamp/courier-imap:latest
+    volumes:
+      - smtp_maildir:/home/smtp/Maildir/
+
+  webmail:
+    image: camptocamp/sqwebmail:latest
+    environment:
+      - IMAP_HOSTNAME=courier-imap
+      - SMTP_HOSTNAME=smtp-sink
+    volumes:
+      - smtp_maildir:/home/smtp/Maildir/
+    ports:
+      - 8082:80

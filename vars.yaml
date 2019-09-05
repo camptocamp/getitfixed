@@ -1,5 +1,17 @@
 vars:
    project: getitfixed
-
    smtp:
       host: smtp
+   welcome_email:
+      # Used to send a welcome email for new user
+      email_from: info@camptocamp.com
+      email_subject: Confirmation de la remontée du problème
+      email_body: |
+         Bonjour {issue.firstname} {issue.lastname},
+         Nous avons bien pris en compte votre demande situé à {issue.localisation}.
+         Une fois traitée, vous en serez informé par email
+            Cordialement
+            Get It Fixed Team
+
+no_interpreted:
+   - welcome_email.email_body
