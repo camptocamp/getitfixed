@@ -124,6 +124,10 @@ pshell: ## Launch getitfixed pshell
 pshell:
 	docker-compose run --rm getitfixed pshell c2c://development.ini
 
+.PHONY: update-catalog
+update-catalog: ## Update the source localisation files (*.po)
+	$(DOCKER_MAKE_CMD) update-catalog-internal
+
 # Docker images
 
 .PHONY: docker-build-postgresql
@@ -141,8 +145,8 @@ docker-build-getitfixed: docker-build-build
 
 # Targets used inside docker build container
 
-.PHONY: update-catalog
-update-catalog:
+.PHONY: update-catalog-internal
+update-catalog-internal:
 	pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
 		getitfixed/models/ \
 		getitfixed/views/ \
