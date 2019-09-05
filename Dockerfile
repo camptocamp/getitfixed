@@ -42,4 +42,4 @@ WORKDIR /app
 
 RUN pip3 install --no-deps -e .
 
-ENV PROXY_PREFIX ""
+ENV PROXY_PREFIX=
