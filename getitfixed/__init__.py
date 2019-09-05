@@ -1,6 +1,7 @@
 from pyramid.config import Configurator
 from pkg_resources import resource_filename
 
+from c2c.template.config import config as configuration
 import c2cgeoform
 
 search_paths = ((resource_filename('getitfixed', 'templates/widgets'),) +
@@ -13,6 +14,11 @@ def main(global_config, **settings):
     """
     config = Configurator(settings=settings,
                           locale_negotiator='getitfixed.i18n.locale_negotiator')
+
+    # Update the settings object from the YAML application config file
+    configuration.init(settings.get('app.cfg'))
+    settings.update(configuration.get_config())
+
     config.include('c2cwsgiutils.pyramid.includeme')
     config.include('pyramid_jinja2')
     config.include('c2cgeoform')

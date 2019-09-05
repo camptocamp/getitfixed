@@ -1,3 +1,4 @@
+c2c.template
 c2cgeoform
 colander
 ColanderAlchemy>=0.3.2
