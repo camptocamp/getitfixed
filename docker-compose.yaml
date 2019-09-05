@@ -10,7 +10,7 @@ services:
      image: camptocamp/getitfixed-postgresql:latest
 
   getitfixed:
-    image: camptocamp/getitfixed-getitfixed:latest
+    image: ${DOCKER_BASE}-getitfixed:${DOCKER_TAG}
     user: www-data
     restart: unless-stopped
     depends_on:
@@ -31,5 +31,6 @@ services:
       - C2CWSGIUTILS_CONFIG
       - SMTP_USER
       - SMTP_PASSWORD
+      - PROXY_PREFIX
     ports:
       - ${DOCKER_PORT}:8080
