@@ -72,20 +72,13 @@ class TestIssueViews(AbstractViewsTests):
     def test_index(self, test_app):
         resp = self.get(test_app, status=200)
 
-        self.check_left_menu(resp, 'Issues')
-
-        expected = [('actions', '', 'false'),
-                    ('id', 'Identifier', 'true'),
-                    ('request_date', 'Request date', 'true'),
-                    ('type_id', 'Type', 'true'),
+        expected = [
                     ('description', 'Description', 'true'),
+                    ('type_id', 'Type', 'true'),
                     ('localisation', 'Localisation', 'true'),
-                    ('firstname', 'Firstname', 'true'),
-                    ('lastname', 'Lastname', 'true'),
-                    ('phone', 'Phone', 'true'),
-                    ('email', 'Email', 'true'),
+                    ('request_date', 'Request date', 'true'),
                     ]
-        self.check_grid_headers(resp, expected)
+        self.check_grid_headers(resp, expected, check_actions=False)
 
     def test_grid(self, test_app, dbsession):
         json = self.check_search(test_app,
@@ -97,10 +90,9 @@ class TestIssueViews(AbstractViewsTests):
         assert 10 == json['total']
 
         row = json['rows'][5]
-        obj = dbsession.query(Issue).get(row['id'])
+        obj = dbsession.query(Issue).filter(Issue.hash==row['_id_']).first()
         assert obj.hash == row['_id_']
-        assert obj.request_date.isoformat() == row['request_date']
-        assert obj.description == row['description']
+        assert obj.description in row['description']
 
     def test_new_then_save(self, dbsession, test_app, issue_test_data):
         resp = test_app.get('/getitfixed/issues/new', status=200)
