@@ -198,4 +198,4 @@ compile-catalog: $(MO_FILES)
 		--files $<
 
 config.yaml:
-	c2c-template --vars vars.yaml --get-config config.yaml project smtp new_issue_email update_issue_email resolved_issue_email
+	c2c-template --vars vars.yaml --get-config config.yaml project smtp emails

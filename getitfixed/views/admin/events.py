@@ -45,15 +45,27 @@ class EventViews(AbstractViews):
                         request=self._request,
                         to=self._obj.issue.email,
                         template_name="resolved_issue_email",
-                        template_kwargs={"issue": self._obj.issue},
+                        template_kwargs={
+                            "issue": self._obj.issue,
+                            "issue-link": self._request.route_url(
+                                "c2cgeoform_item", id=self._obj.issue.hash
+                            ),
+                        },
                     )
                 else:
                     send_email(
                         request=self._request,
                         to=self._obj.issue.email,
                         template_name="update_issue_email",
-                        template_kwargs={"issue": self._obj.issue, "event": self._obj},
-                    )
+                        template_kwargs={
+                            "issue": self._obj.issue,
+                            "event": self._obj,
+                            "issue-link": self._request.route_url(
+                                "c2cgeoform_item", id=self._obj.issue.hash
+                            ),
+                        },
+                    ),
+
             self._obj.issue.status = event_status
 
             # Redirect to issue form

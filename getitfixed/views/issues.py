@@ -168,7 +168,12 @@ class IssueViews(AbstractViews):
                     request=self._request,
                     to=self._obj.email,
                     template_name="new_issue_email",
-                    template_kwargs={"issue": self._obj},
+                    template_kwargs={
+                        "issue": self._obj,
+                        "issue-link": self._request.route_url(
+                            "c2cgeoform_item", id=self._obj.hash
+                        ),
+                    },
                 )
 
         return base_save
