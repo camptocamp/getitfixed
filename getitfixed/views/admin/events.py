@@ -6,6 +6,8 @@ from c2cgeoform.views.abstract_views import AbstractViews
 
 from getitfixed.models.getitfixed import Event
 
+from getitfixed.emails.email_service import send_email
+
 base_schema = GeoFormSchemaNode(Event)
 
 
@@ -34,7 +36,25 @@ class EventViews(AbstractViews):
         if isinstance(resp, HTTPFound):
             # Update issue status
             # FIXME: Should be placed in a trigger after first migration is created
-            self._obj.issue.status = self._obj.status
+            event_status = self._obj.status
+            # send a email when the status has changed
+            if event_status != self._obj.issue.status:
+                # send a specific email when the status has been set to resolved
+                if event_status == "resolved":
+                    send_email(
+                        request=self._request,
+                        to=self._obj.issue.email,
+                        template_name="resolved_issue_email",
+                        template_kwargs={"issue": self._obj.issue},
+                    )
+                else:
+                    send_email(
+                        request=self._request,
+                        to=self._obj.issue.email,
+                        template_name="update_issue_email",
+                        template_kwargs={"issue": self._obj.issue, "event": self._obj},
+                    )
+            self._obj.issue.status = event_status
 
             # Redirect to issue form
             return HTTPFound(

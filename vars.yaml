@@ -2,8 +2,8 @@ vars:
    project: getitfixed
    smtp:
       host: smtp
-   welcome_email:
-      # Used to send a welcome email for new user
+   new_issue_email:
+      # Used to send a email when an issue has been created
       email_from: info@camptocamp.com
       email_subject: Confirmation de la remontée du problème
       email_body: |
@@ -12,6 +12,28 @@ vars:
          Une fois traitée, vous en serez informé par email
             Cordialement
             Get It Fixed Team
+   update_issue_email:
+      # Used to send a email when an issue has been updated
+      email_from: info@camptocamp.com
+      email_subject: Mise à jour du statut du problème déclaré
+      email_body: |
+         Bonjour {issue.firstname} {issue.lastname},
+         Le problème déclaré le {issue.request_date} est désormais en : {issue.status}.
+         Voici les informations complémentaires : {event.comment}
+            Cordialement
+            Get It Fixed Team
+   resolved_issue_email:
+      # Used to send a when an issue has been resolved
+      email_from: info@camptocamp.com
+      email_subject: Le problème à été résolu
+      email_body: |
+         Bonjour {issue.firstname} {issue.lastname},
+         Le problème déclaré le {issue.request_date} à été traité
+         Merci
+            Cordialement
+            Get It Fixed Team
 
 no_interpreted:
-   - welcome_email.email_body
+   - new_issue_email.email_body
+   - update_issue_email.email_body
+   - resolved_issue_email.email_body

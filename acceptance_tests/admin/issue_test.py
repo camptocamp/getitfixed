@@ -4,7 +4,7 @@ from c2cgeoform.testing.views import AbstractViewsTests
 
 from getitfixed.models.getitfixed import Event, Issue
 from ..issue_test import issue_test_data  # noqa
-
+from unittest.mock import patch
 
 @pytest.mark.usefixtures("issue_test_data", "test_app")
 class TestAdminIssueViews(AbstractViewsTests):
@@ -42,6 +42,7 @@ class TestAdminIssueViews(AbstractViewsTests):
         assert obj.request_date.isoformat() == row["request_date"]
         assert obj.description == row["description"]
 
+    @patch("getitfixed.emails.email_service.smtplib.SMTP")
     def test_edit_then_post_comment(self, test_app, issue_test_data, dbsession):
         issue = issue_test_data["issues"][0]
         resp = self.get(test_app, "/{}".format(issue.hash), status=200)
@@ -87,3 +88,4 @@ class TestAdminIssueViews(AbstractViewsTests):
         assert "This is a comment" == obj.comment
 
         assert "in_progress" == issue.status
+        assert smtp_mock.called, "method should have been called"

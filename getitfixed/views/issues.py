@@ -167,10 +167,8 @@ class IssueViews(AbstractViews):
                 send_email(
                     request=self._request,
                     to=self._obj.email,
-                    template_name='welcome_email',
-                    template_kwargs={
-                        'issue': self._obj,
-                    }
+                    template_name="new_issue_email",
+                    template_kwargs={"issue": self._obj},
                 )
 
         return base_save
