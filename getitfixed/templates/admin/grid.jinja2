@@ -1,5 +1,5 @@
 {% extends 'c2cgeoform:/templates/grid.jinja2' %}
 
-{% block calculateHeightJS %}
-return $(window).height() - $('footer').height() - 30
+{% block calculateTableHeightJS %}
+return $(window).height() - $('footer').height() - $('header').height() - 30
 {% endblock %}
