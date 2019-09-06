@@ -42,7 +42,7 @@
 
     <!-- Deform JavaScript -->
     {% if deform_dependencies %}
-    <script type="text/javascript" src="{{request.static_url('deform:static/scripts/deform.js')}}" type="text/css" />
+    <script type="text/javascript" src="{{request.static_url('deform:static/scripts/deform.js')}}"></script>
     {% for js in deform_dependencies['js'] %}
     <script type="text/javascript" src="{{request.static_url(js)}}"></script>
     {% endfor %}
