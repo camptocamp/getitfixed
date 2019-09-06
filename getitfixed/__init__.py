@@ -17,7 +17,7 @@ def main(global_config, **settings):
 
     # Update the settings object from the YAML application config file
     configuration.init(settings.get('app.cfg'))
-    settings.update(configuration.get_config())
+    config.get_settings().update(configuration.get_config())
 
     config.include('c2cwsgiutils.pyramid.includeme')
     config.include('pyramid_jinja2')
