@@ -11,7 +11,7 @@ def add_renderer_globals(event):
     event['localizer'] = request.localizer
 
 
-tsf1 = TranslationStringFactory('{{package}}')
+tsf1 = TranslationStringFactory('getitfixed')
 tsf2 = TranslationStringFactory('c2cgeoform')
 
 
