@@ -163,3 +163,11 @@ Now try it:
 docker-compose run --rm --user `id -u ` getitfixed \
     alembic -c /app/alembic.ini -n getitfixed upgrade head
 ```
+
+
+
+## Email
+
+In development we use a custom SMTP server. All emails will be available at the following address:
+
+  http://localhost:8082/webmail/?_task=mail&_mbox=INBOX
