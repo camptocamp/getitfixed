@@ -86,9 +86,18 @@ initdb:
 reinitdb: ## Drop schema and regenerate it with development dataset
 	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini#app --force=1 --with-data=1
 
+.PHONY: black
+black: docker-build-build
+black: ## Format python code with black
+	docker run --rm ${COMMON_DOCKER_RUN_OPTIONS} black getitfixed setup.py
+
 .PHONY: check
 check: ## Check the code with flake8
 check: docker-build-build
+	docker run --rm ${COMMON_DOCKER_RUN_OPTIONS} black --check getitfixed setup.py || ( \
+		echo 'Please run "make black" to format you Python code' && \
+		false \
+	)
 	docker run --rm ${COMMON_DOCKER_RUN_OPTIONS} flake8 getitfixed
 
 .PHONY: test
