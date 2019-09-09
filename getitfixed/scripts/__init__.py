@@ -7,7 +7,7 @@ def wait_for_db(connection):
     max_sleep = 30
     while sleep_time < max_sleep:
         try:
-            connection.execute(text('SELECT 1;'))
+            connection.execute(text("SELECT 1;"))
             return
         except Exception as e:
             print(str(e))

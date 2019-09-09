@@ -1,10 +1,11 @@
 from contextlib import suppress
 from transaction.interfaces import NoTransaction
+
 # from webtest import TestApp
 
 
 def setup(env):
-    request = env['request']
+    request = env["request"]
 
     # env['testapp'] = TestApp(env['app'])
 
@@ -13,8 +14,8 @@ def setup(env):
 
     # if using the SQLAlchemy backend from our cookiecutter, the dbsession is
     # connected to the transaction manager above
-    env['tm'] = request.tm
-    env['s'] = request.dbsession
+    env["tm"] = request.tm
+    env["s"] = request.dbsession
     try:
         yield
 
