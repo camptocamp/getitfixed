@@ -50,7 +50,7 @@ def get_issue_link(issue):
     request = get_current_request()
     if request is None:
         return issue.description
-    uri = request.route_url("c2cgeoform_item", id=issue.hash)
+    uri = request.route_url("c2cgeoform_item", id=issue.id)
     return '<a href="{}">{}</a>'.format(uri, issue.description)
 
 
@@ -59,7 +59,7 @@ class IssueViews(AbstractViews):
 
     _model = Issue
     _base_schema = new_schema
-    _id_field = "hash"
+    _id_field = "id"
 
     _list_fields = [
         # _list_field('id'),

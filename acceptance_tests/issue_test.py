@@ -90,8 +90,8 @@ class TestIssueViews(AbstractViewsTests):
         assert 10 == json['total']
 
         row = json['rows'][5]
-        obj = dbsession.query(Issue).filter(Issue.hash==row['_id_']).first()
-        assert obj.hash == row['_id_']
+        obj = dbsession.query(Issue).filter(Issue.id == row['_id_']).first()
+        assert obj.id == int(row['_id_'])
         assert obj.description in row['description']
 
     def test_new_then_save(self, dbsession, test_app, issue_test_data):
@@ -120,11 +120,11 @@ class TestIssueViews(AbstractViewsTests):
         assert IssueViews.MSG_COL['submit_ok'] == \
             resp.follow().html.find('div', {'class': 'msg-lbl'}).getText()
 
-        hash_ = re.match(
+        id_ = re.match(
             r'http://localhost/getitfixed/issues/(.*)\?msg_col=submit_ok',
             resp.location).group(1)
 
-        obj = self._obj_by_hash(dbsession, hash_)
+        obj = dbsession.query(Issue).get(id_)
         assert datetime.date.today() == obj.request_date
         assert issue_test_data['types'][0] is obj.type
         assert 'Description' == obj.description
