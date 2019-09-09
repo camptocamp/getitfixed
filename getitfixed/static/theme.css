@@ -8,6 +8,26 @@
   padding: 0 0.75em;
 }
 
+.container .panel-body {
+  position: relative;
+  overflow: hidden;
+}
+
+.status-ribbon {
+  position: absolute;
+  right: -3em;
+  top: 2em;
+  background-color: #17a2b8;
+  color: white;
+  font-weight: bold;
+  padding: 0.5em;
+  transform: rotate(45deg);
+  box-shadow: 0px 0 2px rgba(0,0,0,0.5);
+  width: 12em;
+  text-align: center;
+  z-index: 10;
+}
+
 .content {
   padding-bottom: 6em;
 }

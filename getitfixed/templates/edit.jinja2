@@ -1,10 +1,18 @@
 {% extends "layout.jinja2" %}
 {% block content %}
 <div class="container">
+
   <ol class="breadcrumb">
     <li><a href="{{request.route_url('c2cgeoform_index', application='getitfixed', table='issues')}}">{{_('Issues')}}</a></li>
     <li class="active">{{item_name}}</li>
   </ol>
-  {% include 'c2cgeoform:/templates/edit.jinja2' %}
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="status-ribbon">{{_(issue.status)}}</div>
+      {% include 'c2cgeoform:/templates/edit.jinja2' %}
+    </div>
+  </div>
+
 </div>
 {% endblock content %}

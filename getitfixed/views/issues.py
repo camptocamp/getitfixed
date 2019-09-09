@@ -129,6 +129,7 @@ class IssueViews(AbstractViews):
         else:
             base_edit = super().edit(schema=follow_schema, readonly=True)
             base_edit["item_name"] = self._get_object().description
+            base_edit["issue"] = self._get_object()
             return base_edit
 
     # For development/testing purpose
@@ -140,6 +141,7 @@ class IssueViews(AbstractViews):
     def duplicate(self):
         base_duplicate = super().duplicate()
         base_duplicate["form_render_kwargs"].update({"deps": get_types(self._request)})
+        base_duplicate["issue"] = self._get_object()
         return base_duplicate
 
     @view_config(
