@@ -1,7 +1,19 @@
 {% extends "layout.jinja2" %}
 
 {% block content %}
-<div class="container-fluid">
-  {% include 'c2cgeoform:/templates/grid.jinja2' %}
+{% if applications[request.matchdict['application']].name()=='getitfixed' %}
+<div class="jumbotron">
+  <p class="container">
+    <a class="btn btn-danger btn-lg" href="{{request.route_url('c2cgeoform_item', id='new')}}" role="button">{{_('Report an issue')}}</a>
+    <span class="small">{{_("If you can't find it in the list below")}}</span>
+  </p>
+</div>
+{% endif %}
+<div class="container">
+{% if applications[request.matchdict['application']].name()=='getitfixed' %}
+  {% include 'getitfixed:/templates/grid.jinja2' %}
+{% else %}
+  {% include 'getitfixed:/templates/admin/grid.jinja2' %}
+{% endif %}
 </div>
 {% endblock content %}

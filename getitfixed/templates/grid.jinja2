@@ -1,0 +1,35 @@
+{# see: https://github.com/wenzhixin/bootstrap-table/tree/develop/src/locale #}
+{% set bootstrap_table_locales = {
+    'de': 'de-DE',
+    'en': 'en-US',
+    'fr': 'fr-FR',
+} %}
+<div class="list-grid">
+
+  <table class="table table-condensed table-hover table-striped issue-grid">
+    <thead>
+      <tr>
+        {% for field in list_fields %}
+        <th data-field="{{field.id()}}"
+            data-sortable="{{'true' if field.sortable() else 'false'}}"
+            data-visible="{{'true' if field.visible() else 'false'}}"
+            class="{{field.id()}}"
+        >{{request.localizer.translate(field.label())}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+  </table>
+
+  <script>
+    $('.issue-grid').bootstrapTable({
+      url: "{{request.route_url('c2cgeoform_grid')}}",
+      search: true,
+      pagination: true,
+      sidePagination: 'server',
+      pageSize: 20,
+      pageList: [20],
+      locale: '{{ bootstrap_table_locales[request.locale_name] }}',
+      uniqueId: '_id_',
+    })
+  </script>
+</div>

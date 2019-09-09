@@ -7,7 +7,7 @@
     <meta name="description" content="pyramid web application">
     <meta name="author" content="Camptocamp">
 
-    <title>getitfixed</title>
+    <title>{{_('getitfixed')}}</title>
     <link rel="shortcut icon" href="{{request.static_url('getitfixed:static/favicon.ico')}}">
 
     <!-- Bootstrap core CSS -->
@@ -49,13 +49,35 @@
     {% endif %}
   </head>
 
-  <body>
+  <body class="app-{{applications[request.matchdict['application']].name()}}">
 
-    {% include 'c2cgeoform:/templates/navigation.jinja2' %}
+    <header class="container">
+      <h3>{{request.localizer.translate('getitfixed.title')}}</h3>
+    </header>
 
-    {% block content %}
-      <p>No content</p>
-    {% endblock content %}
+    <div class="content">
+      {% block content %}
+        <p>No content</p>
+      {% endblock content %}
+    </div>
+
+    <footer class="footer text-muted">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <p>
+              Made by <a href="http://www.camptocamp.com">camptocamp</a>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="text-right">
+              <a href="{{request.route_url('locale', _query=(('language', 'en'),))}}" class="label label-{{'primary' if request.locale_name=='en' else 'default'}}">en</a>
+              <a href="{{request.route_url('locale', _query=(('language', 'fr'),))}}" class="label label-label label-{{'primary' if request.locale_name=='fr' else 'default'}}">fr</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
   </body>
 </html>

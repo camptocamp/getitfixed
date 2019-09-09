@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2016-02-17 11:07+0100\n"
+"POT-Creation-Date: 2019-09-05 11:32+0200\n"
 "PO-Revision-Date: 2016-01-29 14:19+0100\n"
 "Last-Translator: Arnaud Morvan <contact@camptocamp.com>\n"
 "Language-Team: German\n"
@@ -17,174 +17,109 @@ msgstr ""
 "Generated-By: Lingua 4.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: getitfixed/models.py:54
-msgid "Contact Person"
-msgstr ""
-
-#: getitfixed/models.py:63
-msgid "First name"
-msgstr ""
-
-#: getitfixed/models.py:67
-msgid "Last name"
-msgstr ""
-
-#: getitfixed/models.py:81 getitfixed/models.py:284
+#: getitfixed/models/getitfixed.py:70 getitfixed/models/getitfixed.py:213
 msgid "Photo"
 msgstr ""
 
-#: getitfixed/models.py:111
-msgid "Application form for permission to carry out excavation work"
+#: getitfixed/models/getitfixed.py:83 getitfixed/models/getitfixed.py:131
+msgid "Category"
 msgstr ""
 
-#: getitfixed/models.py:118
-msgid "Permission Number"
+#: getitfixed/models/getitfixed.py:84
+msgid "Categories"
 msgstr ""
 
-#: getitfixed/models.py:128
-msgid "Reference Number"
+#: getitfixed/models/getitfixed.py:89 getitfixed/models/getitfixed.py:116
+#: getitfixed/models/getitfixed.py:159
+msgid "Identifier"
 msgstr ""
 
-#: getitfixed/models.py:132
-msgid "Request Date"
+#: getitfixed/models/getitfixed.py:94 getitfixed/models/getitfixed.py:121
+msgid "Label(fr)"
 msgstr ""
 
-#: getitfixed/models.py:138
-msgid "Description of the Work"
+#: getitfixed/models/getitfixed.py:99 getitfixed/models/getitfixed.py:126
+msgid "Label(en)"
 msgstr ""
 
-#: getitfixed/models.py:143
-msgid "Motive for the Work"
+#: getitfixed/models/getitfixed.py:110 getitfixed/models/getitfixed.py:175
+msgid "Type"
 msgstr ""
 
-#: getitfixed/models.py:153
-msgid "Situation"
+#: getitfixed/models/getitfixed.py:111
+msgid "Types"
 msgstr ""
 
-#: getitfixed/models.py:173
-msgid "Contact Persons"
-msgstr ""
-
-#: getitfixed/models.py:177
-msgid "District"
-msgstr ""
-
-#: getitfixed/models.py:189 getitfixed/models.py:233
+#: getitfixed/models/getitfixed.py:137 getitfixed/models/getitfixed.py:181
 msgid "- Select -"
 msgstr ""
 
-#: getitfixed/models.py:194
-msgid "Street"
+#: getitfixed/models/getitfixed.py:148
+msgid "Issue"
 msgstr ""
 
-#: getitfixed/models.py:198
-msgid "Postal Code"
+#: getitfixed/models/getitfixed.py:149 getitfixed/templates/edit.jinja2:5
+msgid "Issues"
 msgstr ""
 
-#: getitfixed/models.py:202
-msgid "Town"
+#: getitfixed/models/getitfixed.py:171
+msgid "Request date"
 msgstr ""
 
-#: getitfixed/models.py:207
-msgid "Address"
+#: getitfixed/models/getitfixed.py:189
+msgid "Description"
 msgstr ""
 
-#: getitfixed/models.py:221
+#: getitfixed/models/getitfixed.py:194
+msgid "Localisation"
+msgstr ""
+
+#: getitfixed/models/getitfixed.py:200
 msgid "Position"
 msgstr ""
 
-#: getitfixed/models.py:230
-msgid "Title"
+#: getitfixed/models/getitfixed.py:217
+msgid "Firstname"
 msgstr ""
 
-#: getitfixed/models.py:234
-msgid "Mr."
+#: getitfixed/models/getitfixed.py:221
+msgid "Lastname"
 msgstr ""
 
-#: getitfixed/models.py:235
-msgid "Mrs."
+#: getitfixed/models/getitfixed.py:225
+msgid "Phone"
 msgstr ""
 
-#: getitfixed/models.py:240
-msgid "Name"
+#: getitfixed/models/getitfixed.py:229
+msgid "Email"
 msgstr ""
 
-#: getitfixed/models.py:245
-msgid "First Name"
+#: getitfixed/views/issues.py:90
+msgid ""
+"Thank you for your report, it has been registered with following details, "
+"and will be treated as soon as possible."
 msgstr ""
 
-#: getitfixed/models.py:250
-msgid "Mobile Phone"
+#: getitfixed/views/issues.py:93
+msgid "Please check that the copy fits before submitting."
 msgstr ""
 
-#: getitfixed/models.py:254
-msgid "Mail"
+#: getitfixed/views/issues.py:129
+msgid "New"
 msgstr ""
 
-#: getitfixed/models.py:259
-msgid "Company"
+#: getitfixed/templates/index.jinja2:7
+msgid "Report an issue"
 msgstr ""
 
-#: getitfixed/models.py:264
-msgid "Validation"
+#: getitfixed/templates/index.jinja2:8
+msgid "If you can't find it in the list below"
 msgstr ""
 
-#: getitfixed/models.py:265
-msgid "Validated"
+#: getitfixed/templates/layout.jinja2:10
+msgid "getitfixed"
 msgstr ""
 
-#: getitfixed/models.py:272
-msgid "Footprint for the Work"
-msgstr ""
-
-#: getitfixed/templates/form.pt:33
-msgid "There was a problem with your submission"
-msgstr ""
-
-#: getitfixed/templates/form.pt:34
-msgid "Errors have been highlighted below"
-msgstr ""
-
-#: getitfixed/templates/form.pt:44
-msgid "Basic"
-msgstr ""
-
-#: getitfixed/templates/form.pt:54
-msgid "Location"
-msgstr ""
-
-#: getitfixed/templates/form.pt:70
-msgid "Person in Charge for the Work"
-msgstr ""
-
-#: getitfixed/templates/form.pt:88
-msgid "Footprint"
-msgstr ""
-
-#: getitfixed/templates/form.pt:285
-msgid "Cancel"
-msgstr ""
-
-#: getitfixed/templates/form.pt:285
-msgid "current step:"
-msgstr ""
-
-#: getitfixed/templates/form.pt:285
-msgid "Pagination"
-msgstr ""
-
-#: getitfixed/templates/form.pt:285
-msgid "Proceed"
-msgstr ""
-
-#: getitfixed/templates/form.pt:285
-msgid "Next"
-msgstr ""
-
-#: getitfixed/templates/form.pt:285
-msgid "Previous"
-msgstr ""
-
-#: getitfixed/templates/form.pt:285
-msgid "Loading ..."
+#: getitfixed/templates/layout.jinja2:55
+msgid "getitfixed.title"
 msgstr ""

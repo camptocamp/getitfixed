@@ -17,7 +17,6 @@ class TestAdminIssueViews(AbstractViewsTests):
     def test_index(self, test_app):
         resp = self.get(test_app, status=200)
 
-        self.check_left_menu(resp, 'Issues')
 
         expected = [('actions', '', 'false'),
                     ('id', 'Identifier', 'true'),
