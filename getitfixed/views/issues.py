@@ -15,7 +15,7 @@ from getitfixed.i18n import _
 
 _list_field = partial(ListField, Issue)
 
-new_schema = GeoFormSchemaNode(Issue, excludes=["request_date", "events"])
+new_schema = GeoFormSchemaNode(Issue, excludes=["request_date", "events", "status"])
 
 new_schema.add_before(
     "type_id",
