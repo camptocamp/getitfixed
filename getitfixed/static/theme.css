@@ -28,6 +28,10 @@
   z-index: 10;
 }
 
+.pull-right.search {
+  float: none !important;
+}
+
 @media (min-width: 992px) {
   .issue-view .deform .form-group {
     float: left;
