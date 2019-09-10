@@ -121,7 +121,7 @@ msgstr "S’il n’est pas déjà présent dans la liste ci-dessous."
 
 #: getitfixed/templates/layout.jinja2:55
 msgid "getitfixed.title"
-msgstr "Titre en français"
+msgstr "Déclaration de problèmes"
 
 #~ msgid "Contact Person"
 #~ msgstr "Contact"
