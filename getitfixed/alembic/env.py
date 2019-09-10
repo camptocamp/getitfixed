@@ -13,6 +13,7 @@ fileConfig(context.config.config_file_name)
 # add your model's MetaData object here
 # for 'autogenerate' support
 from getitfixed import models  # noqa
+
 target_metadata = models.meta.Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -25,18 +26,20 @@ def get_config():
     conf = context.config.get_section(context.config.config_ini_section)
 
     # Load config from c2cgeoportal if available
-    app_cfg = context.config.get_main_option('app.cfg')
+    app_cfg = context.config.get_main_option("app.cfg")
     if app_cfg:
         from c2c.template.config import config
-        config.init(context.config.get_main_option('app.cfg'))
+
+        config.init(context.config.get_main_option("app.cfg"))
         conf.update(config.get_config())
 
-    if 'sqlalchemy.url' not in conf:
-        conf['sqlalchemy.url'] = 'postgresql://{PGUSER}:{PGPASSWORD}@{PGHOST}:{PGPORT}/{PGDATABASE}'. \
-                                 format(**os.environ)
-    conf.update({
-        'version_table_schema': context.config.get_main_option('schema'),
-    })
+    if "sqlalchemy.url" not in conf:
+        conf[
+            "sqlalchemy.url"
+        ] = "postgresql://{PGUSER}:{PGPASSWORD}@{PGHOST}:{PGPORT}/{PGDATABASE}".format(
+            **os.environ
+        )
+    conf.update({"version_table_schema": context.config.get_main_option("schema")})
     return conf
 
 
@@ -53,10 +56,12 @@ def run_migrations_offline():
 
     """
     conf = get_config()
-    context.configure(url=conf['sqlalchemy.url'],
-                      target_metadata=target_metadata,
-                      literal_binds=True,
-                      **conf)
+    context.configure(
+        url=conf["sqlalchemy.url"],
+        target_metadata=target_metadata,
+        literal_binds=True,
+        **conf
+    )
 
     with context.begin_transaction():
         context.run_migrations()
@@ -72,16 +77,16 @@ def run_migrations_online():
     conf = get_config()
 
     connectable = engine_from_config(
-        conf,
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
+        conf, prefix="sqlalchemy.", poolclass=pool.NullPool
     )
 
-    def include_object(obj, name, type_, reflected, compare_to):  # pylint: disable=unused-argument
-        if type_ == 'table':
-            return obj.schema == conf.get('schema')
+    def include_object(
+        obj, name, type_, reflected, compare_to
+    ):  # pylint: disable=unused-argument
+        if type_ == "table":
+            return obj.schema == conf.get("schema")
         else:
-            return obj.table.schema == conf.get('schema')
+            return obj.table.schema == conf.get("schema")
 
     with connectable.connect() as connection:
         context.configure(

@@ -10,54 +10,37 @@ from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.models.getitfixed import (
-    Category,
-    Issue,
-    Type,
-)
+from getitfixed.models.getitfixed import Category, Issue, Type
 from getitfixed.i18n import _
 
 _list_field = partial(ListField, Issue)
 
-new_schema = GeoFormSchemaNode(
-    Issue,
-    excludes=[
-        'request_date',
-        'events',
-    ])
+new_schema = GeoFormSchemaNode(Issue, excludes=["request_date", "events"])
 
 new_schema.add_before(
-    'type_id',
+    "type_id",
     SchemaNode(
         Int(),
-        name='category_id',
-        title='Category',
-        widget=RelationSelectWidget(
-            Category,
-            'id',
-            'label_fr',
-            order_by='label_fr'
-        ),
-    )
+        name="category_id",
+        title="Category",
+        widget=RelationSelectWidget(Category, "id", "label_fr", order_by="label_fr"),
+    ),
 )
 
 follow_schema = GeoFormSchemaNode(
     Issue,
-    includes=['request_date',
-              'type_id',
-              'description',
-              'localisation',
-              'geometry',
-              ])
+    includes=["request_date", "type_id", "description", "localisation", "geometry"],
+)
 
 
 def get_types(request):
     return {
-        "fields": ['category_id', 'type_id'],
+        "fields": ["category_id", "type_id"],
         "values": [
             dict(id=o.id, cat=o.category_id, label=o.label_fr)
             for o in request.dbsession.query(Type)
-        ]}
+        ],
+    }
 
 
 def get_issue_link(issue):
@@ -67,27 +50,31 @@ def get_issue_link(issue):
     request = get_current_request()
     if request is None:
         return issue.description
-    uri = request.route_url('c2cgeoform_item', id=issue.hash)
+    uri = request.route_url("c2cgeoform_item", id=issue.hash)
     return '<a href="{}">{}</a>'.format(uri, issue.description)
 
 
-@view_defaults(match_param=('application=getitfixed', 'table=issues'))
+@view_defaults(match_param=("application=getitfixed", "table=issues"))
 class IssueViews(AbstractViews):
 
     _model = Issue
     _base_schema = new_schema
-    _id_field = 'hash'
+    _id_field = "hash"
 
     _list_fields = [
         # _list_field('id'),
-        _list_field('description', renderer=get_issue_link),
-        _list_field('type_id',
-                    renderer=lambda issue: issue.type.label_fr,
-                    sort_column=Type.label_fr,
-                    filter_column=Type.label_fr),
-        _list_field('localisation'),
-        _list_field('request_date',
-                    renderer=lambda issue: issue.request_date.strftime('%d/%m/%Y')),
+        _list_field("description", renderer=get_issue_link),
+        _list_field(
+            "type_id",
+            renderer=lambda issue: issue.type.label_fr,
+            sort_column=Type.label_fr,
+            filter_column=Type.label_fr,
+        ),
+        _list_field("localisation"),
+        _list_field(
+            "request_date",
+            renderer=lambda issue: issue.request_date.strftime("%d/%m/%Y"),
+        ),
         # _list_field('firstname'),
         # _list_field('lastname'),
         # _list_field('phone'),
@@ -95,24 +82,27 @@ class IssueViews(AbstractViews):
     ]
 
     MSG_COL = {
-        'submit_ok': _('Thank you for your report, '
-                       'it has been registered with following details, '
-                       'and will be treated as soon as possible.'),
-        'copy_ok': _('Please check that the copy fits before submitting.'),
+        "submit_ok": _(
+            "Thank you for your report, "
+            "it has been registered with following details, "
+            "and will be treated as soon as possible."
+        ),
+        "copy_ok": _("Please check that the copy fits before submitting."),
     }
 
     def _base_query(self):
-        return super()._base_query(). \
-            outerjoin(Issue.type). \
-            options(subqueryload(Issue.type))
+        return (
+            super()
+            ._base_query()
+            .outerjoin(Issue.type)
+            .options(subqueryload(Issue.type))
+        )
 
-    @view_config(route_name='c2cgeoform_index',
-                 renderer='../templates/index.jinja2')
+    @view_config(route_name="c2cgeoform_index", renderer="../templates/index.jinja2")
     def index(self):
         return super().index()
 
-    @view_config(route_name='c2cgeoform_grid',
-                 renderer='json')
+    @view_config(route_name="c2cgeoform_grid", renderer="json")
     def grid(self):
         return super().grid()
 
@@ -120,39 +110,42 @@ class IssueViews(AbstractViews):
         return []
 
     def _grid_item_actions(self, item):
-        return {
-                'dropdown': []}
+        return {"dropdown": []}
 
     def _item_actions(self, item):
         return []
 
-    @view_config(route_name='c2cgeoform_item',
-                 request_method='GET',
-                 renderer='../templates/edit.jinja2')
+    @view_config(
+        route_name="c2cgeoform_item",
+        request_method="GET",
+        renderer="../templates/edit.jinja2",
+    )
     def edit(self):
         if self._is_new():
             base_edit = super().edit()
-            base_edit['form_render_kwargs'].update(
-                    {"deps": get_types(self._request)})
-            base_edit['item_name'] = _('New')
+            base_edit["form_render_kwargs"].update({"deps": get_types(self._request)})
+            base_edit["item_name"] = _("New")
             return base_edit
         else:
             base_edit = super().edit(schema=follow_schema, readonly=True)
-            base_edit['item_name'] = self._get_object().description
+            base_edit["item_name"] = self._get_object().description
             return base_edit
 
     # For development/testing purpose
-    @view_config(route_name='c2cgeoform_item_duplicate',
-                 request_method='GET',
-                 renderer='../templates/edit.jinja2')
+    @view_config(
+        route_name="c2cgeoform_item_duplicate",
+        request_method="GET",
+        renderer="../templates/edit.jinja2",
+    )
     def duplicate(self):
         base_duplicate = super().duplicate()
-        base_duplicate['form_render_kwargs'].update(
-                {"deps": get_types(self._request)})
+        base_duplicate["form_render_kwargs"].update({"deps": get_types(self._request)})
         return base_duplicate
 
-    @view_config(route_name='c2cgeoform_item',
-                 request_method='POST',
-                 renderer='../templates/edit.jinja2')
+    @view_config(
+        route_name="c2cgeoform_item",
+        request_method="POST",
+        renderer="../templates/edit.jinja2",
+    )
     def save(self):
         return super().save()

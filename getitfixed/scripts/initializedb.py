@@ -8,26 +8,19 @@ from random import randrange
 from pyramid.scripts.common import parse_vars, get_config_loader
 
 from ..models.meta import Base
-from ..models import (
-    get_engine,
-    get_session_factory,
-    get_tm_session,
-    )
+from ..models import get_engine, get_session_factory, get_tm_session
 
-from getitfixed.models.getitfixed import (
-    schema,
-    Issue,
-    Category,
-    Type,
-    )
+from getitfixed.models.getitfixed import schema, Issue, Category, Type
 
 from getitfixed.scripts import wait_for_db
 
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
-    print('usage: %s <config_uri> [var=value]\n'
-          '(example: "%s development.ini")' % (cmd, cmd))
+    print(
+        "usage: %s <config_uri> [var=value]\n"
+        '(example: "%s development.ini")' % (cmd, cmd)
+    )
     sys.exit(1)
 
 
@@ -45,7 +38,9 @@ def main(argv=sys.argv):
     wait_for_db(engine)
 
     with engine.begin() as connection:
-        init_db(connection, force='--force' in options, with_data='--with-data' in options)
+        init_db(
+            connection, force="--force" in options, with_data="--with-data" in options
+        )
 
 
 def init_db(connection, force=False, with_data=False):
@@ -54,7 +49,7 @@ def init_db(connection, force=False, with_data=False):
             connection.execute("DROP SCHEMA {} CASCADE;".format(schema))
 
     if not schema_exists(connection, schema):
-        connection.execute("CREATE SCHEMA \"{}\";".format(schema))
+        connection.execute('CREATE SCHEMA "{}";'.format(schema))
 
     Base.metadata.create_all(connection)
 
@@ -67,11 +62,13 @@ def init_db(connection, force=False, with_data=False):
 
 
 def schema_exists(connection, schema_name):
-    sql = '''
+    sql = """
 SELECT count(*) AS count
 FROM information_schema.schemata
 WHERE schema_name = '{}';
-'''.format(schema_name)
+""".format(
+        schema_name
+    )
     result = connection.execute(sql)
     row = result.first()
     return row[0] == 1
@@ -80,37 +77,31 @@ WHERE schema_name = '{}';
 def setup_test_data(dbsession):
     if dbsession.query(Category).count() == 0:
         for i in range(5):
-            dbsession.add(Category(label_en='Category «{}»'.format(i),
-                                   label_fr='Catégorie «{}»'.format(i)))
+            dbsession.add(
+                Category(
+                    label_en="Category «{}»".format(i),
+                    label_fr="Catégorie «{}»".format(i),
+                )
+            )
     if dbsession.query(Type).count() == 0:
         for i in range(15):
-            dbsession.add(Type(label_en='Type «{}»'.format(i),
-                               label_fr='Type «{}»'.format(i),
-                               category_id=(i % 3) + 1))
+            dbsession.add(
+                Type(
+                    label_en="Type «{}»".format(i),
+                    label_fr="Type «{}»".format(i),
+                    category_id=(i % 3) + 1,
+                )
+            )
     if dbsession.query(Issue).count() == 0:
         for i in range(100):
             dbsession.add(_issue(i, (i % 15) + 1, dbsession))
 
 
-DESCRIPTIONS = (
-    'Déchets sur la voie publique',
-    'Nid de poule',
-)
+DESCRIPTIONS = ("Déchets sur la voie publique", "Nid de poule")
 
-FIRSTNAMES = (
-    'Dale',
-    'Teresa',
-    'Beatrice',
-    'Darcie',
-)
+FIRSTNAMES = ("Dale", "Teresa", "Beatrice", "Darcie")
 
-LASTNAMES = (
-    'Lamb',
-    'Evans',
-    'Alexander',
-    'Rowe',
-    'Ford',
-)
+LASTNAMES = ("Lamb", "Evans", "Alexander", "Rowe", "Ford")
 
 
 def get_value(col, i):
@@ -122,15 +113,16 @@ def _issue(i, type_id, dbsession):
         request_date=date.today() - timedelta(days=100 - i),
         type_id=type_id,
         description=get_value(DESCRIPTIONS, i),
-        localisation='{} rue du pont'.format(i),
+        localisation="{} rue du pont".format(i),
         # position
         # photos
         firstname=get_value(FIRSTNAMES, i),
         lastname=get_value(LASTNAMES, i),
-        phone='0{} {:02} {:02} {:02} {:02}'.format(
-            randrange(1, 10),
-            *[randrange(100) for i in range(4)])
+        phone="0{} {:02} {:02} {:02} {:02}".format(
+            randrange(1, 10), *[randrange(100) for i in range(4)]
+        ),
     )
-    issue.email = '{}.{}@domain.net'.format(issue.firstname.lower(),
-                                            issue.lastname.lower())
+    issue.email = "{}.{}@domain.net".format(
+        issue.firstname.lower(), issue.lastname.lower()
+    )
     return issue
