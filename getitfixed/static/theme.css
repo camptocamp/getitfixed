@@ -28,6 +28,16 @@
   z-index: 10;
 }
 
+@media (min-width: 992px) {
+  .issue-view .deform .form-group {
+    float: left;
+    width: 50%;
+  }
+  .issue-view .deform .item-geometry {
+    width: 100%;
+  }
+}
+
 .content {
   padding-bottom: 6em;
 }
