@@ -7,14 +7,7 @@
     <li class="active">{{item_name}}</li>
   </ol>
 
-  <div class="panel panel-default">
-    <div class="panel-body">
-      {% if issue: %}
-      <div class="status-ribbon">{{_(issue.status)}}</div>
-      {% endif %}
-      {% include 'c2cgeoform:/templates/edit.jinja2' %}
-    </div>
-  </div>
+  {% include 'c2cgeoform:/templates/edit.jinja2' %}
 
 </div>
 {% endblock content %}

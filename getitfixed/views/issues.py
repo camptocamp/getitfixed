@@ -1,3 +1,4 @@
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid.threadlocal import get_current_request
@@ -29,7 +30,14 @@ new_schema.add_before(
 
 follow_schema = GeoFormSchemaNode(
     Issue,
-    includes=["request_date", "type_id", "description", "localisation", "geometry"],
+    includes=[
+        "status",
+        "request_date",
+        "type_id",
+        "description",
+        "localisation",
+        "geometry",
+    ],
 )
 
 
@@ -129,7 +137,6 @@ class IssueViews(AbstractViews):
         else:
             base_edit = super().edit(schema=follow_schema, readonly=True)
             base_edit["item_name"] = self._get_object().description
-            base_edit["issue"] = self._get_object()
             return base_edit
 
     # For development/testing purpose
@@ -141,7 +148,7 @@ class IssueViews(AbstractViews):
     def duplicate(self):
         base_duplicate = super().duplicate()
         base_duplicate["form_render_kwargs"].update({"deps": get_types(self._request)})
-        base_duplicate["issue"] = self._get_object()
+        base_duplicate["item_name"] = _("New")
         return base_duplicate
 
     @view_config(
@@ -150,4 +157,7 @@ class IssueViews(AbstractViews):
         renderer="../templates/edit.jinja2",
     )
     def save(self):
-        return super().save()
+        base_save = super().save()
+        if not isinstance(base_save, HTTPFound):
+            base_save["item_name"] = _("New")
+        return base_save

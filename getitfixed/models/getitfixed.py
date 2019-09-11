@@ -199,7 +199,9 @@ class Issue(Base):
         info={
             "colanderalchemy": {
                 "title": _("Status"),
-                "widget": SelectWidget(values=STATUSES.items(), readonly=True),
+                "widget": SelectWidget(
+                    values=STATUSES.items(), readonly=True, item_css_class="item-status"
+                ),
             }
         },
     )

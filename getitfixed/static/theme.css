@@ -1,19 +1,64 @@
+/* For the footer */
+html, body {
+  min-height: 100%;
+}
+html {
+  position: relative;
+}
+
+
 .jumbotron .small {
   font-size: 65%;
 }
 .breadcrumb {
   margin-top: 1em;
 }
-.fixed-table-pagination {
-  padding: 0 0.75em;
-}
 
+/* For the status ribbon */
 .container .panel-body {
   position: relative;
   overflow: hidden;
 }
 
-.status-ribbon {
+/*
+ * Public issues table
+ */
+.app-getitfixed .fixed-table-pagination {
+  padding: 0 0.75em;
+}
+
+.app-getitfixed .pull-right.search {
+  float: none !important;
+}
+
+/*
+ * Forms
+ */
+.form-panel > .panel-footer {
+  position: static;  /* Override c2cgeoform panel-footer sticky */
+}
+
+/*
+ * New issue form
+ */
+@media (min-width: 992px) {
+  .issue-view .deform .form-group {
+    float: left;
+    width: 50%;
+  }
+  .issue-view .deform .item-geometry {
+    width: 100%;
+  }
+}
+
+/* Status field */
+.issue-view .deform .item-status {
+  float: none;
+}
+.item-status label {
+  display: none;
+}
+.panel-body .item-status p {
   position: absolute;
   right: -3em;
   top: 2em;
@@ -28,27 +73,16 @@
   z-index: 10;
 }
 
-.pull-right.search {
-  float: none !important;
-}
-
-@media (min-width: 992px) {
-  .issue-view .deform .form-group {
-    float: left;
-    width: 50%;
-  }
-  .issue-view .deform .item-geometry {
-    width: 100%;
-  }
-}
-
+/*
+ * Footer
+ */
 .content {
-  padding-bottom: 6em;
+  padding-bottom: 4em;
 }
 footer {
   border-top: 1px solid #ddd;
   background: #f7f7f7;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   padding: 1em;
   width: 100%;
