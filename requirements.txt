@@ -15,4 +15,3 @@ transaction
 zope.sqlalchemy
 waitress
 mock
-black

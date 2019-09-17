@@ -163,7 +163,6 @@ class IssueViews(AbstractViews):
         if self._is_new():
             base_save = super().save()
             if isinstance(base_save, HTTPFound):
-                base_save["item_name"] = _("New")
                 send_email(
                     request=self._request,
                     to=self._obj.email,
@@ -175,5 +174,7 @@ class IssueViews(AbstractViews):
                         ),
                     },
                 )
+            if not isinstance(base_save, HTTPFound):
+                base_save["item_name"] = _("New")
 
         return base_save

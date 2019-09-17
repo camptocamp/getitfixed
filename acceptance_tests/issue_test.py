@@ -90,7 +90,7 @@ class TestIssueViews(AbstractViewsTests):
 
     @patch("getitfixed.emails.email_service.smtplib.SMTP")
     def test_new_then_save(self, smtp_mock, dbsession, test_app, issue_test_data):
-        resp = test_app.get('/getitfixed/issues/new', status=200)
+        resp = test_app.get("/getitfixed/issues/new", status=200)
 
         form = resp.form
         assert "" == form["id"].value

@@ -11,34 +11,31 @@ LOG = logging.getLogger(__name__)
 
 
 def send_email(request, to, template_name, template_args=[], template_kwargs={}):
-    '''Send acknowledgment email to rpfe and requerant'''
+    """Send acknowledgment email to rpfe and requerant"""
     settings = request.registry.settings
-    import pprint
-    LOG.error(pprint.pformat(settings, indent=4))
-    smtp = settings['smtp']['host']
+    smtp = settings["smtp"]["host"]
     if not smtp:
         return False
 
-    template = settings[template_name]
-    sender = template['email_from']
-    logging.getLogger(__name__).error(pprint.pformat(template))
+    template = settings["emails"][request.localizer.locale_name][template_name]
+    sender = template["email_from"]
 
-    body = template['email_body'].format(template, *template_args, **template_kwargs)
+    body = template["email_body"].format(template, *template_args, **template_kwargs)
 
     msg = MIMEText(body, _charset="UTF-8")
-    msg['From'] = Header(sender)
-    msg['To'] = Header(to)
-    #msg['Bcc'] = Header(sender)
-    msg['Subject'] = Header(template['email_subject'], "utf-8")
+    msg["From"] = Header(sender)
+    msg["To"] = Header(to)
+    # msg['Bcc'] = Header(sender)
+    msg["Subject"] = Header(template["email_subject"], "utf-8")
 
     # Connect to server
-    if 'ssl' in smtp and smtp['mail.ssl']:
+    if "ssl" in smtp and smtp["mail.ssl"]:
         server = smtplib.SMTP_SSL(smtp)
     else:
         server = smtplib.SMTP(smtp)
-    if 'user' in smtp and smtp['mail.user']:
-        server.login(smtp['mail.user'], smtp['mail.password'])
-    if 'starttls' in smtp and smtp['starttls']:
+    if "user" in smtp and smtp["mail.user"]:
+        server.login(smtp["mail.user"], smtp["mail.password"])
+    if "starttls" in smtp and smtp["starttls"]:
         server.starttls()
 
     # Send message
