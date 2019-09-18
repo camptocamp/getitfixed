@@ -10,8 +10,10 @@ RUN apt-get update && \
         make
 
 RUN mkdir -p /src && \
-    git clone -b getitfixed https://github.com/camptocamp/c2cgeoform.git /src/c2cgeoform
-RUN make -C /src/c2cgeoform compile-catalog
+    git clone -b getitfixed https://github.com/camptocamp/c2cgeoform.git /src/c2cgeoform && \
+    cd /src/c2cgeoform && \
+    git checkout 4477e201252bd70a11ebe81a151af074424bd2aa && \
+    make compile-catalog
 
 
 FROM camptocamp/c2cwsgiutils:3
