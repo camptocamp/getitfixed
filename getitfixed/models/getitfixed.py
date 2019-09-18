@@ -199,7 +199,9 @@ class Issue(Base):
         info={
             "colanderalchemy": {
                 "title": _("Status"),
-                "widget": SelectWidget(values=STATUSES.items(), readonly=True),
+                "widget": SelectWidget(
+                    values=STATUSES.items(), readonly=True, item_css_class="item-status"
+                ),
             }
         },
     )
@@ -225,7 +227,10 @@ class Issue(Base):
                 "title": _("Position"),
                 "typ": colander_ext.Geometry("POINT", srid=4326, map_srid=3857),
                 "widget": deform_ext.MapWidget(
-                    base_layer=gmf_demo_map, center=[738260, 5864270], zoom=12
+                    base_layer=gmf_demo_map,
+                    center=[738260, 5864270],
+                    zoom=12,
+                    item_css_class="item-geometry",
                 ),
             }
         },

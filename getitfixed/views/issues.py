@@ -1,3 +1,4 @@
+from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid.threadlocal import get_current_request
@@ -15,7 +16,7 @@ from getitfixed.i18n import _
 
 _list_field = partial(ListField, Issue)
 
-new_schema = GeoFormSchemaNode(Issue, excludes=["request_date", "events"])
+new_schema = GeoFormSchemaNode(Issue, excludes=["request_date", "events", "status"])
 
 new_schema.add_before(
     "type_id",
@@ -29,7 +30,14 @@ new_schema.add_before(
 
 follow_schema = GeoFormSchemaNode(
     Issue,
-    includes=["request_date", "type_id", "description", "localisation", "geometry"],
+    includes=[
+        "status",
+        "request_date",
+        "type_id",
+        "description",
+        "localisation",
+        "geometry",
+    ],
 )
 
 
@@ -50,7 +58,7 @@ def get_issue_link(issue):
     request = get_current_request()
     if request is None:
         return issue.description
-    uri = request.route_url("c2cgeoform_item", id=issue.hash)
+    uri = request.route_url("c2cgeoform_item", id=issue.id)
     return '<a href="{}">{}</a>'.format(uri, issue.description)
 
 
@@ -59,7 +67,7 @@ class IssueViews(AbstractViews):
 
     _model = Issue
     _base_schema = new_schema
-    _id_field = "hash"
+    _id_field = "id"
 
     _list_fields = [
         # _list_field('id'),
@@ -140,6 +148,7 @@ class IssueViews(AbstractViews):
     def duplicate(self):
         base_duplicate = super().duplicate()
         base_duplicate["form_render_kwargs"].update({"deps": get_types(self._request)})
+        base_duplicate["item_name"] = _("New")
         return base_duplicate
 
     @view_config(
@@ -148,4 +157,7 @@ class IssueViews(AbstractViews):
         renderer="../templates/edit.jinja2",
     )
     def save(self):
-        return super().save()
+        base_save = super().save()
+        if not isinstance(base_save, HTTPFound):
+            base_save["item_name"] = _("New")
+        return base_save
