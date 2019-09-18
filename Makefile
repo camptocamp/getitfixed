@@ -63,7 +63,8 @@ help: ## Display this help message
 .PHONY: meacoffee
 meacoffee: ## Build, run and show logs
 meacoffee: build initdb
-	docker-compose rm --stop --force getitfixed
+	docker-compose stop getitfixed
+	docker-compose rm --force getitfixed
 	docker-compose up -d
 	docker-compose logs -f getitfixed
 
