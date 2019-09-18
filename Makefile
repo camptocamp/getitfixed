@@ -157,6 +157,16 @@ docker-build-getitfixed: docker-build-build
 	$(DOCKER_MAKE_CMD) compile-catalog config.yaml
 	docker build --build-arg GIT_HASH=${GIT_HASH} -t ${DOCKER_BASE}-getitfixed:${DOCKER_TAG} .
 
+.PHONY: docker-push
+docker-push: ## Push docker images on docker hub
+	docker push ${DOCKER_BASE}-build:${DOCKER_TAG}
+	docker push ${DOCKER_BASE}-getitfixed:${DOCKER_TAG}
+
+.PHONY: docker-pull
+docker-pull: ## Pull docker images from docker hub
+	docker pull ${DOCKER_BASE}-build:${DOCKER_TAG}
+	docker pull ${DOCKER_BASE}-getitfixed:${DOCKER_TAG}
+
 # Targets used inside docker build container
 
 .PHONY: update-catalog-internal
