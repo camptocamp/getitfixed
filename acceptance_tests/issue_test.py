@@ -10,6 +10,7 @@ from getitfixed.views.issues import IssueViews
 
 from unittest.mock import patch
 
+
 @pytest.fixture(scope="function")
 @pytest.mark.usefixtures("dbsession", "transact")
 def issue_test_data(dbsession, transact):
@@ -132,3 +133,4 @@ class TestIssueViews(AbstractViewsTests):
         assert "andreas.ford@domain.net" == obj.email
 
         assert smtp_mock.called, "method should have been called"
+        assert smtp_mock.call_count == 2

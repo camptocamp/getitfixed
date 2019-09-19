@@ -159,10 +159,11 @@ class IssueViews(AbstractViews):
         renderer="../templates/edit.jinja2",
     )
     def save(self):
-
+        base_save = super().save()
         if self._is_new():
-            base_save = super().save()
+
             if isinstance(base_save, HTTPFound):
+                # Send email to the issue Reporter
                 send_email(
                     request=self._request,
                     to=self._obj.email,
@@ -174,7 +175,21 @@ class IssueViews(AbstractViews):
                         ),
                     },
                 )
-            if not isinstance(base_save, HTTPFound):
+                # Send email to the category Manager
+                send_email(
+                    request=self._request,
+                    to=self._obj.category.email,
+                    template_name="admin_new_issue_email",
+                    template_kwargs={
+                        "issue": self._obj,
+                        "issue-link": self._request.route_url(
+                            "c2cgeoform_item", application="admin", id=self._obj.hash
+                        ),
+                    },
+                )
+            else:
                 base_save["item_name"] = _("New")
+        else:
+            base_save["item_name"] = self._get_object().description
 
         return base_save

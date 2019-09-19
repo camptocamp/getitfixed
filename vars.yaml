@@ -4,6 +4,12 @@ vars:
       host: smtp
    emails:
       fr:
+         admin_new_issue_email:
+            email_from: info@camptocamp.com
+            email_subject: Nouveau problème remonté dans votre categorie
+            email_body: |
+               Un nouveau problème a été remonté dans votre catégorie
+               Vous pouvez la consulter ici : {issue-link}
          new_issue_email:
             # Used to send a email when an issue has been created
             email_from: info@camptocamp.com
@@ -36,6 +42,12 @@ vars:
                   Cordialement,
                   Get It Fixed Team
       en:
+         admin_new_issue_email:
+            email_from: info@camptocamp.com
+            email_subject: A new issue has been created
+            email_body: |
+               A nex issue has been submitted
+               You can find the link here : {issue-link}
          new_issue_email:
             # Used to send a email when an issue has been created
             email_from: info@camptocamp.com
@@ -69,6 +81,8 @@ vars:
                   Get It Fixed Team
 
 no_interpreted:
+   - emails.fr.admin_new_issue_email.email_body
+   - emails.en.admin_new_issue_email.email_body
    - emails.fr.new_issue_email.email_body
    - emails.en.new_issue_email.email_body
    - emails.fr.update_issue_email.email_body
