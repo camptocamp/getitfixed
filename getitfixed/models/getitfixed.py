@@ -260,7 +260,7 @@ class Issue(Base):
         info={
             "colanderalchemy": {
                 "title": _("Events"),
-                "widget": SequenceWidget(readonly=True),
+                "widget": SequenceWidget(readonly=True, item_css_class="item-events"),
             }
         },
     )
@@ -293,7 +293,9 @@ class Event(Base):
         info={
             "colanderalchemy": {
                 "title": _("Status"),
-                "widget": SelectWidget(values=STATUSES.items()),
+                "widget": SelectWidget(
+                    values=STATUSES.items(), item_css_class="item-status"
+                ),
             }
         },
     )
