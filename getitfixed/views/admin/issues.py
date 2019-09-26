@@ -85,9 +85,9 @@ class IssueViews(AbstractViews):
             event = Event(issue_id=issue.id)
             event.status = issue.status
 
-            events = events_schema.get('events').children
+            events = events_schema.get("events").children
             for e in events:
-                e.get('date').widget = DateTimeInputWidget()
+                e.get("date").widget = DateTimeInputWidget()
 
             event_form = Form(
                 GeoFormSchemaNode(Event),
@@ -106,15 +106,15 @@ class IssueViews(AbstractViews):
             )
 
             # Create an issue form with only existing events property
-            events_form = Form(
-                events_schema,
-                formid="existing_events_form",
-            )
+            events_form = Form(events_schema, formid="existing_events_form")
             resp.update(
                 {
                     "events_form": events_form,
                     "events_form_render_args": (events_schema.dictify(issue),),
-                    "events_form_render_kwargs": {"request": self._request, "readonly": True},
+                    "events_form_render_kwargs": {
+                        "request": self._request,
+                        "readonly": True,
+                    },
                 }
             )
 
