@@ -41,30 +41,26 @@ class EventViews(AbstractViews):
             if event_status != self._obj.issue.status:
                 # send a specific email when the status has been set to resolved
                 if event_status == "resolved":
-                    send_email(
-                        request=self._request,
-                        to=self._obj.issue.email,
-                        template_name="resolved_issue_email",
-                        template_kwargs={
+                    self.send_notification_email(
+                        "resolved_issue_email",
+                        **{
                             "issue": self._obj.issue,
                             "issue-link": self._request.route_url(
                                 "c2cgeoform_item", id=self._obj.issue.hash
                             ),
-                        },
+                        }
                     )
                 else:
-                    send_email(
-                        request=self._request,
-                        to=self._obj.issue.email,
-                        template_name="update_issue_email",
-                        template_kwargs={
+                    self.send_notification_email(
+                        "update_issue_email",
+                        **{
                             "issue": self._obj.issue,
                             "event": self._obj,
                             "issue-link": self._request.route_url(
                                 "c2cgeoform_item", id=self._obj.issue.hash
                             ),
-                        },
-                    ),
+                        }
+                    )
 
             self._obj.issue.status = event_status
 
@@ -75,3 +71,11 @@ class EventViews(AbstractViews):
                 )
             )
         return resp
+
+    def send_notification_email(self, template_name, **template_kwargs):
+        send_email(
+            request=self._request,
+            to=self._obj.issue.email,
+            template_name=template_name,
+            template_kwargs=template_kwargs,
+        )

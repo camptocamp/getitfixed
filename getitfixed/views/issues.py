@@ -164,11 +164,9 @@ class IssueViews(AbstractViews):
 
             if isinstance(base_save, HTTPFound):
                 # Send email to the issue Reporter
-                send_email(
-                    request=self._request,
-                    to=self._obj.email,
-                    template_name="new_issue_email",
-                    template_kwargs={
+                self.send_notification_email(
+                    "new_issue_email",
+                    **{
                         "issue": self._obj,
                         "issue-link": self._request.route_url(
                             "c2cgeoform_item", id=self._obj.hash
@@ -176,11 +174,9 @@ class IssueViews(AbstractViews):
                     },
                 )
                 # Send email to the category Manager
-                send_email(
-                    request=self._request,
-                    to=self._obj.category.email,
-                    template_name="admin_new_issue_email",
-                    template_kwargs={
+                self.send_notification_email(
+                    "admin_new_issue_email",
+                    **{
                         "issue": self._obj,
                         "issue-link": self._request.route_url(
                             "c2cgeoform_item", application="admin", id=self._obj.hash
@@ -189,7 +185,12 @@ class IssueViews(AbstractViews):
                 )
             else:
                 base_save["item_name"] = _("New")
-        else:
-            base_save["item_name"] = self._get_object().description
-
         return base_save
+
+    def send_notification_email(self, template_name, **template_kwargs):
+        send_email(
+            request=self._request,
+            to=self._obj.email,
+            template_name=template_name,
+            template_kwargs=template_kwargs,
+        )

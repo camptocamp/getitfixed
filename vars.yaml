@@ -9,14 +9,14 @@ vars:
             email_subject: Nouveau problème remonté dans votre categorie
             email_body: |
                Un nouveau problème a été remonté dans votre catégorie
-               Vous pouvez la consulter ici : {issue-link}
+               Vous pouvez le consulter ici : {issue-link}
          new_issue_email:
             # Used to send a email when an issue has been created
             email_from: info@camptocamp.com
             email_subject: Confirmation de la remontée du problème
             email_body: |
                Bonjour {issue.firstname} {issue.lastname},
-               Nous avons bien pris en compte votre demande situé à {issue.localisation}.
+               Nous avons bien pris en compte votre demande située à {issue.localisation}.
                Vous pouvez la consulter ici : {issue-link}
                Une fois traitée, vous en serez informé par email.
                   Cordialement,
@@ -46,7 +46,7 @@ vars:
             email_from: info@camptocamp.com
             email_subject: A new issue has been created
             email_body: |
-               A nex issue has been submitted
+               A new issue has been submitted
                You can find the link here : {issue-link}
          new_issue_email:
             # Used to send a email when an issue has been created
@@ -54,7 +54,7 @@ vars:
             email_subject: Issue declaration confirmation
             email_body: |
                Hello {issue.firstname} {issue.lastname},
-               We have received your demand for the issue situated at {issue.localisation}.
+               We confirm that we have received a new issue situated at {issue.localisation}.
                You can follow the status here : {issue-link}
                You will receive a new email as soon as it has been updated.
                   Best
@@ -65,8 +65,8 @@ vars:
             email_subject: Status update for an issue
             email_body: |
                Hello {issue.firstname} {issue.lastname},
-               The issue {issue.hash} created the {issue.request_date} has evolved it is now {issue.status}.
-               With the following informations: {event.comment}
+               The issue {issue.hash} created on the {issue.request_date} has evolved it is now {issue.status}.
+               With the following comment: {event.comment}
                   Best
                   Get It Fixed Team
          resolved_issue_email:
@@ -75,7 +75,7 @@ vars:
             email_subject: Issue resolved
             email_body: |
                Hello {issue.firstname} {issue.lastname},
-               he issue {issue.hash} created the {issue.request_date} has been resolved
+               The issue {issue.hash} created on the {issue.request_date} has now been resolved
                Thank you
                   Best
                   Get It Fixed Team
