@@ -256,11 +256,12 @@ class Issue(Base):
     )
     events = relationship(
         "Event",
+        order_by="desc(Event.date)",
         backref=backref("issue", info={"colanderalchemy": {"exclude": True}}),
         info={
             "colanderalchemy": {
                 "title": _("Events"),
-                "widget": SequenceWidget(readonly=True),
+                "widget": SequenceWidget(readonly=True, item_css_class="item-events"),
             }
         },
     )
@@ -281,20 +282,23 @@ class Event(Base):
         nullable=False,
         info={"colanderalchemy": {"title": _("Type"), "widget": HiddenWidget()}},
     )
-    date = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        server_default=func.now(),
-        info={"colanderalchemy": {"title": _("Date"), "widget": HiddenWidget()}},
-    )
     status = Column(
         Enum(*tuple(STATUSES.keys()), native_enum=False, name="status"),
         nullable=False,
         info={
             "colanderalchemy": {
                 "title": _("Status"),
-                "widget": SelectWidget(values=STATUSES.items()),
+                "widget": SelectWidget(
+                    values=STATUSES.items(), item_css_class="item-status"
+                ),
             }
         },
     )
+    date = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+        info={"colanderalchemy": {"title": _("Date"), "widget": HiddenWidget()}},
+    )
+
     comment = Column(Text, info={"colanderalchemy": {"title": _("Comment")}})

@@ -1,9 +1,11 @@
 {% extends "getitfixed:templates/layout.jinja2" %}
 {% block content %}
 <div class="container">
-  {% include 'c2cgeoform:/templates/edit.jinja2' %}
+    <a class="btn btn-link" href="#existing_events_form">{% trans %} See events {% endtrans %}</a>
+    {% include 'c2cgeoform:/templates/edit.jinja2' %}
   <hr/>
   <h3>{% trans %}Add new event{% endtrans %}</h3>
   {{event_form.render(*event_form_render_args, **event_form_render_kwargs)|safe}}
+  {{events_form.render(*events_form_render_args, **events_form_render_kwargs)|safe}}
 </div>
 {% endblock content %}

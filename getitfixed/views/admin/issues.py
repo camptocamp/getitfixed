@@ -6,6 +6,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy.orm import subqueryload
 
 from deform import Button, Form
+from deform.widget import DateTimeInputWidget
 
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
@@ -15,7 +16,8 @@ from getitfixed.models.getitfixed import Event, Issue, Type
 
 _list_field = partial(ListField, Issue)
 
-base_schema = GeoFormSchemaNode(Issue)
+base_schema = GeoFormSchemaNode(Issue, excludes=["events"])
+events_schema = GeoFormSchemaNode(Issue, includes=["events"])
 
 
 @view_defaults(match_param=("application=admin", "table=issues"))
@@ -74,12 +76,19 @@ class IssueViews(AbstractViews):
         if self._is_new():
             return HTTPNotFound()
         else:
-            # Return readonly issue form and new event form
+            # Create a readonly issue form
             resp = super().edit(readonly=True)
 
             issue = self._get_object()
+
+            # Create a new event form
             event = Event(issue_id=issue.id)
             event.status = issue.status
+
+            events = events_schema.get("events").children
+            for e in events:
+                e.get("date").widget = DateTimeInputWidget(item_css_class="item-date")
+
             event_form = Form(
                 GeoFormSchemaNode(Event),
                 formid="new_event_form",
@@ -95,6 +104,20 @@ class IssueViews(AbstractViews):
                     "event_form_render_kwargs": {"request": self._request},
                 }
             )
+
+            # Create an issue form with only existing events property
+            events_form = Form(events_schema, formid="existing_events_form")
+            resp.update(
+                {
+                    "events_form": events_form,
+                    "events_form_render_args": (events_schema.dictify(issue),),
+                    "events_form_render_kwargs": {
+                        "request": self._request,
+                        "readonly": True,
+                    },
+                }
+            )
+
             return resp
 
     @view_config(
