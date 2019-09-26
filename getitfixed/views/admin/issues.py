@@ -6,6 +6,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy.orm import subqueryload
 
 from deform import Button, Form
+from deform.widget import DateTimeInputWidget
 
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
@@ -83,6 +84,11 @@ class IssueViews(AbstractViews):
             # Create a new event form
             event = Event(issue_id=issue.id)
             event.status = issue.status
+
+            events = events_schema.get('events').children
+            for e in events:
+                e.get('date').widget = DateTimeInputWidget()
+
             event_form = Form(
                 GeoFormSchemaNode(Event),
                 formid="new_event_form",
