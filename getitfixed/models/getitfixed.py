@@ -256,6 +256,7 @@ class Issue(Base):
     )
     events = relationship(
         "Event",
+        order_by="desc(Event.date)",
         backref=backref("issue", info={"colanderalchemy": {"exclude": True}}),
         info={
             "colanderalchemy": {
