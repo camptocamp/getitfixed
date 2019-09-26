@@ -4,6 +4,42 @@ Demo : https://geomapfish-demo.camptocamp.com/getitfixed/getitfixed/issues
 
 ## Create a development instance
 
+```
+git clone git@github.com:camptocamp/getitfixed.git
+cd getitfixed
+make meacoffee
+```
+
+Public interface should be available at: http://localhost:8080/getitfixed/issues
+
+Admin interface should be available at: http://localhost:8080/admin/issues
+
+## Upgrade GetItFixed! demo
+
+Build docker images locally and push them on docker hub:
+
+```
+make -f demo.mk build docker-push
+```
+
+Now connect to server and update docker composition:
+
+```
+ssh geomapfish-demo.camptocamp.com
+cd /var/www/vhosts/geomapfish-demo/private/getitfixed_demo/getitfixed
+docker login  # Because images are private for now
+make -f demo.mk meacoffee
+```
+
+Test the application:
+
+- https://geomapfish-demo.camptocamp.com/getitfixed/getitfixed/issues
+- https://geomapfish-demo.camptocamp.com/getitfixed/admin/issues
+
+If everything went well you can now exit from logs, close ssh connection, and go take your coffee.
+
+## Add GetItFixed! in demo_geomapfish
+
 Copy the `gmf_demo` database locally:
 
 ```
