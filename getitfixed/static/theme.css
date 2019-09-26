@@ -85,32 +85,34 @@ html {
 }
 .item-events .panel-body .item-status p {
   transform: rotate(0deg);
+  position: inherit;
+  float: right;
   min-height: auto;
   right: 1em;
-  margin: -0.5em;
   width: auto;
-  top: 1em;
   border-radius: 4px;
   padding: 0.25em 1em;
 }
-.item-events .form-group.row.deform-seq-item {
-  padding-right: 0.5em;
-}
-.item-events .deform-seq > .panel.panel-default {
+
+.item-events .deform-seq > .panel {
  border: None;
 }
 
-.form-group.item-events label {
-  display: None;
-}
-.form-group.item-date {
-  margin-top: 0.5em;
+#existing_events_form .panel-body {
+  padding: 0em;
 }
 
-#existing_events_form > .panel.panel-default {
+.item-events label {
+  display: None;
+}
+
+#existing_events_form > .panel {
   border: None;
 }
 
+.item-status {
+  margin-bottom: 0em;
+}
 
 /*
  * Footer

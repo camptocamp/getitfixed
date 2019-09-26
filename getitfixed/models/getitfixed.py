@@ -281,12 +281,6 @@ class Event(Base):
         nullable=False,
         info={"colanderalchemy": {"title": _("Type"), "widget": HiddenWidget()}},
     )
-    date = Column(
-        DateTime(timezone=True),
-        nullable=False,
-        server_default=func.now(),
-        info={"colanderalchemy": {"title": _("Date"), "widget": HiddenWidget()}},
-    )
     status = Column(
         Enum(*tuple(STATUSES.keys()), native_enum=False, name="status"),
         nullable=False,
@@ -299,4 +293,11 @@ class Event(Base):
             }
         },
     )
+    date = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+        info={"colanderalchemy": {"title": _("Date"), "widget": HiddenWidget()}},
+    )
+
     comment = Column(Text, info={"colanderalchemy": {"title": _("Comment")}})
