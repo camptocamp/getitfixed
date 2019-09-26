@@ -110,7 +110,7 @@ html {
   border: None;
 }
 
-.item-status {
+.item-status .deform-seq-container {
   margin-bottom: 0em;
 }
 
