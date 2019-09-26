@@ -87,7 +87,7 @@ class IssueViews(AbstractViews):
 
             events = events_schema.get("events").children
             for e in events:
-                e.get("date").widget = DateTimeInputWidget()
+                e.get("date").widget = DateTimeInputWidget(item_css_class="item-date")
 
             event_form = Form(
                 GeoFormSchemaNode(Event),

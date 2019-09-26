@@ -83,7 +83,6 @@ html {
 .item-events .panel-heading {
   display: none;
 }
-
 .item-events .panel-body .item-status p {
   transform: rotate(0deg);
   min-height: auto;
@@ -94,16 +93,18 @@ html {
   border-radius: 4px;
   padding: 0.25em 1em;
 }
-
 .item-events .form-group.row.deform-seq-item {
   padding-right: 0.5em;
 }
-
 .item-events .deform-seq > .panel.panel-default {
  border: None;
 }
+
 .form-group.item-events label {
   display: None;
+}
+.form-group.item-date {
+  margin-top: 0.5em;
 }
 
 #existing_events_form > .panel.panel-default {
