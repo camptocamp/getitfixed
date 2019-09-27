@@ -12,11 +12,18 @@ docker-compose-env: ## Build docker-compose environment file
 	touch .env.mako
 	$(DOCKER_MAKE_CMD) .env
 
-# Pull images instead of building them, as we cannot build docker image on demo
-# server due to installed docker version
-.PHONY: docker-build-build
-docker-build-build:
-	docker pull ${DOCKER_BASE}-build:${DOCKER_TAG}
-.PHONY: docker-build-getitfixed
-docker-build-getitfixed:
-	docker pull ${DOCKER_BASE}-getitfixed:${DOCKER_TAG}
+.PHONY: docker-config
+docker-config: ## Build config.yaml file
+	rm -f config.yaml
+	touch config.yaml
+	sleep 0.1
+	touch vars.yaml
+	$(DOCKER_MAKE_CMD) config.yaml
+
+.PHONY: demo
+demo: ## Pull docker images, run composition and show logs
+demo: docker-compose-env docker-config docker-pull initdb
+	docker-compose stop getitfixed
+	docker-compose rm --force getitfixed
+	docker-compose up -d
+	docker-compose logs -f getitfixed

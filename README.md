@@ -27,14 +27,17 @@ Now connect to server and update docker composition:
 ```
 ssh geomapfish-demo.camptocamp.com
 cd /var/www/vhosts/geomapfish-demo/private/getitfixed_demo/getitfixed
+git pull origin/master
+docker-compose down
 docker login  # Because images are private for now
-make -f demo.mk meacoffee
+make -f demo.mk demo
 ```
 
 Test the application:
 
 - https://geomapfish-demo.camptocamp.com/getitfixed/getitfixed/issues
 - https://geomapfish-demo.camptocamp.com/getitfixed/admin/issues
+- https://geomapfish-demo.camptocamp.com/webmail/
 
 If everything went well you can now exit from logs, close ssh connection, and go take your coffee.
 
