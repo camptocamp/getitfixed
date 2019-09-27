@@ -10,9 +10,9 @@ RUN apt-get update && \
         make
 
 RUN mkdir -p /src && \
-    git clone -b getitfixed https://github.com/camptocamp/c2cgeoform.git /src/c2cgeoform && \
-    cd /src/c2cgeoform && \
-    git checkout 4477e201252bd70a11ebe81a151af074424bd2aa && \
+    git clone -b getitfixed https://github.com/camptocamp/c2cgeoform.git /opt/c2cgeoform && \
+    cd /opt/c2cgeoform && \
+    git checkout 5a71f06a47ae754cb030e3226f1e6b6fbe3b7d74 && \
     make compile-catalog
 
 
@@ -36,8 +36,8 @@ COPY requirements.txt /app
 RUN pip3 install -r /app/requirements.txt
 
 # Install c2cgeoform from getitfixed branch
-COPY --from=c2cgeoform /src/c2cgeoform /src/c2cgeoform
-RUN pip3 install /src/c2cgeoform
+COPY --from=c2cgeoform /opt/c2cgeoform /opt/c2cgeoform
+RUN pip3 install -e /opt/c2cgeoform
 
 COPY . /app/
 WORKDIR /app
