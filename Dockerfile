@@ -12,7 +12,7 @@ RUN apt-get update && \
 RUN mkdir -p /src && \
     git clone -b getitfixed https://github.com/camptocamp/c2cgeoform.git /opt/c2cgeoform && \
     cd /opt/c2cgeoform && \
-    git checkout ed12f49b7444040ca40b7c97fa649ec55479d706 && \
+    git checkout 5a71f06a47ae754cb030e3226f1e6b6fbe3b7d74 && \
     make compile-catalog
 
 

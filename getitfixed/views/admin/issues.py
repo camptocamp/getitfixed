@@ -53,7 +53,9 @@ class IssueViews(AbstractViews):
             .options(subqueryload(Issue.type))
         )
 
-    @view_config(route_name="c2cgeoform_index", renderer="../../templates/index.jinja2")
+    @view_config(
+        route_name="c2cgeoform_index", renderer="../../templates/admin/index.jinja2"
+    )
     def index(self):
         return super().index()
 
