@@ -7,7 +7,7 @@ from sqlalchemy.orm import subqueryload
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.models.getitfixed import Event, Issue, Type
+from getitfixed.models.getitfixed import Event, Issue, Type, USER_ADMIN
 from getitfixed.views.semi_private_issues import IssueViews
 
 
@@ -19,11 +19,8 @@ base_schema = GeoFormSchemaNode(Issue, excludes=["events", "public_events"])
 @view_defaults(match_param=("application=admin", "table=issues"))
 class IssueAdminViews(IssueViews):
 
-    _model = Issue
-    _base_schema = base_schema
-    _id_field = "hash"
     _hidden_columns = []
-
+    _author = USER_ADMIN
     _list_fields = [
         _list_field("id"),
         _list_field("request_date"),
@@ -73,11 +70,6 @@ class IssueAdminViews(IssueViews):
     )
     def edit(self):
         return super().edit()
-
-    @staticmethod
-    def set_event_columns(event, issue):
-        event.status = issue.status
-        return event
 
     @staticmethod
     def hide_schema_nodes(event_schema, columns):

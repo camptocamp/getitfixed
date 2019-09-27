@@ -8,7 +8,7 @@ from deform.widget import DateTimeInputWidget, HiddenWidget
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.models.getitfixed import STATUS_ADMIN, Event, Issue, Type
+from getitfixed.models.getitfixed import USER_CUSTOMER, Event, Issue, Type
 
 from getitfixed.i18n import _
 
@@ -35,6 +35,7 @@ class IssueViews(AbstractViews):
     _base_schema = base_schema
     _id_field = "hash"
     _hidden_columns = ["status", "private"]
+    _author = USER_CUSTOMER
 
     @view_config(
         route_name="c2cgeoform_item_private",
@@ -51,7 +52,8 @@ class IssueViews(AbstractViews):
             issue = self._get_object()
 
             event = Event(issue_id=issue.id)
-            self.set_event_columns(event, issue)
+            event.status = issue.status
+            event.author = self._author
 
             event_schema = GeoFormSchemaNode(Event)
             self.hide_schema_nodes(event_schema, self._hidden_columns)
@@ -73,12 +75,6 @@ class IssueViews(AbstractViews):
             )
             resp.update({"events": self.get_events_to_display(issue)})
             return resp
-
-    @staticmethod
-    def set_event_columns(event, issue):
-        event.status = STATUS_ADMIN
-        event.private = False
-        return event
 
     @staticmethod
     def hide_schema_nodes(event_schema, columns):

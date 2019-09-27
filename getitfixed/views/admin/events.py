@@ -4,7 +4,7 @@ from pyramid.httpexceptions import HTTPFound
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews
 
-from getitfixed.models.getitfixed import Event
+from getitfixed.models.getitfixed import Event, USER_CUSTOMER
 
 from getitfixed.emails.email_service import send_email
 
@@ -35,17 +35,14 @@ class EventViews(AbstractViews):
         resp = super().save()
         if isinstance(resp, HTTPFound):
             event_status = self._obj.status
-
+            route = "c2cgeoform_item"
             # send a email when the status has changed
             if event_status != self._obj.issue.status:
-                # Update issue status
-                # FIXME: Should be placed in a trigger after first migration is created
+                # update issue status
                 self._obj.issue.status = event_status
-                # Do not send comment en email if it is private
-                self._obj.comment = "" if self._obj.private else self._obj.comment
 
                 # send a specific email when the status has been set to resolved
-                if event_status == "resolved":
+                if event_status == "resolved" and self._obj.user is not True:
                     self.send_notification_email(
                         self._obj.issue.email,
                         "resolved_issue_email",
@@ -56,19 +53,8 @@ class EventViews(AbstractViews):
                             ),
                         }
                     )
-                elif event_status == "waiting_for_admin":
-                    self.send_notification_email(
-                        self._obj.issue.category.email,
-                        "update_issue_email",
-                        **{
-                            "issue": self._obj.issue,
-                            "event": self._obj,
-                            "issue-link": self._request.route_url(
-                                "c2cgeoform_item", id=self._obj.issue.hash
-                            ),
-                        }
-                    )
-                else:
+                # send email to user when admin has commented
+                elif self._obj.private is False and event_status:
                     self.send_notification_email(
                         self._obj.issue.email,
                         "update_issue_email",
@@ -80,19 +66,29 @@ class EventViews(AbstractViews):
                             ),
                         }
                     )
-
-            # Update issue status
-            # FIXME: Should be placed in a trigger after first migration is created
-            self._obj.issue.status = self._obj.status
-            # For the semi private view
-            if self._obj.status == "waiting_for_admin":
-                route = "c2cgeoform_item_private"
             else:
-                route = "c2cgeoform_item"
-            self._obj.issue.status = self._obj.status
+                # send email to admin when user has commented
+                if self._obj.author == USER_CUSTOMER:
+                    route = "c2cgeoform_item_private"
+                    self.send_notification_email(
+                        self._obj.issue.email,
+                        "update_issue_email",
+                        **{
+                            "issue": self._obj.issue,
+                            "event": self._obj,
+                            "issue-link": self._request.route_url(
+                                "c2cgeoform_item", id=self._obj.issue.hash
+                            ),
+                        }
+                    )
             # Redirect to issue form
             return HTTPFound(
-                self._request.route_url(route, table="issues", id=self._obj.issue.hash)
+                self._request.route_url(
+                    route,
+                    application=self._request.matchdict["application"],
+                    table="issues",
+                    id=self._obj.issue.hash,
+                )
             )
         return resp
 

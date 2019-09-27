@@ -15,6 +15,11 @@
                     <i class="text-muted small glyphicon glyphicon-lock" ></i>
                 {% endif %}
                 {{ event.date.strftime("%Y-%m-%d %H:%M") }}
+                {% if request.matchdict["application"] == "admin" or event.author == "admin" %}
+                    ({{ event.author }})
+                {% else %}
+                    ({% trans %}You{% endtrans %})
+                {% endif %}
                 </li>
                 <li class="list-group-item">{{ event.comment }}</li>
             {% endfor %}

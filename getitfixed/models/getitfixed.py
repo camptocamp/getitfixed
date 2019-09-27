@@ -59,14 +59,22 @@ gmf_demo_map = """new ol.layer.Tile({
     })
 })"""  # noqa
 
-STATUS_ADMIN = "waiting_for_admin"
+STATUS_NEW = "new"
+STATUS_IN_PROGRESS = "in_progress"
+STATUS_CUSTOMER = "waiting_for_customer"
+STATUS_RESOLVED = "resolved"
+
+
 STATUSES = {
-    "new": _("Nouveau"),
-    "in_progress": _("In progress"),
-    "waiting_for_customer": _("Waiting for customer"),
-    "resolved": _("Resolved"),
-    STATUS_ADMIN: _("Waiting for admin"),
+    STATUS_NEW: _("Nouveau"),
+    STATUS_IN_PROGRESS: _("In progress"),
+    STATUS_CUSTOMER: _("Waiting for customer"),
+    STATUS_RESOLVED: _("Resolved"),
 }
+
+USER_ADMIN = "admin"
+USER_CUSTOMER = "customer"
+USER_AUTHORS = {USER_CUSTOMER: _("Customer"), USER_ADMIN: _("Administrator")}
 
 
 # FIXME a file upload memory store is not appropriate for production
@@ -336,4 +344,10 @@ class Event(Base):
                 "widget": CheckboxWidget(item_css_class="item-private"),
             }
         },
+    )
+    author = Column(
+        Enum(*tuple(USER_AUTHORS.keys()), native_enum=False, name="author"),
+        nullable=False,
+        default="new",
+        info={"colanderalchemy": {"title": _("Author"), "widget": HiddenWidget()}},
     )

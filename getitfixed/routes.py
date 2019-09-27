@@ -1,6 +1,6 @@
 import os
 
-from c2cgeoform.routes import register_application, pregenerator
+from c2cgeoform.routes import pregenerator
 from getitfixed.models.getitfixed import Event, Issue
 
 
