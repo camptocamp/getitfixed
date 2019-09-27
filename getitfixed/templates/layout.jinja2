@@ -49,7 +49,7 @@
     {% endif %}
   </head>
 
-  <body class="app-{{applications[request.matchdict['application']].name()}}">
+  <body class="{#{% if not none(request.c2cgeoform_application) %}app-{{request.c2cgeoform_application.name()}}{% endif %}#}">
 
     <header class="container">
       <h3>{{_('getitfixed.title')}}</h3>
