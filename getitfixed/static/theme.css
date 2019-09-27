@@ -52,66 +52,55 @@ html {
 }
 
 /* Status field */
-.issue-view .deform .item-status {
-  float: none;
-}
-.item-status label {
-  display: none;
-}
 .panel-body .item-status p {
   font-size: 0.9em;
   position: absolute;
   right: -4em;
-  top: 4em;
+  top: 2em;
   background-color: #17a2b8;
   color: white;
   font-weight: bold;
   padding: 1em;
   transform: rotate(45deg);
   box-shadow: 0px 0 2px rgba(0,0,0,0.5);
-  width: 20em;
+  width: 15em;
   text-align: center;
   z-index: 10;
+}
+
+/* Fix border on chrome */
+#new_event_form {
+  padding: 0.1em;
+}
+#existing_events_form {
+  padding: 0.1em;
 }
 
 /*
  * Event field
  */
-.item-events .item-comment label {
-  display: none;
+.event-details {
+  background:   #f5f5f5;
 }
-.item-events .panel-heading {
-  display: none;
-}
-.item-events .panel-body .item-status p {
-  transform: rotate(0deg);
-  position: inherit;
+.event-details span {
   float: right;
-  min-height: auto;
-  right: 1em;
-  width: auto;
-  border-radius: 4px;
-  padding: 0.25em 1em;
+  font-size: 0.9em;
 }
 
-.item-events .deform-seq > .panel {
- border: None;
+.event-new {
+  background: #d9534f;
 }
 
-#existing_events_form .panel-body {
-  padding: 0em;
+.event-waiting_for_customer {
+  background: lightcoral;
 }
 
-.item-events label {
-  display: None;
+.event-waiting_for_admin {
+  background: orange;
 }
 
-#existing_events_form > .panel {
-  border: None;
-}
-
-.item-status .deform-seq-container {
-  margin-bottom: 0em;
+.event-resolved {
+  background: forestgreen;
 }
 
 /*

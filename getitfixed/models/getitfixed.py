@@ -1,7 +1,17 @@
 # coding=utf-8
 from uuid import uuid4
 
-from sqlalchemy import Column, Date, DateTime, Enum, Integer, ForeignKey, String, Text
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Date,
+    DateTime,
+    Enum,
+    Integer,
+    ForeignKey,
+    String,
+    Text,
+)
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql.expression import func
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -10,6 +20,7 @@ import geoalchemy2
 
 import colander
 from deform.widget import (
+    CheckboxWidget,
     FormWidget,
     HiddenWidget,
     SelectWidget,
@@ -48,12 +59,13 @@ gmf_demo_map = """new ol.layer.Tile({
     })
 })"""  # noqa
 
-
+STATUS_ADMIN = "waiting_for_admin"
 STATUSES = {
     "new": _("Nouveau"),
     "in_progress": _("In progress"),
     "waiting_for_customer": _("Waiting for customer"),
     "resolved": _("Resolved"),
+    STATUS_ADMIN: _("Waiting for admin"),
 }
 
 
@@ -104,6 +116,7 @@ class Category(Base):
     )
     email = Column(
         String(50),
+        nullable=False,
         info={"colanderalchemy": {"title": _("Email"), "widget": TextInputWidget()}},
     )
 
@@ -271,6 +284,10 @@ class Issue(Base):
             }
         },
     )
+    public_events = relationship(
+        "Event", primaryjoin="and_(Event.issue_id==Issue.id, Event.private==False)"
+    )
+
     category = association_proxy("type", "category")
 
 
@@ -309,4 +326,14 @@ class Event(Base):
     )
     comment = Column(
         Text, info={"colanderalchemy": {"title": _("Comment"), "missing": ""}}
+    )
+
+    private = Column(
+        Boolean,
+        info={
+            "colanderalchemy": {
+                "title": _("Private"),
+                "widget": CheckboxWidget(item_css_class="item-private"),
+            }
+        },
     )
