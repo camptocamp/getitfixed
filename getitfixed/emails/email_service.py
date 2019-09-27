@@ -15,6 +15,7 @@ def send_email(request, to, template_name, template_args=[], template_kwargs={})
     settings = request.registry.settings
     smtp = settings["smtp"]
     if not smtp:
+        LOG.warning("Email cannot be sent as smtp service is not configured.")
         return False
 
     template = settings["emails"][request.localizer.locale_name][template_name]
