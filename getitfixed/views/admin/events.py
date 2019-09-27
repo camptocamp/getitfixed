@@ -34,11 +34,14 @@ class EventViews(AbstractViews):
     def save(self):
         resp = super().save()
         if isinstance(resp, HTTPFound):
-            # Update issue status
-            # FIXME: Should be placed in a trigger after first migration is created
             event_status = self._obj.status
+
             # send a email when the status has changed
             if event_status != self._obj.issue.status:
+                # Update issue status
+                # FIXME: Should be placed in a trigger after first migration is created
+                self._obj.issue.status = event_status
+
                 # send a specific email when the status has been set to resolved
                 if event_status == "resolved":
                     self.send_notification_email(
@@ -61,8 +64,6 @@ class EventViews(AbstractViews):
                             ),
                         }
                     )
-
-            self._obj.issue.status = event_status
 
             # Redirect to issue form
             return HTTPFound(
