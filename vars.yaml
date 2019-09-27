@@ -10,37 +10,49 @@ vars:
             email_body: |
                Un nouveau problème a été remonté dans votre catégorie
                Vous pouvez le consulter ici : {issue-link}
+
          new_issue_email:
             # Used to send a email when an issue has been created
             email_from: info@camptocamp.com
             email_subject: Confirmation de la remontée du problème
             email_body: |
                Bonjour {issue.firstname} {issue.lastname},
+
                Nous avons bien pris en compte votre demande située à {issue.localisation}.
-               Vous pouvez la consulter ici : {issue-link}
+               Vous pouvez suivre l'avancement ici : {issue-link}
                Une fois traitée, vous en serez informé par email.
-                  Cordialement,
-                  Get It Fixed Team
+
+               Cordialement,
+
+               Get It Fixed Team
+
          update_issue_email:
             # Used to send a email when an issue has been updated
             email_from: info@camptocamp.com
             email_subject: Mise à jour du statut du problème déclaré
             email_body: |
                Bonjour {issue.firstname} {issue.lastname},
+
                Le problème déclaré le {issue.request_date} est désormais en : {issue.status}.
-               Voici les informations complémentaires : {event.comment}.
-                  Cordialement,
-                  Get It Fixed Team
+               {event.comment}
+
+               Cordialement,
+
+               Get It Fixed Team
+
          resolved_issue_email:
             # Used to send a when an issue has been resolved
             email_from: info@camptocamp.com
             email_subject: Le problème à été résolu
             email_body: |
                Bonjour {issue.firstname} {issue.lastname},
+
                Le problème déclaré le {issue.request_date} à été traité.
-               Merci
-                  Cordialement,
-                  Get It Fixed Team
+
+               Cordialement,
+
+               Get It Fixed Team
+
       en:
          admin_new_issue_email:
             email_from: info@camptocamp.com
@@ -48,37 +60,49 @@ vars:
             email_body: |
                A new issue has been submitted
                You can find the link here : {issue-link}
+
          new_issue_email:
             # Used to send a email when an issue has been created
             email_from: info@camptocamp.com
             email_subject: Issue declaration confirmation
             email_body: |
                Hello {issue.firstname} {issue.lastname},
+
                We confirm that we have received a new issue situated at {issue.localisation}.
+
                You can follow the status here : {issue-link}
                You will receive a new email as soon as it has been updated.
-                  Best
-                  Get It Fixed Team
+
+               Best
+
+               Get It Fixed Team
+
          update_issue_email:
             # Used to send a email when an issue has been updated
             email_from: info@camptocamp.com
             email_subject: Status update for an issue
             email_body: |
                Hello {issue.firstname} {issue.lastname},
+
                The issue {issue.hash} created on the {issue.request_date} has evolved it is now {issue.status}.
-               With the following comment: {event.comment}
-                  Best
-                  Get It Fixed Team
+               {event.comment}
+
+               Best
+
+               Get It Fixed Team
+
          resolved_issue_email:
             # Used to send a when an issue has been resolved
             email_from: info@camptocamp.com
             email_subject: Issue resolved
             email_body: |
                Hello {issue.firstname} {issue.lastname},
-               The issue {issue.hash} created on the {issue.request_date} has now been resolved
-               Thank you
-                  Best
-                  Get It Fixed Team
+
+               The issue {issue.hash} created on the {issue.request_date} has now been resolved.
+
+               Best
+
+               Get It Fixed Team
 
 no_interpreted:
    - emails.fr.admin_new_issue_email.email_body
