@@ -14,8 +14,7 @@ def send_email(request, to, template_name, template_args=[], template_kwargs={})
     """Send acknowledgment email to rpfe and requerant"""
     settings = request.registry.settings
     smtp = settings["smtp"]
-    smtp_host = smtp["host"]
-    if not smtp_host:
+    if not smtp:
         return False
 
     template = settings["emails"][request.localizer.locale_name][template_name]
@@ -30,13 +29,14 @@ def send_email(request, to, template_name, template_args=[], template_kwargs={})
     msg["Subject"] = Header(template["email_subject"], "utf-8")
 
     # Connect to server
-    if "ssl" in smtp_host and smtp_host["mail.ssl"]:
+    smtp_host = smtp["host"]
+    if "ssl" in smtp_host and smtp["ssl"]:
         server = smtplib.SMTP_SSL(smtp_host)
     else:
         server = smtplib.SMTP(smtp_host)
-    if "user" in smtp_host and smtp["mail.user"]:
-        server.login(smtp_host["mail.user"], smtp_host["mail.password"])
-    if "starttls" in smtp_host and smtp_host["starttls"]:
+    if "user" in smtp and smtp["user"]:
+        server.login(smtp["user"], smtp["password"])
+    if "starttls" in smtp and smtp["starttls"]:
         server.starttls()
 
     # Send message
