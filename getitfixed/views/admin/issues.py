@@ -1,31 +1,28 @@
 from functools import partial
 
 from pyramid.view import view_config, view_defaults
-from pyramid.httpexceptions import HTTPNotFound
 
 from sqlalchemy.orm import subqueryload
-
-from deform import Button, Form
-from deform.widget import DateTimeInputWidget
 
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.i18n import _
 from getitfixed.models.getitfixed import Event, Issue, Type
+from getitfixed.views.semi_private_issues import IssueViews
+
 
 _list_field = partial(ListField, Issue)
 
-base_schema = GeoFormSchemaNode(Issue, excludes=["events"])
-events_schema = GeoFormSchemaNode(Issue, includes=["events"])
+base_schema = GeoFormSchemaNode(Issue, excludes=["events", "public_events"])
 
 
 @view_defaults(match_param=("application=admin", "table=issues"))
-class IssueViews(AbstractViews):
+class IssueAdminViews(IssueViews):
 
     _model = Issue
     _base_schema = base_schema
     _id_field = "hash"
+    _hidden_columns = []
 
     _list_fields = [
         _list_field("id"),
@@ -75,52 +72,20 @@ class IssueViews(AbstractViews):
         renderer="../../templates/admin/issue/edit.jinja2",
     )
     def edit(self):
-        if self._is_new():
-            return HTTPNotFound()
-        else:
-            # Create a readonly issue form
-            resp = super().edit(readonly=True)
+        return super().edit()
 
-            issue = self._get_object()
+    @staticmethod
+    def set_event_columns(event, issue):
+        event.status = issue.status
+        return event
 
-            # Create a new event form
-            event = Event(issue_id=issue.id)
-            event.status = issue.status
+    @staticmethod
+    def hide_schema_nodes(event_schema, columns):
+        return event_schema
 
-            events = events_schema.get("events").children
-            for e in events:
-                e.get("date").widget = DateTimeInputWidget(item_css_class="item-date")
-
-            event_form = Form(
-                GeoFormSchemaNode(Event),
-                formid="new_event_form",
-                buttons=[Button(name="formsubmit", title=_("Submit"))],
-                action=self._request.route_url(
-                    "c2cgeoform_item", table="events", id="new"
-                ),
-            )
-            resp.update(
-                {
-                    "event_form": event_form,
-                    "event_form_render_args": (event_form.schema.dictify(event),),
-                    "event_form_render_kwargs": {"request": self._request},
-                }
-            )
-
-            # Create an issue form with only existing events property
-            events_form = Form(events_schema, formid="existing_events_form")
-            resp.update(
-                {
-                    "events_form": events_form,
-                    "events_form_render_args": (events_schema.dictify(issue),),
-                    "events_form_render_kwargs": {
-                        "request": self._request,
-                        "readonly": True,
-                    },
-                }
-            )
-
-            return resp
+    @staticmethod
+    def get_events_to_display(issue):
+        return issue.events
 
     @view_config(
         route_name="c2cgeoform_item",
