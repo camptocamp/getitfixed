@@ -307,5 +307,6 @@ class Event(Base):
         server_default=func.now(),
         info={"colanderalchemy": {"title": _("Date"), "widget": HiddenWidget()}},
     )
-
-    comment = Column(Text, info={"colanderalchemy": {"title": _("Comment")}})
+    comment = Column(
+        Text, info={"colanderalchemy": {"title": _("Comment"), "missing": ""}}
+    )
