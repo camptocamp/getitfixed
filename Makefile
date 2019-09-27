@@ -197,5 +197,5 @@ compile-catalog: $(MO_FILES)
 		--engine mako \
 		--files $<
 
-config.yaml:
-	c2c-template --vars vars.yaml --get-config config.yaml project smtp
+config.yaml: vars.yaml
+	c2c-template --vars vars.yaml --get-config config.yaml project smtp emails

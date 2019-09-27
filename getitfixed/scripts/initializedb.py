@@ -81,6 +81,7 @@ def setup_test_data(dbsession):
                 Category(
                     label_en="Category «{}»".format(i),
                     label_fr="Catégorie «{}»".format(i),
+                    email="test{}@toto.com".format(i),
                 )
             )
     if dbsession.query(Type).count() == 0:

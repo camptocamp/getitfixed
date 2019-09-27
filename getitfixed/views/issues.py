@@ -12,6 +12,8 @@ from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
 from getitfixed.models.getitfixed import Category, Issue, Type
+from getitfixed.emails.email_service import send_email
+
 from getitfixed.i18n import _
 
 _list_field = partial(ListField, Issue)
@@ -158,6 +160,37 @@ class IssueViews(AbstractViews):
     )
     def save(self):
         base_save = super().save()
-        if not isinstance(base_save, HTTPFound):
-            base_save["item_name"] = _("New")
+        if self._is_new():
+
+            if isinstance(base_save, HTTPFound):
+                # Send email to the issue Reporter
+                self.send_notification_email(
+                    "new_issue_email",
+                    **{
+                        "issue": self._obj,
+                        "issue-link": self._request.route_url(
+                            "c2cgeoform_item", id=self._obj.hash
+                        ),
+                    },
+                )
+                # Send email to the category Manager
+                self.send_notification_email(
+                    "admin_new_issue_email",
+                    **{
+                        "issue": self._obj,
+                        "issue-link": self._request.route_url(
+                            "c2cgeoform_item", application="admin", id=self._obj.hash
+                        ),
+                    },
+                )
+            else:
+                base_save["item_name"] = _("New")
         return base_save
+
+    def send_notification_email(self, template_name, **template_kwargs):
+        send_email(
+            request=self._request,
+            to=self._obj.email,
+            template_name=template_name,
+            template_kwargs=template_kwargs,
+        )

@@ -4,6 +4,8 @@ from uuid import uuid4
 from sqlalchemy import Column, Date, DateTime, Enum, Integer, ForeignKey, String, Text
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql.expression import func
+from sqlalchemy.ext.associationproxy import association_proxy
+
 import geoalchemy2
 
 import colander
@@ -99,6 +101,10 @@ class Category(Base):
         info={
             "colanderalchemy": {"title": _("Label(en)"), "widget": TextInputWidget()}
         },
+    )
+    email = Column(
+        String(50),
+        info={"colanderalchemy": {"title": _("Email"), "widget": TextInputWidget()}},
     )
 
 
@@ -265,6 +271,7 @@ class Issue(Base):
             }
         },
     )
+    category = association_proxy("type", "category")
 
 
 class Event(Base):
@@ -300,5 +307,6 @@ class Event(Base):
         server_default=func.now(),
         info={"colanderalchemy": {"title": _("Date"), "widget": HiddenWidget()}},
     )
-
-    comment = Column(Text, info={"colanderalchemy": {"title": _("Comment")}})
+    comment = Column(
+        Text, info={"colanderalchemy": {"title": _("Comment"), "missing": ""}}
+    )

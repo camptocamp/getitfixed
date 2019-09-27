@@ -8,6 +8,8 @@ from c2cgeoform.testing.views import AbstractViewsTests
 from getitfixed.models.getitfixed import Category, Issue, Type
 from getitfixed.views.issues import IssueViews
 
+from unittest.mock import patch
+
 
 @pytest.fixture(scope="function")
 @pytest.mark.usefixtures("dbsession", "transact")
@@ -87,7 +89,8 @@ class TestIssueViews(AbstractViewsTests):
         assert obj.id == int(row["_id_"])
         assert obj.description in row["description"]
 
-    def test_new_then_save(self, dbsession, test_app, issue_test_data):
+    @patch("getitfixed.emails.email_service.smtplib.SMTP")
+    def test_new_then_save(self, smtp_mock, dbsession, test_app, issue_test_data):
         resp = test_app.get("/getitfixed/issues/new", status=200)
 
         form = resp.form
@@ -128,3 +131,6 @@ class TestIssueViews(AbstractViewsTests):
         assert "Ford" == obj.lastname
         assert "04 58 48 20 00" == obj.phone
         assert "andreas.ford@domain.net" == obj.email
+
+        assert smtp_mock.called, "method should have been called"
+        assert smtp_mock.call_count == 2
