@@ -2,10 +2,10 @@ language: python
 
 sudo: false
 
-dist: trusty
+dist: xenial
 
 python:
-  - "3.6"
+  - "3.7"
 
 install:
 - make build
