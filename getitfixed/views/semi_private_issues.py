@@ -3,12 +3,12 @@ from functools import partial
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPNotFound
 from deform import Button, Form
-from deform.widget import DateTimeInputWidget, HiddenWidget
+from deform.widget import HiddenWidget
 
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.models.getitfixed import USER_CUSTOMER, Event, Issue, Type
+from getitfixed.models.getitfixed import USER_CUSTOMER, Event, Issue
 
 from getitfixed.i18n import _
 
@@ -56,7 +56,7 @@ class IssueViews(AbstractViews):
             event.author = self._author
 
             event_schema = GeoFormSchemaNode(Event)
-            self.hide_schema_nodes(event_schema, self._hidden_columns)
+            self.get_schema(event_schema, self._hidden_columns)
 
             event_form = Form(
                 event_schema,
@@ -73,15 +73,15 @@ class IssueViews(AbstractViews):
                     "event_form_render_kwargs": {"request": self._request},
                 }
             )
-            resp.update({"events": self.get_events_to_display(issue)})
+            resp.update({"events": self.get_events(issue)})
             return resp
 
     @staticmethod
-    def hide_schema_nodes(event_schema, columns):
+    def get_schema(event_schema, columns):
         for column in columns:
             event_schema.get(column).widget = HiddenWidget()
         return event_schema
 
     @staticmethod
-    def get_events_to_display(issue):
+    def get_events(issue):
         return issue.public_events

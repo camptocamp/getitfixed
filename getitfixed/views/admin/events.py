@@ -88,6 +88,7 @@ class EventViews(AbstractViews):
                     application=self._request.matchdict["application"],
                     table="issues",
                     id=self._obj.issue.hash,
+                    _anchor="existing_events_form",
                 )
             )
         return resp

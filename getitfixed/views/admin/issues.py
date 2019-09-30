@@ -5,9 +5,9 @@ from pyramid.view import view_config, view_defaults
 from sqlalchemy.orm import subqueryload
 
 from c2cgeoform.schema import GeoFormSchemaNode
-from c2cgeoform.views.abstract_views import AbstractViews, ListField
+from c2cgeoform.views.abstract_views import ListField
 
-from getitfixed.models.getitfixed import Event, Issue, Type, USER_ADMIN
+from getitfixed.models.getitfixed import Issue, Type, USER_ADMIN
 from getitfixed.views.semi_private_issues import IssueViews
 
 
@@ -72,11 +72,11 @@ class IssueAdminViews(IssueViews):
         return super().edit()
 
     @staticmethod
-    def hide_schema_nodes(event_schema, columns):
+    def get_schema(event_schema, columns):
         return event_schema
 
     @staticmethod
-    def get_events_to_display(issue):
+    def get_events(issue):
         return issue.events
 
     @view_config(

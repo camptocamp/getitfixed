@@ -88,19 +88,16 @@ html {
 }
 
 .event-new {
-  background: #d9534f;
+  background: #54a847;
 }
-
 .event-waiting_for_customer {
-  background: lightcoral;
+  background: #007bff;
 }
-
-.event-waiting_for_admin {
-  background: orange;
-}
-
 .event-resolved {
-  background: forestgreen;
+  background: #dc4244;
+}
+.event-in_progress {
+  background: #f9c12f;
 }
 
 /*
