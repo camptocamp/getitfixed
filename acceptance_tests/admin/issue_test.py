@@ -78,7 +78,10 @@ class TestAdminIssueViews(AbstractViewsTests):
 
         resp = form.submit("submit", status=302)
 
-        assert "http://localhost/admin/issues/{}".format(issue.hash) == resp.location
+        assert (
+            "http://localhost/admin/issues/{}#existing_events_form".format(issue.hash)
+            == resp.location
+        )
 
         obj = (
             dbsession.query(Event)
@@ -130,7 +133,10 @@ class TestAdminIssueViews(AbstractViewsTests):
 
         resp = form.submit("submit", status=302)
 
-        assert "http://localhost/admin/issues/{}".format(issue.hash) == resp.location
+        assert (
+            "http://localhost/admin/issues/{}#existing_events_form".format(issue.hash)
+            == resp.location
+        )
 
         obj = (
             dbsession.query(Event)

@@ -8,7 +8,7 @@ from deform.widget import HiddenWidget
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.models.getitfixed import USER_CUSTOMER, Event, Issue
+from getitfixed.models.getitfixed import USER_ADMIN, USER_CUSTOMER, Event, Issue
 
 from getitfixed.i18n import _
 
@@ -70,7 +70,10 @@ class IssueViews(AbstractViews):
                 {
                     "event_form": event_form,
                     "event_form_render_args": (event_form.schema.dictify(event),),
-                    "event_form_render_kwargs": {"request": self._request},
+                    "event_form_render_kwargs": {
+                        "request": self._request,
+                        "user_admin": USER_ADMIN,
+                    },
                 }
             )
             resp.update({"events": self.get_events(issue)})

@@ -15,7 +15,7 @@
                     <i class="text-muted small glyphicon glyphicon-lock" ></i>
                 {% endif %}
                 {{ event.date.strftime("%Y-%m-%d %H:%M") }}
-                {% if request.matchdict["application"] == "admin" or event.author == "admin" %}
+                {% if request.matchdict["application"] == "admin" or event.author == event_form_render_kwargs['user_admin'] %}
                     ({{ event.author }})
                 {% else %}
                     ({% trans %}You{% endtrans %})

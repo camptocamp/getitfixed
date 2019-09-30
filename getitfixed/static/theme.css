@@ -49,6 +49,9 @@ html {
   .issue-view .deform .item-geometry {
     width: 100%;
   }
+  .item-status label {
+    display: none;
+  }
 }
 
 /* Status field */
@@ -66,14 +69,6 @@ html {
   width: 15em;
   text-align: center;
   z-index: 10;
-}
-
-/* Fix border on chrome */
-#new_event_form {
-  padding: 0.1em;
-}
-#existing_events_form {
-  padding: 0.1em;
 }
 
 /*

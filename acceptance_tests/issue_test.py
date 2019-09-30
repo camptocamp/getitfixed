@@ -168,7 +168,9 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
         resp = form.submit("submit", status=302)
 
         assert (
-            "http://localhost/getitfixed/private/issues/{}".format(issue.hash)
+            "http://localhost/getitfixed/private/issues/{}#existing_events_form".format(
+                issue.hash
+            )
             == resp.location
         )
 
