@@ -33,9 +33,9 @@ vars:
             email_body: |
                Bonjour {issue.firstname} {issue.lastname},
 
-               Le problème déclaré le {issue.request_date} est désormais en : {issue.status}.
+               Le problème déclaré le {issue.request_date} est en : {issue.status}.
                {event.comment}
-
+               Vous pouvez le consultez ici {issue-link}
                Cordialement,
 
                Get It Fixed Team
@@ -86,6 +86,7 @@ vars:
 
                The issue {issue.hash} created on the {issue.request_date} has evolved it is now {issue.status}.
                {event.comment}
+               You can follow it here {issue-link}
 
                Best
 

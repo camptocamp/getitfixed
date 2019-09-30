@@ -293,7 +293,9 @@ class Issue(Base):
         },
     )
     public_events = relationship(
-        "Event", primaryjoin="and_(Event.issue_id==Issue.id, Event.private==False)"
+        "Event",
+        order_by="desc(Event.date)",
+        primaryjoin="and_(Event.issue_id==Issue.id, Event.private==False)",
     )
 
     category = association_proxy("type", "category")

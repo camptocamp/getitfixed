@@ -36,51 +36,51 @@ class EventViews(AbstractViews):
         if isinstance(resp, HTTPFound):
             event_status = self._obj.status
             route = "c2cgeoform_item"
-            # send a email when the status has changed
-            if event_status != self._obj.issue.status:
-                # update issue status
-                self._obj.issue.status = event_status
+            # update issue status
+            self._obj.issue.status = event_status
 
-                # send a specific email when the status has been set to resolved
-                if event_status == "resolved" and self._obj.user is not True:
-                    self.send_notification_email(
-                        self._obj.issue.email,
-                        "resolved_issue_email",
-                        **{
-                            "issue": self._obj.issue,
-                            "issue-link": self._request.route_url(
-                                "c2cgeoform_item", id=self._obj.issue.hash
-                            ),
-                        }
-                    )
-                # send email to user when admin has commented
-                elif self._obj.private is False and event_status:
-                    self.send_notification_email(
-                        self._obj.issue.email,
-                        "update_issue_email",
-                        **{
-                            "issue": self._obj.issue,
-                            "event": self._obj,
-                            "issue-link": self._request.route_url(
-                                "c2cgeoform_item", id=self._obj.issue.hash
-                            ),
-                        }
-                    )
-            else:
-                # send email to admin when user has commented
-                if self._obj.author == USER_CUSTOMER:
-                    route = "c2cgeoform_item_private"
-                    self.send_notification_email(
-                        self._obj.issue.email,
-                        "update_issue_email",
-                        **{
-                            "issue": self._obj.issue,
-                            "event": self._obj,
-                            "issue-link": self._request.route_url(
-                                "c2cgeoform_item", id=self._obj.issue.hash
-                            ),
-                        }
-                    )
+            # send a specific email to user when the status has been set to resolved
+            if event_status != self._obj.issue.status and event_status == "resolved":
+                self.send_notification_email(
+                    self._obj.issue.email,
+                    "resolved_issue_email",
+                    **{
+                        "issue": self._obj.issue,
+                        "issue-link": self._request.route_url(
+                            "c2cgeoform_item", table="issues", id=self._obj.issue.hash
+                        ),
+                    }
+                )
+            # send email to user when admin has commented and message is not private
+            elif self._obj.private is False and event_status:
+                self.send_notification_email(
+                    self._obj.issue.email,
+                    "update_issue_email",
+                    **{
+                        "issue": self._obj.issue,
+                        "event": self._obj,
+                        "issue-link": self._request.route_url(
+                            "c2cgeoform_item_private",
+                            application="getitfixed",
+                            table="issues",
+                            id=self._obj.issue.hash,
+                        ),
+                    }
+                )
+            # send email to admin when user has commented
+            if self._obj.author == USER_CUSTOMER:
+                route = "c2cgeoform_item_private"  # redirect
+                self.send_notification_email(
+                    self._obj.issue.category.email,
+                    "update_issue_email",
+                    **{
+                        "issue": self._obj.issue,
+                        "event": self._obj,
+                        "issue-link": self._request.route_url(
+                            "c2cgeoform_item", table="issues", id=self._obj.issue.hash
+                        ),
+                    }
+                )
             # Redirect to issue form
             return HTTPFound(
                 self._request.route_url(
