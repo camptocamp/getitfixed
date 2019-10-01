@@ -30,6 +30,7 @@ class IssueAdminViews(IssueViews):
     _author = USER_ADMIN
     _list_fields = [
         _list_field("id"),
+        _list_field("status"),
         _list_field("request_date"),
         _list_field(
             "type_id",
@@ -43,7 +44,6 @@ class IssueAdminViews(IssueViews):
         _list_field("lastname"),
         _list_field("phone"),
         _list_field("email"),
-        _list_field("status"),
     ]
 
     def _base_query(self):
@@ -52,7 +52,6 @@ class IssueAdminViews(IssueViews):
             ._base_query()
             .outerjoin(Issue.type)
             .options(subqueryload(Issue.type))
-            .order_by(Issue.request_date.desc())
         )
         # return all issues that are not closed
         if not self._request.GET.get("all"):
