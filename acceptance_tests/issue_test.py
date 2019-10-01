@@ -143,7 +143,10 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
 
     _prefix = "/getitfixed/private/issues"
 
-    def test_edit_then_post_comment(self, test_app, issue_test_data, dbsession):
+    @patch("getitfixed.emails.email_service.smtplib.SMTP")
+    def test_edit_then_post_comment(
+        self, smtp_mock, test_app, issue_test_data, dbsession
+    ):
         issue = issue_test_data["issues"][0]
         resp = self.get(test_app, "/{}".format(issue.hash), status=200)
 
@@ -184,3 +187,4 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
         assert "new" == obj.status
         assert "This is a user comment" == obj.comment
         assert "new" == issue.status
+        assert smtp_mock.call_count == 1

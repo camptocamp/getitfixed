@@ -4,7 +4,7 @@ from pyramid.httpexceptions import HTTPFound
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews
 
-from getitfixed.models.getitfixed import Event, USER_CUSTOMER
+from getitfixed.models.getitfixed import Event, USER_ADMIN, USER_CUSTOMER
 
 from getitfixed.emails.email_service import send_email
 
@@ -52,7 +52,11 @@ class EventViews(AbstractViews):
                     }
                 )
             # send email to user when admin has commented and message is not private
-            elif self._obj.private is False and event_status:
+            elif (
+                self._obj.private is False
+                and event_status
+                and self._obj.author == USER_ADMIN
+            ):
                 self.send_notification_email(
                     self._obj.issue.email,
                     "update_issue_email",
