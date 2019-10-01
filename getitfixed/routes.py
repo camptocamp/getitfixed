@@ -1,5 +1,6 @@
 import os
 
+from c2cgeoform.routes import pregenerator
 from getitfixed.models.getitfixed import Event, Issue
 
 
@@ -14,3 +15,8 @@ def includeme(config):
 
     config.add_c2cgeoform_application("getitfixed", [("issues", Issue)])
     config.add_c2cgeoform_application("admin", [("issues", Issue), ("event", Event)])
+    config.add_route(
+        "c2cgeoform_item_private",
+        "{application:admin|getitfixed}/private/{table}/{id}",
+        pregenerator=pregenerator,
+    )

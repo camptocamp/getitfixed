@@ -11,7 +11,10 @@ LOG = logging.getLogger(__name__)
 
 
 def send_email(request, to, template_name, template_args=[], template_kwargs={}):
-    """Send acknowledgment email to rpfe and requerant"""
+    """Send email based on different templates
+    Templates are set in the vars.yaml file
+    """
+
     settings = request.registry.settings
     smtp = settings["smtp"]
     if not smtp:

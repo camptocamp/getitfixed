@@ -78,7 +78,10 @@ class TestAdminIssueViews(AbstractViewsTests):
 
         resp = form.submit("submit", status=302)
 
-        assert "http://localhost/admin/issues/{}".format(issue.hash) == resp.location
+        assert (
+            "http://localhost/admin/issues/{}#existing_events_form".format(issue.hash)
+            == resp.location
+        )
 
         obj = (
             dbsession.query(Event)
@@ -93,3 +96,57 @@ class TestAdminIssueViews(AbstractViewsTests):
         assert "in_progress" == issue.status
         assert smtp_mock.called, "method should have been called"
         assert smtp_mock.call_count == 1
+
+    @patch("getitfixed.emails.email_service.smtplib.SMTP")
+    def test_edit_then_post_private_comment(
+        self, smtp_mock, test_app, issue_test_data, dbsession
+    ):
+        issue = issue_test_data["issues"][0]
+        resp = self.get(test_app, "/{}".format(issue.hash), status=200)
+
+        self._check_mapping(
+            resp.html.select("form")[0],
+            [
+                {"name": "id", "value": str(issue.id), "hidden": True},
+                {"name": "type_id", "value": issue.type.label_en, "readonly": True},
+                {"name": "description", "value": issue.description, "readonly": True},
+                {"name": "description", "value": issue.description, "readonly": True},
+                {"name": "localisation", "value": issue.localisation, "readonly": True},
+                # Position
+                # Photo
+                {"name": "firstname", "value": issue.firstname, "readonly": True},
+                {"name": "lastname", "value": issue.lastname, "readonly": True},
+                {"name": "phone", "value": issue.phone, "readonly": True},
+                {"name": "email", "value": issue.email, "readonly": True},
+            ],
+        )
+
+        form = resp.forms["new_event_form"]
+        assert "" == form["id"].value
+        assert str(issue.id) == form["issue_id"].value
+        assert issue.status == form["status"].value
+        assert "" == form["comment"].value
+
+        form["status"].value = "in_progress"
+        form["comment"].value = "This is a private comment"
+        form["private"].value = True
+
+        resp = form.submit("submit", status=302)
+
+        assert (
+            "http://localhost/admin/issues/{}#existing_events_form".format(issue.hash)
+            == resp.location
+        )
+
+        obj = (
+            dbsession.query(Event)
+            .filter(Event.issue_id == issue.id)
+            .order_by(Event.date.desc())
+            .first()
+        )
+
+        assert "This is a private comment" == obj.comment
+        assert True is obj.private
+
+        assert "in_progress" == issue.status
+        assert smtp_mock.call_count == 0

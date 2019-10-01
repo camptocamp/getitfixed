@@ -3,9 +3,27 @@
 <div class="container">
     <a class="btn btn-link" href="#existing_events_form">{% trans %} See events {% endtrans %}</a>
     {% include 'c2cgeoform:/templates/edit.jinja2' %}
-  <hr/>
-  <h3>{% trans %}Add new event{% endtrans %}</h3>
-  {{event_form.render(*event_form_render_args, **event_form_render_kwargs)|safe}}
-  {{events_form.render(*events_form_render_args, **events_form_render_kwargs)|safe}}
+    <hr/>
+    <h3>{% trans %}Events{% endtrans %}</h3>
+    {{event_form.render(*event_form_render_args, **event_form_render_kwargs)|safe}}
+    <div class="panel panel-default">
+        <ul id="existing_events_form" class="list-group">
+            {% for event in events %}
+                <li class="list-group-item event-details">
+                <span class="label label-info event-{{event.status}}">{{ _(event.status) }}</span>
+                {% if event.private %}
+                    <i class="text-muted small glyphicon glyphicon-lock" ></i>
+                {% endif %}
+                {{ event.date.strftime("%Y-%m-%d %H:%M") }}
+                {% if request.matchdict["application"] == "admin" or event.author == event_form_render_kwargs['user_admin'] %}
+                    ({{ event.author }})
+                {% else %}
+                    ({% trans %}You{% endtrans %})
+                {% endif %}
+                </li>
+                <li class="list-group-item">{{ event.comment }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock content %}

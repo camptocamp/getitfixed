@@ -1,7 +1,17 @@
 # coding=utf-8
 from uuid import uuid4
 
-from sqlalchemy import Column, Date, DateTime, Enum, Integer, ForeignKey, String, Text
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Date,
+    DateTime,
+    Enum,
+    Integer,
+    ForeignKey,
+    String,
+    Text,
+)
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql.expression import func
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -10,6 +20,7 @@ import geoalchemy2
 
 import colander
 from deform.widget import (
+    CheckboxWidget,
     FormWidget,
     HiddenWidget,
     SelectWidget,
@@ -48,13 +59,22 @@ gmf_demo_map = """new ol.layer.Tile({
     })
 })"""  # noqa
 
+STATUS_NEW = "new"
+STATUS_IN_PROGRESS = "in_progress"
+STATUS_CUSTOMER = "waiting_for_customer"
+STATUS_RESOLVED = "resolved"
+
 
 STATUSES = {
-    "new": _("Nouveau"),
-    "in_progress": _("In progress"),
-    "waiting_for_customer": _("Waiting for customer"),
-    "resolved": _("Resolved"),
+    STATUS_NEW: _("Nouveau"),
+    STATUS_IN_PROGRESS: _("In progress"),
+    STATUS_CUSTOMER: _("Waiting for customer"),
+    STATUS_RESOLVED: _("Resolved"),
 }
+
+USER_ADMIN = "admin"
+USER_CUSTOMER = "customer"
+USER_AUTHORS = {USER_CUSTOMER: _("Customer"), USER_ADMIN: _("Administrator")}
 
 
 # FIXME a file upload memory store is not appropriate for production
@@ -104,6 +124,7 @@ class Category(Base):
     )
     email = Column(
         String(50),
+        nullable=False,
         info={"colanderalchemy": {"title": _("Email"), "widget": TextInputWidget()}},
     )
 
@@ -271,6 +292,12 @@ class Issue(Base):
             }
         },
     )
+    public_events = relationship(
+        "Event",
+        order_by="desc(Event.date)",
+        primaryjoin="and_(Event.issue_id==Issue.id, Event.private==False)",
+    )
+
     category = association_proxy("type", "category")
 
 
@@ -309,4 +336,20 @@ class Event(Base):
     )
     comment = Column(
         Text, info={"colanderalchemy": {"title": _("Comment"), "missing": ""}}
+    )
+
+    private = Column(
+        Boolean,
+        info={
+            "colanderalchemy": {
+                "title": _("Private"),
+                "widget": CheckboxWidget(item_css_class="item-private"),
+            }
+        },
+    )
+    author = Column(
+        Enum(*tuple(USER_AUTHORS.keys()), native_enum=False, name="author"),
+        nullable=False,
+        default="new",
+        info={"colanderalchemy": {"title": _("Author"), "widget": HiddenWidget()}},
     )

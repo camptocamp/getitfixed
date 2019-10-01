@@ -5,7 +5,7 @@ from random import randrange
 
 from c2cgeoform.testing.views import AbstractViewsTests
 
-from getitfixed.models.getitfixed import Category, Issue, Type
+from getitfixed.models.getitfixed import Category, Event, Issue, Type
 from getitfixed.views.issues import IssueViews
 
 from unittest.mock import patch
@@ -20,7 +20,9 @@ def issue_test_data(dbsession, transact):
     for i in range(5):
         categories.append(
             Category(
-                label_en="Category «{}»".format(i), label_fr="Catégorie «{}»".format(i)
+                label_en="Category «{}»".format(i),
+                label_fr="Catégorie «{}»".format(i),
+                email="{}.is@abit.ch".format(i),
             )
         )
     dbsession.add_all(categories)
@@ -134,3 +136,55 @@ class TestIssueViews(AbstractViewsTests):
 
         assert smtp_mock.called, "method should have been called"
         assert smtp_mock.call_count == 2
+
+
+@pytest.mark.usefixtures("issue_test_data", "test_app")
+class TestSemiPrivateIssueViews(AbstractViewsTests):
+
+    _prefix = "/getitfixed/private/issues"
+
+    @patch("getitfixed.emails.email_service.smtplib.SMTP")
+    def test_edit_then_post_comment(
+        self, smtp_mock, test_app, issue_test_data, dbsession
+    ):
+        issue = issue_test_data["issues"][0]
+        resp = self.get(test_app, "/{}".format(issue.hash), status=200)
+
+        self._check_mapping(
+            resp.html.select("form")[0],
+            [
+                {"name": "id", "value": str(issue.id), "hidden": True},
+                {"name": "type_id", "value": issue.type.label_en, "readonly": True},
+                {"name": "description", "value": issue.description, "readonly": True},
+                {"name": "description", "value": issue.description, "readonly": True},
+                {"name": "localisation", "value": issue.localisation, "readonly": True},
+            ],
+        )
+
+        form = resp.forms["new_event_form"]
+        assert "" == form["id"].value
+        assert str(issue.id) == form["issue_id"].value
+        assert "" == form["comment"].value
+
+        form["comment"].value = "This is a user comment"
+
+        resp = form.submit("submit", status=302)
+
+        assert (
+            "http://localhost/getitfixed/private/issues/{}#existing_events_form".format(
+                issue.hash
+            )
+            == resp.location
+        )
+
+        obj = (
+            dbsession.query(Event)
+            .filter(Event.issue_id == issue.id)
+            .order_by(Event.date.desc())
+            .first()
+        )
+
+        assert "new" == obj.status
+        assert "This is a user comment" == obj.comment
+        assert "new" == issue.status
+        assert smtp_mock.call_count == 1
