@@ -1,5 +1,27 @@
 {% extends 'c2cgeoform:/templates/grid.jinja2' %}
-
 {% block calculateTableHeightJS %}
-return $(window).height() - $('footer').height() - $('header').height() - 30
+    return $(window).height() - $('footer').height() - $('header').height() - 30;
+{% endblock %}
+
+{% block extendBs %}
+    let bsTable = $grid.bootstrapTable();
+    let dataUrl = bsTable.data()['bootstrap.table'].options.url
+
+    let openIssues = '{{request.localizer.translate("Get open")}}';
+    let allIssues = '{{request.localizer.translate("Get all")}}';
+    let fetchIssues = function(e) {
+      if (e.currentTarget.textContent==allIssues) {
+        bsTable.data()['bootstrap.table'].options.url = dataUrl + '?all=True';
+        e.currentTarget.textContent = openIssues;
+      } else {
+        bsTable.data()['bootstrap.table'].options.url = dataUrl;
+        e.currentTarget.textContent = allIssues;
+      }
+      bsTable.bootstrapTable('refresh');
+    };
+
+    let element = $('<button/>', {id: 'divName', class: 'btn btn-default', text: allIssues}).click(fetchIssues)
+    const buttonGroup = $('.list-grid .bootstrap-table .fixed-table-toolbar .btn-group.pull-right')
+    buttonGroup.append(element);
+
 {% endblock %}
