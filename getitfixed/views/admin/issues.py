@@ -68,6 +68,9 @@ class IssueAdminViews(IssueViews):
 
     @view_config(route_name="c2cgeoform_grid", renderer="json")
     def grid(self):
+        if 'sort' not in self._request.params:
+            self._request.GET['sort'] = 'request_date'
+            self._request.GET['order'] = 'desc'
         return super().grid()
 
     def _grid_actions(self):

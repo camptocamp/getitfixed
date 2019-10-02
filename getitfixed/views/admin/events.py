@@ -73,6 +73,7 @@ class EventViews(AbstractViews):
                     }
                 )
             # send email to admin when user has commented
+
             if self._obj.author == USER_CUSTOMER:
                 route = "c2cgeoform_item_private"  # redirect
                 self.send_notification_email(
