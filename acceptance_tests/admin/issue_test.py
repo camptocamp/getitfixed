@@ -17,16 +17,16 @@ class TestAdminIssueViews(AbstractViewsTests):
 
         expected = [
             ("actions", "", "false"),
-            ('id', 'Identifier', 'true'),
-            ('status', 'Status', 'true'),
-            ('request_date', 'Request date', 'true'),
-            ('type_id', 'Type', 'true'),
-            ('description', 'Description', 'true'),
-            ('localisation', 'Localisation', 'true'),
-            ('firstname', 'Firstname', 'true'),
-            ('lastname', 'Lastname', 'true'),
-            ('phone', 'Phone', 'true'),
-            ('email', 'Email', 'true'),
+            ("id", "Identifier", "true"),
+            ("status", "Status", "true"),
+            ("request_date", "Request date", "true"),
+            ("type_id", "Type", "true"),
+            ("description", "Description", "true"),
+            ("localisation", "Localisation", "true"),
+            ("firstname", "Firstname", "true"),
+            ("lastname", "Lastname", "true"),
+            ("phone", "Phone", "true"),
+            ("email", "Email", "true"),
         ]
         self.check_grid_headers(resp, expected)
 

@@ -1,6 +1,6 @@
 {% extends 'c2cgeoform:/templates/grid.jinja2' %}
 {% block calculateTableHeightJS %}
-return $(window).height() - $('footer').height() - $('header').height() - 30;
+return $(window).height() - $('footer').height() - $('header').height() - 30
 {% endblock %}
 {% block grid %}
 {{ super() }}
@@ -11,18 +11,17 @@ return $(window).height() - $('footer').height() - $('header').height() - 30;
      let openIssues = '{{request.localizer.translate("Get open")}}'
      let allIssues = '{{request.localizer.translate("Get all")}}'
      let fetchIssues = function () {
-         $(this).find("span").toggleClass("toggle-visible-issues ")
-         bsTable.data()['bootstrap.table'].options.url === dataUrl ?
-             bsTable.data()['bootstrap.table'].options.url = dataUrl + '?all=True' :
-             bsTable.data()['bootstrap.table'].options.url = dataUrl
+         $(this).find("span").toggleClass("toggle-visible-issues")
+         bsTable.data()['bootstrap.table'].options.url =
+             (bsTable.data()['bootstrap.table'].options.url === dataUrl) ? (dataUrl + '?all=True') : dataUrl
          bsTable.bootstrapTable('refresh')
      }
-    let element = $('<button/>', {id: 'divName', class: 'btn btn-default'})
+    let element = $('<button/>', {class: 'btn btn-default'})
         .append(`<span>${openIssues}</span>`)
         .append(`<span class="toggle-visible-issues">${allIssues}</span>`)
         .click(fetchIssues)
 
-    const buttonGroup = $('.list-grid .bootstrap-table .fixed-table-toolbar .btn-group.pull-right')
+    const buttonGroup = $('.list-grid .btn-group.pull-right')
     buttonGroup.append(element)
 
   })
