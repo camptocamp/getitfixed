@@ -7,7 +7,14 @@ from sqlalchemy.orm import subqueryload
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import ListField
 
-from getitfixed.models.getitfixed import Issue, Type, USER_ADMIN
+from getitfixed.models.getitfixed import (
+    Issue,
+    Type,
+    USER_ADMIN,
+    STATUS_IN_PROGRESS,
+    STATUS_CUSTOMER,
+    STATUS_NEW,
+)
 from getitfixed.views.semi_private_issues import IssueViews
 
 
@@ -23,6 +30,7 @@ class IssueAdminViews(IssueViews):
     _author = USER_ADMIN
     _list_fields = [
         _list_field("id"),
+        _list_field("status"),
         _list_field("request_date"),
         _list_field(
             "type_id",
@@ -36,16 +44,22 @@ class IssueAdminViews(IssueViews):
         _list_field("lastname"),
         _list_field("phone"),
         _list_field("email"),
-        _list_field("status"),
     ]
+    _list_ordered_field = [Issue.request_date.desc()]
 
     def _base_query(self):
-        return (
+        query = (
             super()
             ._base_query()
             .outerjoin(Issue.type)
             .options(subqueryload(Issue.type))
         )
+        # return all issues that are not closed
+        if not self._request.GET.get("all"):
+            query = query.filter(
+                Issue.status.in_([STATUS_IN_PROGRESS, STATUS_CUSTOMER, STATUS_NEW])
+            )
+        return query
 
     @view_config(
         route_name="c2cgeoform_index", renderer="../../templates/admin/index.jinja2"

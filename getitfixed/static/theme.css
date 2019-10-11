@@ -96,6 +96,14 @@ html {
 }
 
 /*
+ * Menu Buttons
+ */
+.toggle-visible-issues {
+ display: none;
+}
+
+
+/*
  * Footer
  */
 .content {
