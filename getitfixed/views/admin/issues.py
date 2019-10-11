@@ -8,26 +8,30 @@ from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import ListField
 
 from getitfixed.models.getitfixed import (
+    Event,
     Issue,
     Type,
     USER_ADMIN,
     STATUS_IN_PROGRESS,
-    STATUS_CUSTOMER,
+    STATUS_REPORTER,
     STATUS_NEW,
 )
-from getitfixed.views.semi_private_issues import IssueViews
-
+from getitfixed.views.private.semi_private_issues import IssueViews
 
 _list_field = partial(ListField, Issue)
 
 base_schema = GeoFormSchemaNode(Issue, excludes=["events", "public_events"])
+route = "c2cgeoform_item"
+event_schema = GeoFormSchemaNode(Event)
 
 
 @view_defaults(match_param=("application=admin", "table=issues"))
 class IssueAdminViews(IssueViews):
 
-    _hidden_columns = []
     _author = USER_ADMIN
+    _event_schema = event_schema
+    _application = "admin"
+
     _list_fields = [
         _list_field("id"),
         _list_field("status"),
@@ -57,7 +61,7 @@ class IssueAdminViews(IssueViews):
         # return all issues that are not closed
         if not self._request.GET.get("all"):
             query = query.filter(
-                Issue.status.in_([STATUS_IN_PROGRESS, STATUS_CUSTOMER, STATUS_NEW])
+                Issue.status.in_([STATUS_IN_PROGRESS, STATUS_REPORTER, STATUS_NEW])
             )
         return query
 
@@ -86,11 +90,7 @@ class IssueAdminViews(IssueViews):
         return super().edit()
 
     @staticmethod
-    def get_schema(event_schema, columns):
-        return event_schema
-
-    @staticmethod
-    def get_events(issue):
+    def events(issue):
         return issue.events
 
     @view_config(

@@ -8,7 +8,7 @@ from deform.widget import HiddenWidget
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.models.getitfixed import USER_ADMIN, USER_CUSTOMER, Event, Issue
+from getitfixed.models.getitfixed import USER_ADMIN, USER_REPORTER, Event, Issue
 
 from getitfixed.i18n import _
 
@@ -27,6 +27,9 @@ base_schema = GeoFormSchemaNode(
         "public_events",
     ],
 )
+event_schema = GeoFormSchemaNode(Event)
+event_schema["status"].widget = HiddenWidget()
+event_schema["private"].widget = HiddenWidget()
 
 
 @view_defaults(match_param="table=issues")
@@ -34,13 +37,14 @@ class IssueViews(AbstractViews):
     _model = Issue
     _base_schema = base_schema
     _id_field = "hash"
-    _hidden_columns = ["status", "private"]
-    _author = USER_CUSTOMER
+    _author = USER_REPORTER
+    _event_schema = event_schema
+    _application = "getitfixed"
 
     @view_config(
         route_name="c2cgeoform_item_private",
         request_method="GET",
-        renderer="../templates/admin/issue/edit.jinja2",
+        renderer="../../templates/admin/issue/edit.jinja2",
     )
     def edit(self):
         if self._is_new():
@@ -54,16 +58,15 @@ class IssueViews(AbstractViews):
             event = Event(issue_id=issue.id)
             event.status = issue.status
             event.author = self._author
-
-            event_schema = GeoFormSchemaNode(Event)
-            self.get_schema(event_schema, self._hidden_columns)
-
             event_form = Form(
-                event_schema,
+                self._event_schema,
                 formid="new_event_form",
                 buttons=[Button(name="formsubmit", title=_("Submit"))],
                 action=self._request.route_url(
-                    "c2cgeoform_item", table="events", id="new"
+                    "c2cgeoform_item",
+                    application=self._application,
+                    table="events",
+                    id="new",
                 ),
             )
             resp.update(
@@ -76,15 +79,9 @@ class IssueViews(AbstractViews):
                     },
                 }
             )
-            resp.update({"events": self.get_events(issue)})
+            resp.update({"events": self.events(issue)})
             return resp
 
     @staticmethod
-    def get_schema(event_schema, columns):
-        for column in columns:
-            event_schema.get(column).widget = HiddenWidget()
-        return event_schema
-
-    @staticmethod
-    def get_events(issue):
+    def events(issue):
         return issue.public_events
