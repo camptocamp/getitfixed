@@ -21,7 +21,7 @@
                     ({% trans %}You{% endtrans %})
                 {% endif %}
                 </li>
-                <li class="list-group-item">{{ event.comment }}</li>
+                <li class="list-group-item">{{ event.comment if event.comment != '' else _('No Comment') }}</li>
             {% endfor %}
         </ul>
     </div>
