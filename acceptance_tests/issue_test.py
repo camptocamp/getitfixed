@@ -141,7 +141,7 @@ class TestIssueViews(AbstractViewsTests):
 @pytest.mark.usefixtures("issue_test_data", "test_app")
 class TestSemiPrivateIssueViews(AbstractViewsTests):
 
-    _prefix = "/getitfixed/private/issues"
+    _prefix = "http://localhost/getitfixed/private/issues"
 
     @patch("getitfixed.emails.email_service.smtplib.SMTP")
     def test_edit_then_post_comment(
