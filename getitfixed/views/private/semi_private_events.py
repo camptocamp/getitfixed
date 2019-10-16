@@ -32,10 +32,6 @@ class EventViews(AbstractViews):
     def save(self):
         resp = super().save()
         if isinstance(resp, HTTPFound):
-            issue_status = self._obj.issue.status
-            # status does not change when reporter comments
-            self._obj.issue.status = issue_status
-            # send email to admin when user has commented
             if self._obj.author == USER_REPORTER:
                 self.send_notification_email(
                     self._obj.issue.category.email,

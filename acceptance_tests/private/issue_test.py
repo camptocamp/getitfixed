@@ -63,7 +63,7 @@ def issue_test_data(dbsession, transact):
 @pytest.mark.usefixtures("issue_test_data", "test_app")
 class TestSemiPrivateIssueViews(AbstractViewsTests):
 
-    _prefix = "http://localhost/getitfixed/private/issues"
+    _prefix = "/getitfixed/private/issues"
 
     @patch("getitfixed.emails.email_service.smtplib.SMTP")
     def test_edit_then_post_comment(
@@ -128,13 +128,10 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
                 {"name": "localisation", "value": issue.localisation, "readonly": True},
             ],
         )
-
         form = resp.forms["new_event_form"]
         assert "" == form["id"].value
         assert str(issue.id) == form["issue_id"].value
         assert "" == form["comment"].value
-
-        form["comment"].value = ""
 
         resp = form.submit("submit", status=200)
 

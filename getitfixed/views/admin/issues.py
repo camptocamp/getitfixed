@@ -49,7 +49,7 @@ class IssueAdminViews(IssueViews):
         _list_field("phone"),
         _list_field("email"),
     ]
-    _list_ordered_field = [Issue.request_date.desc()]
+    _list_ordered_fields = [Issue.request_date.desc()]
 
     def _base_query(self):
         query = (
