@@ -74,7 +74,7 @@ STATUSES = {
 
 USER_ADMIN = "admin"
 USER_REPORTER = "customer"
-USER_AUTHORS = {USER_REPORTER: _("Repoerter"), USER_ADMIN: _("Administrator")}
+USER_AUTHORS = {USER_REPORTER: _("Reporter"), USER_ADMIN: _("Administrator")}
 
 
 # FIXME a file upload memory store is not appropriate for production

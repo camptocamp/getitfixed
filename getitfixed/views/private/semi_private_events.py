@@ -7,7 +7,7 @@ from deform.widget import HiddenWidget
 from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.views.abstract_views import AbstractViews
 
-from getitfixed.models.getitfixed import Event, USER_ADMIN, USER_REPORTER
+from getitfixed.models.getitfixed import Event, USER_REPORTER
 
 from getitfixed.emails.email_service import send_email
 

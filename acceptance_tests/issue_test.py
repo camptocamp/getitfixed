@@ -214,6 +214,7 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
 
         form["comment"].value = ""
 
-        form.submit("submit", status=200)
+        resp = form.submit("submit", status=200)
 
+        assert "http://localhost/getitfixed/events/new" == resp.request.path_url
         assert smtp_mock.call_count == 0
