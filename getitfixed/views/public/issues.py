@@ -108,7 +108,7 @@ class IssueViews(AbstractViews):
             .options(subqueryload(Issue.type))
         )
 
-    @view_config(route_name="c2cgeoform_index", renderer="../templates/index.jinja2")
+    @view_config(route_name="c2cgeoform_index", renderer="../../templates/index.jinja2")
     def index(self):
         return super().index()
 
@@ -128,7 +128,7 @@ class IssueViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="GET",
-        renderer="../templates/edit.jinja2",
+        renderer="../../templates/edit.jinja2",
     )
     def edit(self):
         if self._is_new():

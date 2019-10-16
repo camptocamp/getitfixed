@@ -61,20 +61,20 @@ gmf_demo_map = """new ol.layer.Tile({
 
 STATUS_NEW = "new"
 STATUS_IN_PROGRESS = "in_progress"
-STATUS_CUSTOMER = "waiting_for_customer"
+STATUS_REPORTER = "waiting_for_reporter"
 STATUS_RESOLVED = "resolved"
 
 
 STATUSES = {
     STATUS_NEW: _("Nouveau"),
     STATUS_IN_PROGRESS: _("In progress"),
-    STATUS_CUSTOMER: _("Waiting for customer"),
+    STATUS_REPORTER: _("Waiting for Reporter"),
     STATUS_RESOLVED: _("Resolved"),
 }
 
 USER_ADMIN = "admin"
-USER_CUSTOMER = "customer"
-USER_AUTHORS = {USER_CUSTOMER: _("Customer"), USER_ADMIN: _("Administrator")}
+USER_REPORTER = "customer"
+USER_AUTHORS = {USER_REPORTER: _("Reporter"), USER_ADMIN: _("Administrator")}
 
 
 # FIXME a file upload memory store is not appropriate for production

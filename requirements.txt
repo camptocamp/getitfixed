@@ -12,6 +12,7 @@ pyramid_tm
 shapely
 SQLAlchemy
 transaction
+pytest==5.1.3
 zope.sqlalchemy
 waitress
 mock
