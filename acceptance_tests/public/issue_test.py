@@ -5,10 +5,19 @@ from random import randrange
 
 from c2cgeoform.testing.views import AbstractViewsTests
 
-from getitfixed.models.getitfixed import Category, Event, Issue, Type
+from getitfixed.models.getitfixed import (
+    Category,
+    Event,
+    Issue,
+    Type,
+    STATUS_VALIDATED,
+    STATUS_NEW,
+)
 from getitfixed.views.public.issues import IssueViews
 
 from unittest.mock import patch
+
+STATUSES = [STATUS_VALIDATED, STATUS_NEW]
 
 
 @pytest.fixture(scope="function")
@@ -50,6 +59,7 @@ def issue_test_data(dbsession, transact):
                 phone="0{} {:02} {:02} {:02} {:02}".format(
                     randrange(1, 10), *[randrange(100) for i in range(4)]
                 ),
+                status=STATUSES[i % 2],
                 email="firstname{0}.lastname{0}@domain.net".format(i),
             )
         )
@@ -81,12 +91,12 @@ class TestIssueViews(AbstractViewsTests):
 
     def test_grid(self, test_app, dbsession):
         json = self.check_search(
-            test_app, limit=10, sort="identifier", order="asc", total=10
+            test_app, limit=10, sort="identifier", order="asc", total=5
         )
-        assert 10 == len(json["rows"])
-        assert 10 == json["total"]
+        assert 5 == len(json["rows"])
+        assert 5 == json["total"]
 
-        row = json["rows"][5]
+        row = json["rows"][4]
         obj = dbsession.query(Issue).filter(Issue.id == row["_id_"]).first()
         assert obj.id == int(row["_id_"])
         assert obj.description in row["description"]

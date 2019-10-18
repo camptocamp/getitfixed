@@ -94,6 +94,9 @@ html {
 .event-in_progress {
   background: #f9c12f;
 }
+.event-validated {
+  background: #f96705;
+}
 
 /*
  * Menu Buttons

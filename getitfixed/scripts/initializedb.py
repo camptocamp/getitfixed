@@ -10,9 +10,12 @@ from pyramid.scripts.common import parse_vars, get_config_loader
 from ..models.meta import Base
 from ..models import get_engine, get_session_factory, get_tm_session
 
-from getitfixed.models.getitfixed import schema, Issue, Category, Type
+from getitfixed.models.getitfixed import schema, Issue, Category, Type, STATUSES
 
 from getitfixed.scripts import wait_for_db
+
+
+STATUSES = list(STATUSES.keys())
 
 
 def usage(argv):
@@ -122,6 +125,7 @@ def _issue(i, type_id, dbsession):
         phone="0{} {:02} {:02} {:02} {:02}".format(
             randrange(1, 10), *[randrange(100) for i in range(4)]
         ),
+        status=STATUSES[i % 5],
     )
     issue.email = "{}.{}@domain.net".format(
         issue.firstname.lower(), issue.lastname.lower()
