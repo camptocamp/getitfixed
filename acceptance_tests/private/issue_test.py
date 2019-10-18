@@ -1,12 +1,14 @@
 import pytest
-import re
-import datetime
 from random import randrange
 
 from c2cgeoform.testing.views import AbstractViewsTests
 
-from getitfixed.models.getitfixed import Category, Event, Issue, Type
-from getitfixed.views.public.issues import IssueViews
+from getitfixed.models.getitfixed import (
+    Category,
+    Event,
+    Issue,
+    Type,
+)
 
 from unittest.mock import patch
 

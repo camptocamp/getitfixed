@@ -60,13 +60,14 @@ gmf_demo_map = """new ol.layer.Tile({
 })"""  # noqa
 
 STATUS_NEW = "new"
+STATUS_VALIDATED = "validated"
 STATUS_IN_PROGRESS = "in_progress"
 STATUS_REPORTER = "waiting_for_reporter"
 STATUS_RESOLVED = "resolved"
 
-
 STATUSES = {
     STATUS_NEW: _("Nouveau"),
+    STATUS_VALIDATED: _("Validated"),
     STATUS_IN_PROGRESS: _("In progress"),
     STATUS_REPORTER: _("Waiting for Reporter"),
     STATUS_RESOLVED: _("Resolved"),

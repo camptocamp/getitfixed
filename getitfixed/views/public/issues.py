@@ -11,7 +11,7 @@ from c2cgeoform.schema import GeoFormSchemaNode
 from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
 
-from getitfixed.models.getitfixed import Category, Issue, Type
+from getitfixed.models.getitfixed import Category, Issue, Type, STATUS_NEW
 from getitfixed.emails.email_service import send_email
 
 from getitfixed.i18n import _
@@ -105,6 +105,7 @@ class IssueViews(AbstractViews):
             super()
             ._base_query()
             .outerjoin(Issue.type)
+            .filter(Issue.status.notin_([STATUS_NEW]))
             .options(subqueryload(Issue.type))
         )
 
