@@ -94,7 +94,8 @@ class TestAdminIssueViews(AbstractViewsTests):
 
     def test_select_category(self, test_app):
         json = self.check_search(
-            test_app, limit=10, sort="identifier", order="asc", total=0, category=8)
+            test_app, limit=10, sort="identifier", order="asc", total=0, category=8
+        )
         assert 0 == len(json["rows"])
         assert 0 == json["total"]
 

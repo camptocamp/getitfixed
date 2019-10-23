@@ -59,9 +59,7 @@ class IssueAdminViews(IssueViews):
             .options(subqueryload(Issue.type))
         )
         # return all issues that are not closed
-        if (
-            self._request.params.get("all") != "true"
-        ):
+        if self._request.params.get("all") != "true":
             query = query.filter(
                 Issue.status.in_([STATUS_IN_PROGRESS, STATUS_REPORTER, STATUS_NEW])
             )
