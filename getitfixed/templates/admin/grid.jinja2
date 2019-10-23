@@ -3,7 +3,7 @@
 return $(window).height() - $('footer').height() - $('header').height() - 30
 {% endblock %}
 {% block grid %}
-    {{ super() }}
+{{ super() }}
 <script>
   $(function() {
      const bsTable = $('#grid')
@@ -13,7 +13,7 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
      const url  = new URL(dataUrl)
 
      let buttonElement = $('<button/>', {class: 'btn btn-default'})
-          .append($(`<span class="toggle-visible-issues">${openIssues}</span>`).data('issues', 'open'))
+          .append($(`<span class="hidden">${openIssues}</span>`).data('issues', 'open'))
           .append($(`<span>${allIssues}</span>`).data('issues', 'all'))
 
      let fetchIssues = function(key, value) {
@@ -23,15 +23,15 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
      }
 
      let getIssuesByStatus = function () {
-         let span = buttonElement.find("span")
-         span.toggleClass("toggle-visible-issues")
-         let status = span.data().issues
+         let spans = buttonElement.find('span')
+         spans.toggleClass("hidden")
+         let status = spans.not('.hidden').data().issues
          fetchIssues('all', status === 'all' ? 'false' : 'true')
      }
 
      let getIssuesByCategory = function (e) {
-         dropDownElement.text(e.currentTarget.textContent)
-         fetchIssues('category', e.currentTarget.value)
+         $(dropDownElement.children()[0]).text(e.currentTarget.textContent)
+         fetchIssues('category', $(e.currentTarget).data().categoryId)
      }
 
     const buttonGroup = $('.list-grid .btn-group.pull-right')
@@ -42,7 +42,7 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
     const categories = {{ categories|tojson|safe }}
     let dropDownElement = $('<button/>', {class: 'btn btn-default dropdown-toggle',
           'data-toggle': 'dropdown'})
-          .text('{{ _('All Categories') }}')
+          .append($('<span/>').text('{{ _('All Categories') }}'))
           .append($('<span/>', {class: 'caret'}))
     // add dropDown to button group
     buttonGroup.append(dropDownElement)
@@ -53,10 +53,11 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
     // add extra li for all categories
     categories.splice(0,0, {id: '0', value: '{{ _('All Categories') }}'})
     for (let cat of categories) {
-          dropDownMenu.append($('<li/>', {value: cat.id})
-            .append($('<a/>').text(cat.value))
-              .click(getIssuesByCategory)
-          )
+        dropDownMenu.append($('<li/>')
+            .append($('<a/>', {href: '#'}).text(cat.value).data('categoryId', cat.id)
+                .click(getIssuesByCategory)
+            )
+        )
     }
   })
 </script>
