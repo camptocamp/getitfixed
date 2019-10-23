@@ -13,6 +13,7 @@ from getitfixed.models.getitfixed import (
     Type,
     USER_ADMIN,
     STATUS_IN_PROGRESS,
+    STATUS_VALIDATED,
     STATUS_REPORTER,
     STATUS_NEW,
 )
@@ -61,15 +62,14 @@ class IssueAdminViews(IssueViews):
         # return all issues that are not closed
         if self._request.params.get("all") != "true":
             query = query.filter(
-                Issue.status.in_([STATUS_IN_PROGRESS, STATUS_REPORTER, STATUS_NEW])
+                Issue.status.in_(
+                    [STATUS_IN_PROGRESS, STATUS_VALIDATED, STATUS_REPORTER, STATUS_NEW]
+                )
             )
-        category_filter = (
-            int(self._request.params.get("category"))
-            if self._request.params.get("category")
-            else None
-        )
+        category_filter = int(self._request.params.get("category", 0))
+
         # filter issues based on category id
-        if category_filter and category_filter != 0:  # 0 is for all issues
+        if category_filter != 0:  # 0 is for all issues
             query = query.filter(Issue.category.has(id=category_filter))
         return query
 

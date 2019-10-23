@@ -30,7 +30,7 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
      }
 
      let getIssuesByCategory = function (e) {
-         $(dropDownElement.children()[0]).text(e.currentTarget.textContent)
+         $(dropDownElement.find('.category-label')).text(e.currentTarget.textContent)
          fetchIssues('category', $(e.currentTarget).data().categoryId)
      }
 
@@ -42,7 +42,7 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
     const categories = {{ categories|tojson|safe }}
     let dropDownElement = $('<button/>', {class: 'btn btn-default dropdown-toggle',
           'data-toggle': 'dropdown'})
-          .append($('<span/>').text('{{ _('All Categories') }}'))
+          .append($('<span/>', {class: 'category-label'}).text('{{ _('All Categories') }}'))
           .append($('<span/>', {class: 'caret'}))
     // add dropDown to button group
     buttonGroup.append(dropDownElement)
