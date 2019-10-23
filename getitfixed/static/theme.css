@@ -104,7 +104,9 @@ html {
 .toggle-visible-issues {
  display: none;
 }
-
+.dropdown-toggle .caret {
+ margin-left: 0.5em;
+}
 
 /*
  * Footer

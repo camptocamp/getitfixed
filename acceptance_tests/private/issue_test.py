@@ -3,12 +3,7 @@ from random import randrange
 
 from c2cgeoform.testing.views import AbstractViewsTests
 
-from getitfixed.models.getitfixed import (
-    Category,
-    Event,
-    Issue,
-    Type,
-)
+from getitfixed.models.getitfixed import Category, Event, Issue, Type
 
 from unittest.mock import patch
 
