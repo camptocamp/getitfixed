@@ -79,8 +79,8 @@ WHERE schema_name = '{}';
 
 
 def get_geometry(dbsession):
-    coord_x = random.uniform(-2, 6)
-    coord_y = random.uniform(43, 50)
+    coord_x = random.uniform(5.9559113, 10.4922941)
+    coord_y = random.uniform(45.817995, 47.8084648)
     result_proxy = dbsession.execute(
         "SELECT ST_SetSRID( ST_Point( {}, {}), 4326) as geom;".format(coord_x, coord_y)
     )

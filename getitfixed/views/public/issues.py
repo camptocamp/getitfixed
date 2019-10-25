@@ -129,11 +129,16 @@ class IssueViews(AbstractViews):
         )
         features = list()
         for id, geom, cat, type in query.all():
-            url = self._request.route_url(
-                "c2cgeoform_item", application="getitfixed", id=id
-            ),
+            url = (
+                self._request.route_url(
+                    "c2cgeoform_item", application="getitfixed", id=id
+                ),
+            )
             features.append(
-                Feature(geometry=geom, properties={"url": url[0], "category": cat, "type": type})
+                Feature(
+                    geometry=geom,
+                    properties={"url": url[0], "category": cat, "type": type},
+                )
             )
         return FeatureCollection(features)
 
