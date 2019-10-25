@@ -5,9 +5,14 @@
    href="{{request.route_url('c2cgeoform_item', id='new')}}"
    role="button">{{_('Report an issue')}}</a>
 <div id="map" class="map container"></div>
+<div id="popup" class="ol-popup">
+    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+    <div id="popup-content"></div>
+</div>
 <script>
-    c2cgeoform.initMap('map',
-        {url: "{{request.route_url('c2cgeoform_geojson', application="getitfixed", table="issues")}}",
-        baseLayer: 'OSM'})
+    c2cgeoform.initMap('map',{
+        url: "{{request.route_url('c2cgeoform_geojson', application="getitfixed", table="issues")}}",
+        baseLayer: 'OSM'
+    })
 </script>
 {% endblock content %}
