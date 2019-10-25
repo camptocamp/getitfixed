@@ -92,6 +92,13 @@ class TestAdminIssueViews(AbstractViewsTests):
         assert obj.request_date.isoformat() == row["request_date"]
         assert obj.description == row["description"]
 
+    def test_select_category(self, test_app):
+        json = self.check_search(
+            test_app, limit=10, sort="identifier", order="asc", total=0, category=8
+        )
+        assert 0 == len(json["rows"])
+        assert 0 == json["total"]
+
     @patch("getitfixed.emails.email_service.smtplib.SMTP")
     def test_edit_then_post_comment(
         self, smtp_mock, test_app, issue_test_data, dbsession

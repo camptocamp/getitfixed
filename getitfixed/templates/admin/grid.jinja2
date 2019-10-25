@@ -10,20 +10,55 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
      let dataUrl = bsTable.data()['bootstrap.table'].options.url
      let openIssues = '{{request.localizer.translate("Get open")}}'
      let allIssues = '{{request.localizer.translate("Get all")}}'
-     let fetchIssues = function () {
-         $(this).find("span").toggleClass("toggle-visible-issues")
-         bsTable.data()['bootstrap.table'].options.url =
-             (bsTable.data()['bootstrap.table'].options.url === dataUrl) ? (dataUrl + '?all=True') : dataUrl
-         bsTable.bootstrapTable('refresh')
+     const url  = new URL(dataUrl)
+
+     let buttonElement = $('<button/>', {class: 'btn btn-default'})
+          .append($(`<span class="hidden">${openIssues}</span>`).data('issues', 'open'))
+          .append($(`<span>${allIssues}</span>`).data('issues', 'all'))
+
+     let fetchIssues = function(key, value) {
+          url.searchParams.set(key, value)
+          bsTable.data()['bootstrap.table'].options.url = url.toString()
+          bsTable.bootstrapTable('refresh')
      }
-    let element = $('<button/>', {class: 'btn btn-default'})
-        .append(`<span>${openIssues}</span>`)
-        .append(`<span class="toggle-visible-issues">${allIssues}</span>`)
-        .click(fetchIssues)
+
+     let getIssuesByStatus = function () {
+         let spans = buttonElement.find('span')
+         spans.toggleClass("hidden")
+         let status = spans.not('.hidden').data().issues
+         fetchIssues('all', status === 'all' ? 'false' : 'true')
+     }
+
+     let getIssuesByCategory = function (e) {
+         $(dropDownElement.find('.category-label')).text(e.currentTarget.textContent)
+         fetchIssues('category', $(e.currentTarget).data().categoryId)
+     }
 
     const buttonGroup = $('.list-grid .btn-group.pull-right')
-    buttonGroup.append(element)
+    buttonElement.click(getIssuesByStatus)
+    buttonGroup.append(buttonElement)
 
+    // category filter
+    const categories = {{ categories|tojson|safe }}
+    let dropDownElement = $('<button/>', {class: 'btn btn-default dropdown-toggle',
+          'data-toggle': 'dropdown'})
+          .append($('<span/>', {class: 'category-label'}).text('{{ _('All Categories') }}'))
+          .append($('<span/>', {class: 'caret'}))
+    // add dropDown to button group
+    buttonGroup.append(dropDownElement)
+    // dropDown content
+    let dropDownMenu = $('<ul/>', {class: 'dropdown-menu'})
+
+    buttonGroup.append(dropDownMenu)
+    // add extra li for all categories
+    categories.splice(0,0, {id: '0', value: '{{ _('All Categories') }}'})
+    for (let cat of categories) {
+        dropDownMenu.append($('<li/>')
+            .append($('<a/>', {href: '#'}).text(cat.value).data('categoryId', cat.id)
+                .click(getIssuesByCategory)
+            )
+        )
+    }
   })
 </script>
 {% endblock %}

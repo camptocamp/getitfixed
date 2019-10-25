@@ -1,7 +1,6 @@
 from functools import partial
 
 from pyramid.view import view_config, view_defaults
-
 from sqlalchemy.orm import subqueryload
 
 from c2cgeoform.schema import GeoFormSchemaNode
@@ -9,10 +8,12 @@ from c2cgeoform.views.abstract_views import ListField
 
 from getitfixed.models.getitfixed import (
     Event,
+    Category,
     Issue,
     Type,
     USER_ADMIN,
     STATUS_IN_PROGRESS,
+    STATUS_VALIDATED,
     STATUS_REPORTER,
     STATUS_NEW,
 )
@@ -59,17 +60,37 @@ class IssueAdminViews(IssueViews):
             .options(subqueryload(Issue.type))
         )
         # return all issues that are not closed
-        if not self._request.GET.get("all"):
+        if self._request.params.get("all") != "true":
             query = query.filter(
-                Issue.status.in_([STATUS_IN_PROGRESS, STATUS_REPORTER, STATUS_NEW])
+                Issue.status.in_(
+                    [STATUS_IN_PROGRESS, STATUS_VALIDATED, STATUS_REPORTER, STATUS_NEW]
+                )
             )
+        category_filter = int(self._request.params.get("category", 0))
+
+        # filter issues based on category id
+        if category_filter != 0:  # 0 is for all issues
+            query = query.filter(Issue.category.has(id=category_filter))
         return query
 
     @view_config(
         route_name="c2cgeoform_index", renderer="../../templates/admin/index.jinja2"
     )
     def index(self):
-        return super().index()
+        resp = super().index()
+        cats = self._request.dbsession.query(Category).all()
+
+        label = (
+            "label_fr" if self._request.localizer.locale_name == "fr" else "label_en"
+        )
+        resp.update(
+            {
+                "categories": list(
+                    map(lambda c: {"id": c.id, "value": getattr(c, label)}, cats)
+                )
+            }
+        )
+        return resp
 
     @view_config(route_name="c2cgeoform_grid", renderer="json")
     def grid(self):
