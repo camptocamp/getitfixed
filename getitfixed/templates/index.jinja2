@@ -6,7 +6,7 @@
    role="button">{{_('Report an issue')}}</a>
 <div id="map" class="map"></div>
 <script>
-    c2cgeoform.initMap('map',{
+    let map = c2cgeoform.initMap('map',{
         url: "{{request.route_url('c2cgeoform_geojson', application="getitfixed", table="issues")}}",
         baselayer: {
             'type_': 'WMTS',

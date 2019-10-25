@@ -121,23 +121,32 @@ class IssueViews(AbstractViews):
 
     @view_config(route_name="c2cgeoform_geojson", renderer="json", request_method="GET")
     def geojson(self):
-        query = self._request.dbsession.query(
-            Issue.id,
-            Issue.geometry.ST_Transform(3857).ST_AsGeoJSON().cast(JSON),
-            Category.label_fr,
-            Type.label_fr,
-        )
-        features = list()
-        for id, geom, cat, type in query.all():
-            url = (
-                self._request.route_url(
-                    "c2cgeoform_item", application="getitfixed", id=id
-                ),
+        query = (
+            self._request.dbsession.query(
+                Issue.id,
+                Issue.geometry.ST_Transform(3857).ST_AsGeoJSON().cast(JSON),
+                Type,
             )
+            .join(Type)
+            .join(Category, Type.category_id == Category.id)
+        )
+
+        static_path = self._request.host_url + "/getitfixed_static"
+        features = list()
+        for id, geom, type in query.all():
+            url = self._request.route_url(
+                "c2cgeoform_item", application="getitfixed", id=id
+            )
+
             features.append(
                 Feature(
                     geometry=geom,
-                    properties={"url": url[0], "category": cat, "type": type},
+                    properties={
+                        "url": url,
+                        "category": type.category.label_fr,
+                        "type": type.label_fr,
+                        "icon": static_path + type.category.icon,
+                    },
                 )
             )
         return FeatureCollection(features)

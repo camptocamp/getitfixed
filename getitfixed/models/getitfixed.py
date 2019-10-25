@@ -185,6 +185,12 @@ class Category(Base):
         info={"colanderalchemy": {"title": _("Email"), "widget": TextInputWidget()}},
     )
 
+    icon = Column(
+        String(150),
+        info={"colanderalchemy": {"title": _("Label(en)"), "widget": HiddenWidget()}},
+        default_value={"/assets/icons/cat-default.png"},
+    )
+
 
 class Type(Base):
     __tablename__ = "type"

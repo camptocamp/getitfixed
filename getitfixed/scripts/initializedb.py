@@ -17,6 +17,7 @@ from getitfixed.scripts import wait_for_db
 
 
 STATUSES = list(STATUSES.keys())
+ICONS = ["gif-black.png", "gif-green.png", "gif-red.png"]
 
 
 def usage(argv):
@@ -95,6 +96,7 @@ def setup_test_data(dbsession):
                     label_en="Category «{}»".format(i),
                     label_fr="Catégorie «{}»".format(i),
                     email="test{}@toto.com".format(i),
+                    icon="/assets/icons/{}".format(ICONS[i % 3]),
                 )
             )
     if dbsession.query(Type).count() == 0:
