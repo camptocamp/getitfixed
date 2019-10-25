@@ -3,8 +3,10 @@ from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid.threadlocal import get_current_request
 from functools import partial
+from geojson import FeatureCollection, Feature
 
 from sqlalchemy.orm import subqueryload
+from sqlalchemy import JSON
 
 from colander import SchemaNode, Int
 from c2cgeoform.schema import GeoFormSchemaNode
@@ -116,6 +118,20 @@ class IssueViews(AbstractViews):
     @view_config(route_name="c2cgeoform_grid", renderer="json")
     def grid(self):
         return super().grid()
+
+    @view_config(route_name="c2cgeoform_geojson", renderer="json", request_method="GET")
+    def geojson(self):
+        query = self._request.dbsession.query(
+            Issue.geometry.ST_Transform(3857).ST_AsGeoJSON().cast(JSON),
+            Category.label_fr,
+            Type.label_fr,
+        )
+        features = list()
+        for geom, cat, type in query.all():
+            features.append(
+                Feature(geometry=geom, properties={"category": cat, "type": type})
+            )
+        return FeatureCollection(features)
 
     def _grid_actions(self):
         return []

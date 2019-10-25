@@ -38,7 +38,10 @@
     <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table.min.js')}}"></script>
     <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table-locale-all.js')}}"></script>
     <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/jquery.scrollintoview/jquery.scrollintoview.js')}}"></script>
-    <script type="text/javascript" src="{{request.static_url('c2cgeoform:static/js/c2cgeoform.js')}}"></script>
+
+    <!-- c2cgeoform  -->
+    <script src="{{request.static_url('c2cgeoform:static/dist/index.js')}}"></script>
+    <link href="{{request.static_url('c2cgeoform:static/dist/styles.css')}}" rel="stylesheet">
 
     <!-- Deform JavaScript -->
     {% if deform_dependencies %}
@@ -52,7 +55,7 @@
   <body class="{% if request.c2cgeoform_application is not none %} app-{{request.c2cgeoform_application.name()}}{% endif %}">
 
     <header class="container">
-      <h3>{{_('getitfixed.title')}}</h3>
+      <h3 class="title">{{_('getitfixed.title')}}</h3>
     </header>
 
     <div class="content">
@@ -64,12 +67,12 @@
     <footer class="footer text-muted">
       <div class="container">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-xs-4">
             <p>
               Made by <a href="http://www.camptocamp.com">camptocamp</a>
             </p>
           </div>
-          <div class="col-md-6">
+          <div class="col-xs-8">
             <p class="text-right">
               <a href="{{request.route_url('locale', _query=(('language', 'en'),))}}" class="label label-{{'primary' if request.locale_name=='en' else 'default'}}">en</a>
               <a href="{{request.route_url('locale', _query=(('language', 'fr'),))}}" class="label label-label label-{{'primary' if request.locale_name=='fr' else 'default'}}">fr</a>
