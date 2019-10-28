@@ -119,7 +119,7 @@ class IssueViews(AbstractViews):
     def grid(self):
         return super().grid()
 
-    @view_config(route_name="c2cgeoform_geojson", renderer="json", request_method="GET")
+    @view_config(route_name="issues_geojson", renderer="json", request_method="GET")
     def geojson(self):
         query = (
             self._request.dbsession.query(

@@ -20,4 +20,4 @@ def includeme(config):
         "{application:admin|getitfixed}/private/{table}/{id}",
         pregenerator=pregenerator,
     )
-    config.add_route("c2cgeoform_geojson", "{application}/{table}/data/geojson.json")
+    config.add_route("issues_geojson", "{application}/{table}/data/geojson.json")

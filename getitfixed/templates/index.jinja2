@@ -7,7 +7,7 @@
 <div id="map" class="map"></div>
 <script>
     let map = c2cgeoform.initMap('map',{
-        url: "{{request.route_url('c2cgeoform_geojson', application="getitfixed", table="issues")}}",
+        url: "{{request.route_url('issues_geojson', application="getitfixed", table="issues")}}",
         baselayer: {
             'type_': 'WMTS',
             'attributions': 'ASITVD',
