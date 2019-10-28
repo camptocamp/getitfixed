@@ -59,10 +59,19 @@ footer {
   z-index: 10;
   left: 50%;
   width: 12em;
+  height: 3em;
+  display: inline-grid;
+  align-items: center;
   margin-left: -6em;
   top: 8.5rem;
   border-radius: 4px;
   padding: 2px;
+  font-size: large;
+}
+
+.title {
+  text-align: center;
+  margin: 1em 0 1em 0;
 }
 
 @media (min-width: 768px) {
@@ -74,22 +83,16 @@ footer {
   #map {
     width: 970px;
   }
-  .btn-new-issue {
-    right: calc(10%);
-    top: 2.2em;
-    left: unset;
-  }
 }
 @media (min-width: 1200px) {
   #map {
     width: 1170px;
   }
+  .title {
+    text-align: left;
+  }
 }
 
-.title {
-  text-align: center;
-  margin: 1em 0 1em 0;
-}
 /*
  * Forms
  */
