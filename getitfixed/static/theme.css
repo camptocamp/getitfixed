@@ -1,15 +1,18 @@
 /* For the footer */
-html, body {
+html,
+body {
   min-height: 100%;
+  height: 100%;
 }
 html {
   position: relative;
 }
 
-
-.jumbotron .small {
-  font-size: 65%;
+body {
+  display: flex;
+  flex-direction: column;
 }
+
 .breadcrumb {
   margin-top: 1em;
 }
@@ -21,21 +24,79 @@ html {
 }
 
 /*
- * Public issues table
+ * Public issues
  */
-.app-getitfixed .fixed-table-pagination {
-  padding: 0 0.75em;
+.btn-new-issue {
+  left: 50%;
+  width: 12em;
+  margin-right: 10em;
+  top: 7rem;
 }
 
-.app-getitfixed .pull-right.search {
-  float: none !important;
+/*
+ * Map
+ */
+.flex-container {
+  display: flex;
+}
+
+.map-container {
+  height: 100%;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+.map .ol-attribution {
+  bottom: 4.5em;
+}
+
+.btn-new-issue {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  width: 12em;
+  height: 3em;
+  display: inline-grid;
+  align-items: center;
+  margin-left: -6em;
+  top: 8.5rem;
+  border-radius: 4px;
+  padding: 2px;
+  font-size: large;
+}
+
+.title {
+  text-align: center;
+  margin: 1em 0 1em 0;
+}
+
+@media (min-width: 768px) {
+  #map {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  #map {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  #map {
+    width: 1170px;
+  }
+  .title {
+    text-align: left;
+  }
 }
 
 /*
  * Forms
  */
 .form-panel > .panel-footer {
-  position: static;  /* Override c2cgeoform panel-footer sticky */
+  position: static; /* Override c2cgeoform panel-footer sticky */
 }
 
 /*
@@ -65,7 +126,7 @@ html {
   font-weight: bold;
   padding: 1em;
   transform: rotate(45deg);
-  box-shadow: 0px 0 2px rgba(0,0,0,0.5);
+  box-shadow: 0px 0 2px rgba(0, 0, 0, 0.5);
   width: 15em;
   text-align: center;
   z-index: 10;
@@ -75,7 +136,7 @@ html {
  * Event field
  */
 .event-details {
-  background:   #f5f5f5;
+  background: #f5f5f5;
 }
 .event-details span {
   float: right;
@@ -109,12 +170,20 @@ html {
  * Footer
  */
 .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+form.deform {
   padding-bottom: 4em;
 }
+
 footer {
   border-top: 1px solid #ddd;
-  background: #f7f7f7;
-  position: absolute;
+  background: rgba(247, 247, 247, 0.8);
+  backdrop-filter: blur(3px);
+  position: fixed;
   bottom: 0;
   padding: 1em;
   width: 100%;

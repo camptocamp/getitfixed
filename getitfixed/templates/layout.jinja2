@@ -38,7 +38,20 @@
     <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table.min.js')}}"></script>
     <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table-locale-all.js')}}"></script>
     <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/jquery.scrollintoview/jquery.scrollintoview.js')}}"></script>
-    <script type="text/javascript" src="{{request.static_url('c2cgeoform:static/js/c2cgeoform.js')}}"></script>
+
+    <!-- c2cgeoform  -->
+    <script src="{{request.static_url('c2cgeoform:static/dist/index.js')}}"></script>
+    <link href="{{request.static_url('c2cgeoform:static/dist/styles.css')}}" rel="stylesheet">
+    <script>
+        c2cgeoform.registerProjection(
+            'EPSG:21781',
+            [
+                '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1',
+                '+x_0=600000 +y_0=200000 +ellps=bessel',
+                '+towgs84=660.077,13.551,369.344,2.484,1.783,2.939,5.66 +units=m +no_defs',
+            ].join(' ')
+        )
+    </script>
 
     <!-- Deform JavaScript -->
     {% if deform_dependencies %}
@@ -52,7 +65,7 @@
   <body class="{% if request.c2cgeoform_application is not none %} app-{{request.c2cgeoform_application.name()}}{% endif %}">
 
     <header class="container">
-      <h3>{{_('getitfixed.title')}}</h3>
+      <h3 class="title">{{_('getitfixed.title')}}</h3>
     </header>
 
     <div class="content">
@@ -64,12 +77,12 @@
     <footer class="footer text-muted">
       <div class="container">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-xs-4">
             <p>
               Made by <a href="http://www.camptocamp.com">camptocamp</a>
             </p>
           </div>
-          <div class="col-md-6">
+          <div class="col-xs-8">
             <p class="text-right">
               <a href="{{request.route_url('locale', _query=(('language', 'en'),))}}" class="label label-{{'primary' if request.locale_name=='en' else 'default'}}">en</a>
               <a href="{{request.route_url('locale', _query=(('language', 'fr'),))}}" class="label label-label label-{{'primary' if request.locale_name=='fr' else 'default'}}">fr</a>

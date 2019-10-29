@@ -32,6 +32,7 @@ def issue_test_data(dbsession, transact):
                 label_en="Category «{}»".format(i),
                 label_fr="Catégorie «{}»".format(i),
                 email="{}.is@abit.ch".format(i),
+                icon="meme{}.gif".format(i),
             )
         )
     dbsession.add_all(categories)
@@ -79,27 +80,8 @@ class TestIssueViews(AbstractViewsTests):
         return dbsession.query(Issue).filter(Issue.hash == hash_).one_or_none()
 
     def test_index(self, test_app):
-        resp = self.get(test_app, status=200)
-
-        expected = [
-            ("description", "Description", "true"),
-            ("type_id", "Type", "true"),
-            ("localisation", "Localisation", "true"),
-            ("request_date", "Request date", "true"),
-        ]
-        self.check_grid_headers(resp, expected, check_actions=False)
-
-    def test_grid(self, test_app, dbsession):
-        json = self.check_search(
-            test_app, limit=10, sort="identifier", order="asc", total=5
-        )
-        assert 5 == len(json["rows"])
-        assert 5 == json["total"]
-
-        row = json["rows"][4]
-        obj = dbsession.query(Issue).filter(Issue.id == row["_id_"]).first()
-        assert obj.id == int(row["_id_"])
-        assert obj.description in row["description"]
+        resp = self.get(test_app, "/data/geojson.json", status=200)
+        assert 10 == len(resp.json["features"])
 
     @patch("getitfixed.emails.email_service.smtplib.SMTP")
     def test_new_then_save(self, smtp_mock, dbsession, test_app, issue_test_data):

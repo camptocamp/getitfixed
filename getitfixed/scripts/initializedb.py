@@ -2,6 +2,7 @@
 import os
 import sys
 import transaction
+import random
 from datetime import date, timedelta
 from random import randrange
 
@@ -16,6 +17,7 @@ from getitfixed.scripts import wait_for_db
 
 
 STATUSES = list(STATUSES.keys())
+ICONS = ["gif-black.png", "gif-green.png", "gif-red.png"]
 
 
 def usage(argv):
@@ -77,6 +79,15 @@ WHERE schema_name = '{}';
     return row[0] == 1
 
 
+def get_geometry(dbsession):
+    coord_x = random.uniform(5.9559113, 10.4922941)
+    coord_y = random.uniform(45.817995, 47.8084648)
+    result_proxy = dbsession.execute(
+        "SELECT ST_SetSRID( ST_Point( {}, {}), 4326) as geom;".format(coord_x, coord_y)
+    )
+    return result_proxy.first()[0]
+
+
 def setup_test_data(dbsession):
     if dbsession.query(Category).count() == 0:
         for i in range(5):
@@ -85,6 +96,7 @@ def setup_test_data(dbsession):
                     label_en="Category «{}»".format(i),
                     label_fr="Catégorie «{}»".format(i),
                     email="test{}@toto.com".format(i),
+                    icon="/icons/{}".format(ICONS[i % 3]),
                 )
             )
     if dbsession.query(Type).count() == 0:
@@ -118,6 +130,7 @@ def _issue(i, type_id, dbsession):
         type_id=type_id,
         description=get_value(DESCRIPTIONS, i),
         localisation="{} rue du pont".format(i),
+        geometry=get_geometry(dbsession),
         # position
         # photos
         firstname=get_value(FIRSTNAMES, i),

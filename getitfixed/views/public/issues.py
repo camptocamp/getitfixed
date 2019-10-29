@@ -3,8 +3,10 @@ from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid.threadlocal import get_current_request
 from functools import partial
+from geojson import FeatureCollection, Feature
 
 from sqlalchemy.orm import subqueryload
+from sqlalchemy import JSON
 
 from colander import SchemaNode, Int
 from c2cgeoform.schema import GeoFormSchemaNode
@@ -117,6 +119,38 @@ class IssueViews(AbstractViews):
     def grid(self):
         return super().grid()
 
+    @view_config(route_name="issues_geojson", renderer="json", request_method="GET")
+    def geojson(self):
+        query = (
+            self._request.dbsession.query(
+                Issue.id,
+                Issue.geometry.ST_Transform(3857).ST_AsGeoJSON().cast(JSON),
+                Type,
+            )
+            .join(Type)
+            .join(Category, Type.category_id == Category.id)
+        )
+
+        features = list()
+        for id, geom, type in query.all():
+            url = self._request.route_url(
+                "c2cgeoform_item", application="getitfixed", id=id
+            )
+            features.append(
+                Feature(
+                    geometry=geom,
+                    properties={
+                        "url": url,
+                        "category": type.category.label_fr,
+                        "type": type.label_fr,
+                        "icon": self._request.static_url(
+                            "getitfixed:static/assets/{}".format(type.category.icon)
+                        ),
+                    },
+                )
+            )
+        return FeatureCollection(features)
+
     def _grid_actions(self):
         return []
 
@@ -140,6 +174,15 @@ class IssueViews(AbstractViews):
         else:
             base_edit = super().edit(schema=follow_schema, readonly=True)
             base_edit["item_name"] = self._get_object().description
+            base_edit["form_render_kwargs"].update(
+                {
+                    "category_icon": self._request.static_url(
+                        "getitfixed:static/assets/{}".format(
+                            self._get_object().category.icon
+                        )
+                    )
+                }
+            )
             return base_edit
 
     # For development/testing purpose

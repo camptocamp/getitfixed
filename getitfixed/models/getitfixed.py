@@ -38,26 +38,82 @@ from getitfixed.models.meta import Base
 
 schema = "getitfixed"
 
-gmf_demo_map = """new ol.layer.Tile({
-    source: new ol.source.WMTS({
-        capabilities: "https://geomapfish-demo-2-4.camptocamp.com/tiles/1.0.0/WMTSCapabilities.xml",
-        url: "https://geomapfish-demo-2-4.camptocamp.com/tiles/1.0.0/{Layer}/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-        requestEncoding: "REST",
-        layer: "map",
-        matrixSet: "swissgrid_005",
-        dimensions: {},
-        style: "default",
-        projection: new ol.proj.Projection({
-            code: "EPSG:21781"
-        }),
-        tileGrid: new ol.tilegrid.WMTS({
-            origin: [420000, 350000],
-            resolutions: [1000, 500, 250, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.25, 0.1, 0.05],
-            matrixIds: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"],
-        }),
-        attributions: []
-    })
-})"""  # noqa
+gmf_demo_map = {
+    "type_": "WMTS",
+    "attributions": "ASITVD",
+    "url": "https://ows.asitvd.ch/wmts?",
+    "requestEncoding": "KVP",
+    "layer": "asitvd.fond_couleur",
+    "matrixSet": "21781",
+    "projection": "EPSG:21781",
+    "tileGrid": {
+        "origin": [420000, 350000],
+        "resolutions": [
+            4000,
+            3750,
+            3500,
+            3250,
+            3000,
+            2750,
+            2500,
+            2250,
+            2000,
+            1750,
+            1500,
+            1250,
+            1000,
+            750,
+            650,
+            500,
+            250,
+            100,
+            50,
+            20,
+            10,
+            5,
+            2.5,
+            2,
+            1.5,
+            1,
+            0.5,
+            0.25,
+            0.1,
+            0.05,
+        ],
+        "matrixIds": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+        ],
+    },
+}  # noqa
 
 STATUS_NEW = "new"
 STATUS_VALIDATED = "validated"
@@ -127,6 +183,12 @@ class Category(Base):
         String(50),
         nullable=False,
         info={"colanderalchemy": {"title": _("Email"), "widget": TextInputWidget()}},
+    )
+
+    icon = Column(
+        String(150),
+        info={"colanderalchemy": {"title": _("Label(en)"), "widget": HiddenWidget()}},
+        default_value={"/assets/icons/cat-default.png"},
     )
 
 
