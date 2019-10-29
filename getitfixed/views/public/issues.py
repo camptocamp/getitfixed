@@ -177,7 +177,9 @@ class IssueViews(AbstractViews):
             base_edit["form_render_kwargs"].update(
                 {
                     "category_icon": self._request.static_url(
-                        "getitfixed:static/assets/{}".format(self._get_object().category.icon)
+                        "getitfixed:static/assets/{}".format(
+                            self._get_object().category.icon
+                        )
                     )
                 }
             )

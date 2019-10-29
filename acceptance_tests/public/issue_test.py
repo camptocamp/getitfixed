@@ -80,8 +80,8 @@ class TestIssueViews(AbstractViewsTests):
         return dbsession.query(Issue).filter(Issue.hash == hash_).one_or_none()
 
     def test_index(self, test_app):
-        resp = self.get(test_app, '/data/geojson.json',  status=200)
-        assert 10 == len(resp.json['features'])
+        resp = self.get(test_app, "/data/geojson.json", status=200)
+        assert 10 == len(resp.json["features"])
 
     @patch("getitfixed.emails.email_service.smtplib.SMTP")
     def test_new_then_save(self, smtp_mock, dbsession, test_app, issue_test_data):
