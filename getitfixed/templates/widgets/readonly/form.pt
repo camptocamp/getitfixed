@@ -1,0 +1,51 @@
+<?python import json ?>
+<form
+  tal:define="style style|field.widget.style;
+              css_class css_class|string:${field.widget.css_class or field.css_class or ''};
+              item_template item_template|field.widget.readonly_item_template;
+              title title|field.title;
+              errormsg errormsg|field.errormsg;
+              description description|field.description;
+              buttons buttons|field.buttons;
+              use_ajax use_ajax|field.use_ajax;
+              ajax_options ajax_options|field.ajax_options;
+              formid formid|field.formid;
+              method method|field.method;"
+  tal:attributes="style style;
+                  class css_class;"
+  id="${formid}"
+  method="${method}"
+  enctype="multipart/form-data"
+  accept-charset="utf-8"
+  i18n:domain="deform"
+  >
+
+  <div class="panel panel-default form-panel">
+    <div class="panel-body">
+
+      <fieldset class="deform-form-fieldset">
+        <script tal:condition="exists: category_icon">
+        (function(){
+          c2cgeoform.setItemIcon(${structure: json.dumps(category_icon)})
+        })()
+        </script>
+
+        <div class="alert alert-success" tal:condition="exists: msg_col">
+          <tal:loop tal:repeat="msg msg_col">
+            <div class="msg-lbl">${msg}</div>
+          </tal:loop>
+        </div>
+
+        <p class="section first" tal:condition="description">
+          ${description}
+        </p>
+
+        <div tal:repeat="child field"
+             tal:replace="structure child.render_template(item_template)"/>
+
+      </fieldset>
+
+    </div>
+  </div>
+
+</form>

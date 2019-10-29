@@ -174,6 +174,13 @@ class IssueViews(AbstractViews):
         else:
             base_edit = super().edit(schema=follow_schema, readonly=True)
             base_edit["item_name"] = self._get_object().description
+            base_edit["form_render_kwargs"].update(
+                {
+                    "category_icon": self._request.static_url(
+                        "getitfixed:static{}".format(self._get_object().category.icon)
+                    )
+                }
+            )
             return base_edit
 
     # For development/testing purpose
