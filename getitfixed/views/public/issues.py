@@ -131,13 +131,11 @@ class IssueViews(AbstractViews):
             .join(Category, Type.category_id == Category.id)
         )
 
-        static_path = self._request.host_url + "/getitfixed_static"
         features = list()
         for id, geom, type in query.all():
             url = self._request.route_url(
                 "c2cgeoform_item", application="getitfixed", id=id
             )
-
             features.append(
                 Feature(
                     geometry=geom,
@@ -145,7 +143,9 @@ class IssueViews(AbstractViews):
                         "url": url,
                         "category": type.category.label_fr,
                         "type": type.label_fr,
-                        "icon": static_path + type.category.icon,
+                        "icon": self._request.static_url(
+                            "getitfixed:static{}".format(type.category.icon)
+                        ),
                     },
                 )
             )
