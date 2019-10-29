@@ -49,6 +49,9 @@ body {
   height: 100%;
   flex: 1;
 }
+.map .ol-attribution {
+  bottom: 4.5em;
+}
 
 .btn-new-issue {
   position: absolute;
