@@ -1,12 +1,28 @@
 {% extends "layout.jinja2" %}
 
 {% block content %}
-<a class="btn btn-danger btn-sm btn-new-issue"
+<a class="btn btn-danger btn-new-issue"
    href="{{request.route_url('c2cgeoform_item', id='new')}}"
    role="button">{{_('Report an issue')}}</a>
-<div id="map" class="map"></div>
+    <div id="map" class="map">
+        <a class="btn btn-default btn-legend legend-collapsed">
+            <i class="glyphicon glyphicon-info-sign gif-glyphicon"></i>
+            <button type="button" class="close hidden close-button" aria-label="Close">
+                <span aria-hidden="true" class="gif-close">&times;</span>
+            </button>
+            <div id="feature-legend" class="feature-legend hidden">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{_('Legend')}}</div>
+                </div>
+                <ul class="list-group">
+               </ul>
+            </div>
+        </a>
+    </div>
+    <script src="{{request.static_path('getitfixed:static/scripts/legend.js')}}"></script>
 <script>
     let map = c2cgeoform.initMap('map',{
+        onFeatureLoad: generateLegend,
         url: "{{request.route_url('issues_geojson', application="getitfixed", table="issues")}}",
         baselayer: {
             'type_': 'WMTS',
@@ -36,5 +52,14 @@
         }
 
     })
+    const toggleLegend = function () {
+        $('a.btn-legend').toggleClass('legend-expanded')
+        $('.gif-glyphicon').toggleClass('hidden')
+        $('.close-button').toggleClass('hidden')
+        $('#feature-legend').toggleClass('hidden')
+    }
+    $('.gif-glyphicon').click(toggleLegend)
+    $('.close-button').click(toggleLegend)
+
 </script>
 {% endblock content %}

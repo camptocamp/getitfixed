@@ -34,6 +34,82 @@ body {
 }
 
 /*
+ * Legend panel
+ */
+
+.legend-collapsed {
+  right: 0.5em;
+  top: 0.5em;
+  position: absolute;
+  z-index: 10;
+  width: 2em;
+  height: 2em;
+  display: inline-grid;
+  align-items: center;
+  border-radius: 10em;
+  padding: 2px;
+  font-size: large;
+}
+
+.legend-expanded {
+  z-index: 10;
+  position: absolute;
+  overflow: hidden;
+  padding: initial;
+  height: auto;
+  border-radius: 0px;
+  display: initial;
+  align-items: initial;
+  cursor: auto;
+  border-bottom: 0.5em;
+  right: 0.5em;
+  width: auto;
+}
+
+.gif-glyphicon {
+  position: unset;
+  top: 0px;
+}
+
+.gif-close {
+  padding: 2px 5px;
+}
+
+.legend-expanded {
+  border-radius: 0px;
+  margin-right: auto;
+}
+
+.gif-glyphicon {
+  position: initial;
+  font-size: 1.6em;
+}
+
+.feature-legend td {
+  font-size: small;
+}
+.feature-legend .panel-default {
+  font-size: medium;
+}
+
+.feature-legend .panel {
+  margin-bottom: 0px;
+}
+
+.feature-legend .list-group {
+  margin-bottom: 0px;
+  font-size: small;
+}
+
+.feature-legend img {
+  margin-left: 1em;
+}
+
+.feature-legend .panel-heading {
+  padding: 0px 15px;
+}
+
+/*
  * Map
  */
 .flex-container {
@@ -74,17 +150,17 @@ body {
 }
 
 @media (min-width: 768px) {
-  #map {
+  .map {
     width: 750px;
   }
 }
 @media (min-width: 992px) {
-  #map {
+  .map {
     width: 970px;
   }
 }
 @media (min-width: 1200px) {
-  #map {
+  .map {
     width: 1170px;
   }
   .title {
@@ -163,7 +239,7 @@ body {
  * Menu Buttons
  */
 .dropdown-toggle .caret {
- margin-left: 0.5em;
+  margin-left: 0.5em;
 }
 
 /*
