@@ -144,7 +144,7 @@ class IssueViews(AbstractViews):
                         "category": type.category.label_fr,
                         "type": type.label_fr,
                         "icon": self._request.static_url(
-                            "getitfixed:static{}".format(type.category.icon)
+                            "getitfixed:static/assets/{}".format(type.category.icon)
                         ),
                     },
                 )
@@ -177,7 +177,7 @@ class IssueViews(AbstractViews):
             base_edit["form_render_kwargs"].update(
                 {
                     "category_icon": self._request.static_url(
-                        "getitfixed:static{}".format(self._get_object().category.icon)
+                        "getitfixed:static/assets/{}".format(self._get_object().category.icon)
                     )
                 }
             )
