@@ -37,76 +37,26 @@ body {
  * Legend panel
  */
 
-.legend-collapsed {
+.legend-btn,
+.feature-legend {
   right: 0.5em;
   top: 0.5em;
   position: absolute;
   z-index: 10;
-  width: 2em;
-  height: 2em;
-  display: inline-grid;
-  align-items: center;
-  border-radius: 10em;
-  padding: 2px;
-  font-size: large;
 }
 
-.legend-expanded {
-  z-index: 10;
-  position: absolute;
-  overflow: hidden;
-  padding: initial;
-  height: auto;
-  border-radius: 0px;
-  display: initial;
-  align-items: initial;
-  cursor: auto;
-  border-bottom: 0.5em;
-  right: 0.5em;
-  width: auto;
+.feature-legend {
+  width: 15em;
 }
-
-.gif-glyphicon {
-  position: unset;
-  top: 0px;
-}
-
-.gif-close {
-  padding: 2px 5px;
-}
-
-.legend-expanded {
-  border-radius: 0px;
-  margin-right: auto;
-}
-
-.gif-glyphicon {
-  position: initial;
-  font-size: 1.6em;
-}
-
-.feature-legend td {
-  font-size: small;
-}
-.feature-legend .panel-default {
-  font-size: medium;
-}
-
-.feature-legend .panel {
-  margin-bottom: 0px;
-}
-
-.feature-legend .list-group {
-  margin-bottom: 0px;
-  font-size: small;
-}
-
 .feature-legend img {
-  margin-left: 1em;
+  margin-right: 1em;
+}
+.gif-glyphicon {
+  top: 0;
 }
 
 .feature-legend .panel-heading {
-  padding: 0px 15px;
+  padding: .5em 15px;
 }
 
 /*
