@@ -34,6 +34,32 @@ body {
 }
 
 /*
+ * Legend panel
+ */
+
+.legend-btn,
+.feature-legend {
+  right: 0.5em;
+  top: 0.5em;
+  position: absolute;
+  z-index: 10;
+}
+
+.feature-legend {
+  width: 15em;
+}
+.feature-legend img {
+  margin-right: 1em;
+}
+.gif-glyphicon {
+  top: 0;
+}
+
+.feature-legend .panel-heading {
+  padding: .5em 15px;
+}
+
+/*
  * Map
  */
 .flex-container {
@@ -74,17 +100,17 @@ body {
 }
 
 @media (min-width: 768px) {
-  #map {
+  .map {
     width: 750px;
   }
 }
 @media (min-width: 992px) {
-  #map {
+  .map {
     width: 970px;
   }
 }
 @media (min-width: 1200px) {
-  #map {
+  .map {
     width: 1170px;
   }
   .title {
@@ -163,7 +189,7 @@ body {
  * Menu Buttons
  */
 .dropdown-toggle .caret {
- margin-left: 0.5em;
+  margin-left: 0.5em;
 }
 
 /*
