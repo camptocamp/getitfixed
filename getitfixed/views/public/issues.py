@@ -211,6 +211,7 @@ class IssueViews(AbstractViews):
                 self.send_notification_email(
                     "new_issue_email",
                     **{
+                        "username": "{} {}".format(self._obj.firstname, self._obj.lastname),
                         "issue": self._obj,
                         "issue-link": self._request.route_url(
                             "c2cgeoform_item_private", id=self._obj.hash
@@ -221,6 +222,7 @@ class IssueViews(AbstractViews):
                 self.send_notification_email(
                     "admin_new_issue_email",
                     **{
+                        "username": "admin",
                         "issue": self._obj,
                         "issue-link": self._request.route_url(
                             "c2cgeoform_item", application="admin", id=self._obj.hash

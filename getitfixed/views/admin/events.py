@@ -62,6 +62,7 @@ class EventViews(AbstractViews):
                     "update_issue_email",
                     **{
                         "issue": self._obj.issue,
+                        "username": "{} {}".format(self._obj.issue.firstname, self._obj.issue.lastname),
                         "event": self._obj,
                         "issue-link": self._request.route_url(
                             "c2cgeoform_item_private",
