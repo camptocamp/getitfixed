@@ -189,7 +189,7 @@ class IssueViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item_duplicate",
         request_method="GET",
-        renderer="../templates/edit.jinja2",
+        renderer="../../templates/edit.jinja2",
     )
     def duplicate(self):
         base_duplicate = super().duplicate()
@@ -200,7 +200,7 @@ class IssueViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="POST",
-        renderer="../templates/edit.jinja2",
+        renderer="../../templates/edit.jinja2",
     )
     def save(self):
         base_save = super().save()
@@ -213,7 +213,7 @@ class IssueViews(AbstractViews):
                     **{
                         "issue": self._obj,
                         "issue-link": self._request.route_url(
-                            "c2cgeoform_item", id=self._obj.hash
+                            "c2cgeoform_item_private", id=self._obj.hash
                         ),
                     },
                 )

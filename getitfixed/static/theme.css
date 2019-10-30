@@ -185,6 +185,10 @@ body {
   background: #f96705;
 }
 
+.item-public_events {
+  display: none;
+}
+
 /*
  * Menu Buttons
  */
