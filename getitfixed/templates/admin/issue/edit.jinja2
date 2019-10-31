@@ -10,7 +10,7 @@
         <ul id="existing_events_form" class="list-group">
             {% for event in events %}
                 <li class="list-group-item event-details">
-                <span class="label label-info event-{{event.status}}">{{ _(event.status) }}</span>
+                <span class="label label-info event-{{event.status}}">{{ event.status }}</span>
                 {% if event.private %}
                     <i class="text-muted small glyphicon glyphicon-lock" ></i>
                 {% endif %}
@@ -21,7 +21,7 @@
                     ({% trans %}You{% endtrans %})
                 {% endif %}
                 </li>
-                <li class="list-group-item">{{ event.comment if event.comment != '' else _('No Comment') }}</li>
+                <li class="list-group-item">{{ event.comment if event.comment != "" else _("No Comment") }}</li>
             {% endfor %}
         </ul>
     </div>
