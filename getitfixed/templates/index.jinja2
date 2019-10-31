@@ -29,30 +29,9 @@
         onFeatureLoad: generateLegend,
         url: "{{request.route_url('issues_geojson', application="getitfixed", table="issues")}}",
         baselayer: {
-            'type_': 'WMTS',
-            'attributions': 'ASITVD',
-            'url': 'https://ows.asitvd.ch/wmts?',
-            'requestEncoding': 'KVP',
-            'layer': 'asitvd.fond_couleur',
-            'matrixSet': '21781',
-            'projection': 'EPSG:21781',
-            'tileGrid': {
-                'origin': [
-                    420000, 350000
-                ],
-                'resolutions': [
-                    4000, 3750, 3500, 3250, 3000, 2750, 2500,
-                    2250, 2000, 1750, 1500, 1250, 1000, 750,
-                    650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2,
-                    1.5, 1, 0.5, 0.25, 0.1, 0.05
-                ],
-                'matrixIds': [
-                    0, 1, 2, 3, 4, 5, 6,
-                    7, 8, 9, 10, 11, 12, 13,
-                    14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-                    24, 25, 26, 27, 28, 29
-                ]
-            },
+            'type_': 'XYZ',
+            'url': 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoianVsc2JyZWFrZG93biIsImEiOiJjanB3Y216bWowYXJlNDNqbmhwY3Fia3VrIn0.Yo9vCvuv-0sXSIbZag6QYg'
+
         }
 
     })
