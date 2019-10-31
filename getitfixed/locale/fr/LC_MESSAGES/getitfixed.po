@@ -17,25 +17,21 @@ msgstr ""
 "Generated-By: Lingua 4.7\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: getitfixed/models/getitfixed.py:55
-msgid "Nouveau"
-msgstr ""
-
 #: getitfixed/models/getitfixed.py:56
 msgid "Validated"
 msgstr "Validé"
 
 #: getitfixed/models/getitfixed.py:57
 msgid "In progress"
-msgstr ""
+msgstr "En cours"
 
 #: getitfixed/models/getitfixed.py:58
 msgid "Waiting for Reporter"
-msgstr ""
+msgstr "En attente de retour utilisateur"
 
 #: getitfixed/models/getitfixed.py:59
 msgid "Resolved"
-msgstr ""
+msgstr "Résolu"
 
 #: getitfixed/models/getitfixed.py:64
 #, fuzzy
@@ -44,7 +40,7 @@ msgstr "Déclarer un problème"
 
 #: getitfixed/models/getitfixed.py:64
 msgid "Administrator"
-msgstr ""
+msgstr "Administateur"
 
 #: getitfixed/models/getitfixed.py:83 getitfixed/models/getitfixed.py:261
 msgid "Photo"
@@ -64,16 +60,16 @@ msgstr "Catégories"
 #: getitfixed/models/getitfixed.py:98 getitfixed/models/getitfixed.py:133
 #: getitfixed/models/getitfixed.py:181 getitfixed/models/getitfixed.py:304
 msgid "Identifier"
-msgstr ""
+msgstr "Identifiant"
 
 #: getitfixed/models/getitfixed.py:103 getitfixed/models/getitfixed.py:138
 msgid "Label(fr)"
-msgstr ""
+msgstr "Label(fr)"
 
 #: getitfixed/models/getitfixed.py:109 getitfixed/models/getitfixed.py:120
 #: getitfixed/models/getitfixed.py:144
 msgid "Label(en)"
-msgstr ""
+msgstr "Label(en)"
 
 #: getitfixed/models/getitfixed.py:115 getitfixed/models/getitfixed.py:275
 msgid "Email"
@@ -82,11 +78,11 @@ msgstr ""
 #: getitfixed/models/getitfixed.py:128 getitfixed/models/getitfixed.py:203
 #: getitfixed/models/getitfixed.py:310
 msgid "Type"
-msgstr "Type de problème"
+msgstr "Type du problème"
 
 #: getitfixed/models/getitfixed.py:128
 msgid "Types"
-msgstr ""
+msgstr "Types de problème"
 
 #: getitfixed/models/getitfixed.py:158 getitfixed/models/getitfixed.py:209
 msgid "- Select -"
@@ -94,11 +90,11 @@ msgstr "- Sélectionnez -"
 
 #: getitfixed/models/getitfixed.py:170
 msgid "Issue"
-msgstr ""
+msgstr "Problème"
 
 #: getitfixed/models/getitfixed.py:171 getitfixed/templates/edit.jinja2:6
 msgid "Issues"
-msgstr ""
+msgstr "Problèmes"
 
 #: getitfixed/models/getitfixed.py:195
 #, fuzzy
@@ -107,7 +103,7 @@ msgstr "Date de la demande"
 
 #: getitfixed/models/getitfixed.py:221 getitfixed/models/getitfixed.py:317
 msgid "Status"
-msgstr ""
+msgstr "État"
 
 #: getitfixed/models/getitfixed.py:233
 msgid "Description"
@@ -133,20 +129,20 @@ msgstr "Nom"
 
 #: getitfixed/models/getitfixed.py:270
 msgid "Phone"
-msgstr ""
+msgstr "Téléphone"
 
 #: getitfixed/models/getitfixed.py:283 getitfixed/models/getitfixed.py:300
 #: getitfixed/templates/admin/issue/edit.jinja2:7
 msgid "Events"
-msgstr ""
+msgstr "Événements"
 
 #: getitfixed/models/getitfixed.py:300
 msgid "Event"
-msgstr ""
+msgstr "Événement"
 
 #: getitfixed/models/getitfixed.py:328
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: getitfixed/models/getitfixed.py:331
 #, fuzzy
@@ -155,30 +151,32 @@ msgstr "Commentaires"
 
 #: getitfixed/models/getitfixed.py:338
 msgid "Private"
-msgstr ""
+msgstr "Privé"
 
 #: getitfixed/models/getitfixed.py:347
 msgid "Author"
-msgstr ""
+msgstr "Auteur"
 
 #: getitfixed/views/private/semi_private_issues.py:64
 msgid "Submit"
-msgstr ""
+msgstr "Envoyer"
 
 #: getitfixed/views/public/issues.py:97
 msgid ""
 "Thank you for your report, it has been registered with following details, "
 "and will be treated as soon as possible."
-msgstr ""
+msgstr "Merci pour avoir remonté ce problème. Il a bien été pris en compte avec les informations suivantes:"
+        "et sera traité dès que possible"
 
 #: getitfixed/views/public/issues.py:102
 msgid "Please check that the copy fits before submitting."
-msgstr ""
+msgstr "Merci de vérifier que la copie correspond bien avant de l'envoyer"
 
-#: getitfixed/views/public/issues.py:172 getitfixed/views/public/issues.py:197
-#: getitfixed/views/public/issues.py:235
+#: getitfixed/models/getitfixed.py:55 getitfixed/views/public/issues.py:172
+#: getitfixed/views/public/issues.py:197 getitfixed/views/public/issues.py:235
+
 msgid "New"
-msgstr ""
+msgstr "Nouveau"
 
 #: getitfixed/templates/index.jinja2:6
 msgid "Report an issue"
@@ -186,7 +184,7 @@ msgstr "Déclarer un problème"
 
 #: getitfixed/templates/index.jinja2:19
 msgid "Legend"
-msgstr ""
+msgstr "Légende"
 
 #: getitfixed/templates/layout.jinja2:10
 #, fuzzy
@@ -195,21 +193,21 @@ msgstr "Déclaration de problèmes"
 
 #: getitfixed/templates/layout.jinja2:68
 msgid "Problem declaration"
-msgstr ""
+msgstr "Toutes les Catégories"
 
 #: getitfixed/templates/admin/grid.jinja2:46
 #: getitfixed/templates/admin/grid.jinja2:55
 #, fuzzy
 msgid "All Categories"
-msgstr "Catégories"
+msgstr "Déclaration de problèmes"
 
 #: getitfixed/templates/admin/issue/edit.jinja2:4
 msgid " See events "
-msgstr ""
+msgstr " Voir les événements"
 
 #: getitfixed/templates/admin/issue/edit.jinja2:21
 msgid "You"
-msgstr ""
+msgstr "Vous"
 
 #: getitfixed/templates/admin/issue/edit.jinja2:24
 #, fuzzy

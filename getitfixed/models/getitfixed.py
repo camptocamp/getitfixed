@@ -52,7 +52,7 @@ STATUS_REPORTER = "waiting_for_reporter"
 STATUS_RESOLVED = "resolved"
 
 STATUSES = {
-    STATUS_NEW: _("Nouveau"),
+    STATUS_NEW: _("New"),
     STATUS_VALIDATED: _("Validated"),
     STATUS_IN_PROGRESS: _("In progress"),
     STATUS_REPORTER: _("Waiting for Reporter"),
