@@ -166,7 +166,6 @@ class TestAdminIssueViews(AbstractViewsTests):
                 {"name": "id", "value": str(issue.id), "hidden": True},
                 {"name": "type_id", "value": issue.type.label_en, "readonly": True},
                 {"name": "description", "value": issue.description, "readonly": True},
-                {"name": "description", "value": issue.description, "readonly": True},
                 {"name": "localisation", "value": issue.localisation, "readonly": True},
                 # Position
                 # Photo

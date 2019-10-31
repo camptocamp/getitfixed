@@ -128,3 +128,15 @@ class TestIssueViews(AbstractViewsTests):
 
         assert smtp_mock.called, "method should have been called"
         assert smtp_mock.call_count == 2
+
+    def test_open(self, dbsession, test_app, issue_test_data):
+
+        issue = dbsession.query(Issue).first()
+        resp = test_app.get("/getitfixed/issues/{}".format(issue.id), status=200)
+        self._check_mapping(
+            resp.html.select("form")[0],
+            [
+                {"name": "description", "value": issue.description, "readonly": True},
+                {"name": "localisation", "value": issue.localisation, "readonly": True},
+            ],
+        )
