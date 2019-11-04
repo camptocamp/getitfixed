@@ -7,13 +7,16 @@ RUN apt-get update && \
         ca-certificates \
         gettext \
         git \
+        nodejs \
+        npm \
         make
 
 RUN mkdir -p /src && \
     git clone -b getitfixed https://github.com/camptocamp/c2cgeoform.git /opt/c2cgeoform && \
     cd /opt/c2cgeoform && \
-    git checkout f6c683209446414f446dcda559725f7d641beceb && \
-    make compile-catalog
+    mkdir .build/ && \
+    git checkout 5fda87acc14ff0f59380c5a5e0f14abf580406d4 && \
+    make c2cgeoform/static/dist/index.js compile-catalog
 
 
 FROM camptocamp/c2cwsgiutils:3
