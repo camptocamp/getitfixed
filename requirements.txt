@@ -5,7 +5,7 @@ ColanderAlchemy>=0.3.2
 geoalchemy2
 plaster_pastedeploy
 psycopg2-binary
-pyproj
+pyproj==2.4.0
 pyramid_debugtoolbar
 pyramid_retry
 pyramid_tm
