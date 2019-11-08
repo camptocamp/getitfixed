@@ -41,7 +41,7 @@ schema = "getitfixed"
 gmf_demo_map = {
     "type_": "XYZ",
     "url": "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token="
-           "pk.eyJ1IjoianVsc2JyZWFrZG93biIsImEiOiJjanB3Y216bWowYXJlNDNqbmhwY3Fia3VrIn0.Yo9vCvuv-0sXSIbZag6QYg",
+    "pk.eyJ1IjoianVsc2JyZWFrZG93biIsImEiOiJjanB3Y216bWowYXJlNDNqbmhwY3Fia3VrIn0.Yo9vCvuv-0sXSIbZag6QYg",
     "opacity": 0.8,
 }  # noqa
 

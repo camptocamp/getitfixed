@@ -16,26 +16,27 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
           .append($(`<span class="hidden">${openIssues}</span>`).data('issues', 'open'))
           .append($(`<span>${allIssues}</span>`).data('issues', 'all'))
 
-     let fetchIssues = function(key, value) {
-          url.searchParams.set(key, value)
+     let fetchIssues = function() {
           bsTable.data()['bootstrap.table'].options.url = url.toString()
           bsTable.bootstrapTable('refresh')
      }
 
-     let getIssuesByStatus = function () {
+     let toggleOpenFilter = function () {
          let spans = buttonElement.find('span')
          spans.toggleClass("hidden")
          let status = spans.not('.hidden').data().issues
-         fetchIssues('all', status === 'all' ? 'false' : 'true')
+         url.searchParams.set('all', status === 'all' ? 'false' : 'true')
+         fetchIssues()
      }
 
-     let getIssuesByCategory = function (e) {
+     let onCategoryClick = function (e) {
          $(dropDownElement.find('.category-label')).text(e.currentTarget.textContent)
-         fetchIssues('category', $(e.currentTarget).data().categoryId)
+         url.searchParams.set('category', $(e.currentTarget).data().categoryId)
+         fetchIssues()
      }
 
     const buttonGroup = $('.list-grid .btn-group.pull-right')
-    buttonElement.click(getIssuesByStatus)
+    buttonElement.click(toggleOpenFilter)
     buttonGroup.append(buttonElement)
 
     // category filter
@@ -55,7 +56,7 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
     for (let cat of categories) {
         dropDownMenu.append($('<li/>')
             .append($('<a/>', {href: '#'}).text(cat.value).data('categoryId', cat.id)
-                .click(getIssuesByCategory)
+                .click(onCategoryClick)
             )
         )
     }
