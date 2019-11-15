@@ -1,10 +1,12 @@
 *
 !acceptance_tests
 !getitfixed
+getitfixed/locale/getitfixed.pot
 !alembic.ini
 !config.yaml
 !CHANGES.txt
 !development.ini
+!lingua.cfg
 !package.json
 !production.ini
 !README.md

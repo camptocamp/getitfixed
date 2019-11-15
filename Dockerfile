@@ -12,7 +12,7 @@ RUN apt-get update && \
         make
 
 RUN mkdir -p /src && \
-    git clone -b getitfixed https://github.com/camptocamp/c2cgeoform.git /opt/c2cgeoform && \
+    git clone https://github.com/camptocamp/c2cgeoform.git /opt/c2cgeoform && \
     cd /opt/c2cgeoform && \
     mkdir .build/ && \
     git checkout 5fda87acc14ff0f59380c5a5e0f14abf580406d4 && \
@@ -28,7 +28,7 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     rm --recursive --force /var/lib/apt/lists/*
 
 # For development
-RUN pip3 install pydevd pyramid_ipython ipdb webtest ipython==5.8.0
+RUN pip3 install waitress pydevd pyramid_ipython ipdb webtest ipython==5.8.0
 
 RUN mkdir /app
 

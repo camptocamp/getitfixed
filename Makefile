@@ -141,7 +141,17 @@ pshell:
 
 .PHONY: update-catalog
 update-catalog: ## Update the source localisation files (*.po)
-	$(DOCKER_MAKE_CMD) update-catalog-internal
+	docker-compose run --rm \
+		--user=$(shell id -u) \
+		--volume="${PWD}:/app" \
+		getitfixed \
+		pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
+			getitfixed/models/ \
+			getitfixed/views/ \
+			getitfixed/templates/ \
+			config.yaml && \
+		msgmerge --update getitfixed/locale/fr/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot && \
+		msgmerge --update getitfixed/locale/de/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
 
 # Docker images
 
@@ -170,15 +180,6 @@ docker-pull: ## Pull docker images from docker hub
 
 # Targets used inside docker build container
 
-.PHONY: update-catalog-internal
-update-catalog-internal:
-	pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
-		getitfixed/models/ \
-		getitfixed/views/ \
-		getitfixed/templates/
-	msgmerge --update getitfixed/locale/fr/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
-	msgmerge --update getitfixed/locale/de/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
-
 .PHONY: compile-catalog
 compile-catalog: $(MO_FILES)
 
@@ -198,4 +199,4 @@ compile-catalog: $(MO_FILES)
 		--files $<
 
 config.yaml: vars.yaml
-	c2c-template --vars vars.yaml --get-config config.yaml project smtp emails
+	c2c-template --vars vars.yaml --get-config config.yaml project smtp getitfixed

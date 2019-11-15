@@ -35,5 +35,7 @@ setup(
       main = getitfixed:main
       [console_scripts]
       initialize_getitfixed_db = getitfixed.scripts.initializedb:main
+      [lingua.extractors]
+      getitfixed = getitfixed.lingua_extractor:GetItFixedExtractor
       """,
 )

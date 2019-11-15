@@ -6,6 +6,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 
+from getitfixed.i18n import _
 
 LOG = logging.getLogger(__name__)
 
@@ -21,16 +22,16 @@ def send_email(request, to, template_name, template_args=[], template_kwargs={})
         LOG.warning("Email cannot be sent as smtp service is not configured.")
         return False
 
-    template = settings["emails"][request.localizer.locale_name][template_name]
+    template = settings["getitfixed"][template_name]
     sender = template["email_from"]
 
-    body = template["email_body"].format(template, *template_args, **template_kwargs)
+    body = _(template["email_body"]).format(template, *template_args, **template_kwargs)
 
     msg = MIMEText(body, _charset="UTF-8")
     msg["From"] = Header(sender)
     msg["To"] = Header(to)
     # msg['Bcc'] = Header(sender)
-    msg["Subject"] = Header(template["email_subject"], "utf-8")
+    msg["Subject"] = Header(_(template["email_subject"]), "utf-8")
 
     # Connect to server
     smtp_host = smtp["host"]

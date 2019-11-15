@@ -1,11 +1,5 @@
 FROM camptocamp/c2cwsgiutils:3
 
-# To be removed at sometime
-RUN \
-  . /etc/os-release && \
-  apt-get update && \
-  apt-get install --assume-yes --no-install-recommends apt-file && apt-file update
-
 RUN \
   . /etc/os-release && \
   apt-get update && \
