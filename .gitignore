@@ -8,6 +8,7 @@
 
 *.egg-info
 
+getitfixed/static/lib
 .env
 config.yaml
 docker-compose.override.yaml

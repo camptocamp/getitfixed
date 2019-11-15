@@ -41,6 +41,18 @@ export SMTP_PASSWORD
 
 # End of customisable environment variables
 
+JS_LIBS_FOLDER = getitfixed/static/lib
+JS_LIBS = \
+	bootstrap/dist/css/bootstrap.min.css \
+	bootstrap/dist/fonts/glyphicons-halflings-regular.ttf \
+	bootstrap/dist/fonts/glyphicons-halflings-regular.woff2 \
+	bootstrap/dist/js/bootstrap.min.js \
+	bootstrap-table/dist/bootstrap-table.min.css \
+	bootstrap-table/dist/bootstrap-table.min.js \
+	bootstrap-table/dist/bootstrap-table-locale-all.js \
+	jquery/dist/jquery.min.js \
+	jquery.scrollintoview/jquery.scrollintoview.js
+
 MO_FILES = $(addprefix getitfixed/locale/, fr/LC_MESSAGES/getitfixed.mo de/LC_MESSAGES/getitfixed.mo)
 
 COMMON_DOCKER_RUN_OPTIONS ?= \
@@ -165,7 +177,7 @@ docker-build-build:
 
 .PHONY: docker-build-getitfixed
 docker-build-getitfixed: docker-build-build
-	$(DOCKER_MAKE_CMD) compile-catalog config.yaml
+	$(DOCKER_MAKE_CMD) jslibs compile-catalog config.yaml
 	docker build --build-arg GIT_HASH=${GIT_HASH} -t ${DOCKER_BASE}-getitfixed:${DOCKER_TAG} .
 
 .PHONY: docker-push
@@ -186,7 +198,14 @@ compile-catalog: $(MO_FILES)
 # .env depends on user makefile
 .env: $(MAKEFILE_LIST)
 
+.PHONY: jslibs
+jslibs: $(addprefix $(JS_LIBS_FOLDER)/,$(JS_LIBS))
+
 # Rules
+
+$(JS_LIBS_FOLDER)/%: /opt/getitfixed/node_modules/%
+	mkdir -p $(dir $@)
+	cp $< $@
 
 %.mo: %.po
 	msgfmt $< --output-file=$@
