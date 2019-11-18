@@ -153,17 +153,8 @@ pshell:
 
 .PHONY: update-catalog
 update-catalog: ## Update the source localisation files (*.po)
-	docker-compose run --rm \
-		--user=$(shell id -u) \
-		--volume="${PWD}:/app" \
-		getitfixed \
-		pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
-			getitfixed/models/ \
-			getitfixed/views/ \
-			getitfixed/templates/ \
-			config.yaml && \
-		msgmerge --update getitfixed/locale/fr/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot && \
-		msgmerge --update getitfixed/locale/de/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
+	$(DOCKER_MAKE_CMD) update-catalog-internal
+
 
 # Docker images
 
@@ -173,12 +164,12 @@ docker-build-postgresql:
 
 .PHONY: docker-build-build
 docker-build-build:
-	docker build -t ${DOCKER_BASE}-build:${DOCKER_TAG} build
+	docker build --target=build -t ${DOCKER_BASE}-build:${DOCKER_TAG} .
 
 .PHONY: docker-build-getitfixed
 docker-build-getitfixed: docker-build-build
 	$(DOCKER_MAKE_CMD) jslibs compile-catalog config.yaml
-	docker build --build-arg GIT_HASH=${GIT_HASH} -t ${DOCKER_BASE}-getitfixed:${DOCKER_TAG} .
+	docker build --target=getitfixed --build-arg GIT_HASH=${GIT_HASH} -t ${DOCKER_BASE}-getitfixed:${DOCKER_TAG} .
 
 .PHONY: docker-push
 docker-push: ## Push docker images on docker hub
@@ -194,6 +185,15 @@ docker-pull: ## Pull docker images from docker hub
 
 .PHONY: compile-catalog
 compile-catalog: $(MO_FILES)
+
+update-catalog-internal:
+	pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
+		getitfixed/models/ \
+		getitfixed/views/ \
+		getitfixed/templates/ \
+		config.yaml && \
+	msgmerge --update getitfixed/locale/fr/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot && \
+	msgmerge --update getitfixed/locale/de/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
 
 # .env depends on user makefile
 .env: $(MAKEFILE_LIST)
