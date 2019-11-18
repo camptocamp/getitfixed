@@ -78,12 +78,6 @@ export DOCKER_PGSCHEMA ?= main
 export DOCKER_PGSCHEMA_STATIC ?= main_static
 
 include Makefile
-
-secrets: .env.secrets
-    @figlet 'Merde à la fin, il nous fais chier ce target "secrets"'
-
-.env.secrets:
-    touch $@
 ```
 
 Clone and build GetItFixed! plugin and others:
@@ -126,11 +120,12 @@ Build, run and watch the logs:
 
 Here is it: https://localhost:8484/getitfixed
 
-Now you need to create the GetItFixed: database schema and tables:
+Now you need to create the GetItFixed database schema and tables:
 
 ```
-sudo -u postgres psql -d demo_geomapfish -c 'DROP SCHEMA IF EXISTS getitfixed CASCADE;'
-sudo -u postgres psql -d demo_geomapfish -c 'CREATE SCHEMA getitfixed AUTHORIZATION "www-data";'
+DATABASE=demo_geomapfish
+sudo -u postgres psql -d $DATABASE -c 'DROP SCHEMA IF EXISTS getitfixed CASCADE;'
+sudo -u postgres psql -d $DATABASE -c 'CREATE SCHEMA getitfixed AUTHORIZATION "www-data";'
 docker-compose exec geoportal alembic -c alembic.ini -n getitfixed upgrade head
 ```
 
