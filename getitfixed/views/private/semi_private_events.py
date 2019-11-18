@@ -42,7 +42,7 @@ class EventViews(AbstractViews):
                         "username": "",
                         "issue-link": self._request.route_url(
                             "c2cgeoform_item",
-                            application="admin",
+                            application="getitfixed_admin",
                             table="issues",
                             id=self._obj.issue.hash,
                             _anchor="existing_events_form",

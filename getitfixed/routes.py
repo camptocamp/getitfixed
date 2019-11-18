@@ -6,12 +6,16 @@ def includeme(config):
     config.add_static_view("getitfixed_static", "getitfixed:static", cache_max_age=3600)
 
     config.add_route("getitfixed", "/getitfixed")
-
     config.add_c2cgeoform_application("getitfixed", [("issues", Issue)])
-    config.add_c2cgeoform_application("admin", [("issues", Issue), ("event", Event)])
     config.add_route(
         "c2cgeoform_item_private",
-        "{application:admin|getitfixed}/private/{table}/{id}",
+        "{application:getitfixed}/private/{table}/{id}",
         pregenerator=pregenerator,
     )
+
+    config.add_route("getitfixed_admin", "/getitfixed_admin")
+    config.add_c2cgeoform_application(
+        "getitfixed_admin", [("issues", Issue), ("event", Event)]
+    )
+
     config.add_route("issues_geojson", "{application}/{table}/data/geojson.json")

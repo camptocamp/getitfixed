@@ -11,7 +11,7 @@ from getitfixed.emails.email_service import send_email
 base_schema = GeoFormSchemaNode(Event)
 
 
-@view_defaults(match_param=("application=admin", "table=events"))
+@view_defaults(match_param=("application=getitfixed_admin", "table=events"))
 class EventViews(AbstractViews):
 
     _model = Event

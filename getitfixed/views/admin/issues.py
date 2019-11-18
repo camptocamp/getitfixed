@@ -26,7 +26,7 @@ route = "c2cgeoform_item"
 event_schema = GeoFormSchemaNode(Event)
 
 
-@view_defaults(match_param=("application=admin", "table=issues"))
+@view_defaults(match_param=("application=getitfixed_admin", "table=issues"))
 class IssueAdminViews(IssueViews):
 
     _author = USER_ADMIN
