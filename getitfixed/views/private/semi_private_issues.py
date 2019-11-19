@@ -44,7 +44,7 @@ class IssueViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item_private",
         request_method="GET",
-        renderer="../../templates/admin/issue/edit.jinja2",
+        renderer="getitfixed:templates/admin/issues/edit.jinja2",
     )
     def edit(self):
         if self._is_new():

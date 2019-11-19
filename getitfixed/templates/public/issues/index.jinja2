@@ -1,0 +1,47 @@
+{% extends "getitfixed:templates/layout.jinja2" %}
+{% block content %}
+<div class="content">
+  <a class="btn btn-danger btn-new-issue"
+     href="{{request.route_url("c2cgeoform_item", id="new")}}"
+     role="button">{{_("Report an issue")}}</a>
+  <div id="map" class="map">
+      <div class="ol-control legend-btn">
+        <button type="button">
+          <i class="glyphicon glyphicon-list gif-glyphicon"></i>
+        </button>
+      </div>
+      <div class="feature-legend hidden">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                <button type="button" class="close close-button" aria-label="Close">
+                    <span aria-hidden="true" class="gif-close">&times;</span>
+                </button>
+                {{_("Legend")}}
+              </div>
+              <ul class="list-group">
+              </ul>
+          </div>
+      </div>
+  </div>
+</div>
+<script src="{{request.static_path("getitfixed:static/scripts/legend.js")}}"></script>
+<script>
+    let map = c2cgeoform.initMap('map',{
+        onFeatureLoad: generateLegend,
+        url: "{{request.route_url("issues_geojson", application="getitfixed", table="issues")}}",
+        baselayer: {
+            "type_": "XYZ",
+            "url": "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoianVsc2JyZWFrZG93biIsImEiOiJjanB3Y216bWowYXJlNDNqbmhwY3Fia3VrIn0.Yo9vCvuv-0sXSIbZag6QYg",
+            "opacity": 0.8
+
+        }
+
+    })
+    const toggleLegend = function () {
+      $('.feature-legend').toggleClass('hidden')
+    }
+    $('.gif-glyphicon').on('click', toggleLegend)
+    $('.close-button').on('click', toggleLegend)
+
+</script>
+{% endblock content %}

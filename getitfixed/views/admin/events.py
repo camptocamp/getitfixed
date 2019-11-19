@@ -21,7 +21,7 @@ class EventViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="GET",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def edit(self):
         return super().edit()
@@ -29,7 +29,7 @@ class EventViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="POST",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def save(self):
         resp = super().save()

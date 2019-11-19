@@ -111,7 +111,10 @@ class IssueViews(AbstractViews):
             .options(subqueryload(Issue.type))
         )
 
-    @view_config(route_name="c2cgeoform_index", renderer="../../templates/index.jinja2")
+    @view_config(
+        route_name="c2cgeoform_index",
+        renderer="getitfixed:templates/public/issues/index.jinja2",
+    )
     def index(self):
         return super().index()
 
@@ -163,7 +166,7 @@ class IssueViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="GET",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def edit(self):
         if self._is_new():
@@ -189,7 +192,7 @@ class IssueViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item_duplicate",
         request_method="GET",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def duplicate(self):
         base_duplicate = super().duplicate()
@@ -200,7 +203,7 @@ class IssueViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="POST",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def save(self):
         base_save = super().save()

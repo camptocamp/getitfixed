@@ -59,7 +59,7 @@ def issue_test_data(dbsession, transact):
 @pytest.mark.usefixtures("issue_test_data", "test_app")
 class TestAdminIssueViews(AbstractViewsTests):
 
-    _prefix = "/admin/issues"
+    _prefix = "/getitfixed_admin/issues"
 
     def test_index(self, test_app):
         resp = self.get(test_app, status=200)
@@ -135,7 +135,7 @@ class TestAdminIssueViews(AbstractViewsTests):
         resp = form.submit("submit", status=302)
 
         assert (
-            "http://localhost/admin/issues/{}#existing_events_form".format(issue.hash)
+            "http://localhost/getitfixed_admin/issues/{}#existing_events_form".format(issue.hash)
             == resp.location
         )
 
@@ -189,7 +189,7 @@ class TestAdminIssueViews(AbstractViewsTests):
         resp = form.submit("submit", status=302)
 
         assert (
-            "http://localhost/admin/issues/{}#existing_events_form".format(issue.hash)
+            "http://localhost/getitfixed_admin/issues/{}#existing_events_form".format(issue.hash)
             == resp.location
         )
 
