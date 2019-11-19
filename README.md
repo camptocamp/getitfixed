@@ -80,6 +80,15 @@ export DOCKER_PGSCHEMA_STATIC ?= main_static
 include Makefile
 ```
 
+Create the getitfixed db schema:
+
+```
+docker-compose exec geoportal \
+    psql -c 'DROP SCHEMA IF EXISTS getitfixed CASCADE;'
+docker-compose exec geoportal \
+    initialize_getitfixed_db "c2cgeoportal://development.ini#app" --with-data=1
+```
+
 Clone and build GetItFixed! plugin and others:
 
 ```
