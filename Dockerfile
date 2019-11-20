@@ -48,16 +48,18 @@ RUN \
   rm --recursive --force /tmp/* /var/tmp/* /root/.cache/*
 
 RUN mkdir /opt/getitfixed
+
 COPY package.json /opt/getitfixed
 RUN cd /opt/getitfixed && npm install
 
 # We need to install getitfixed to get custom lingua_extractor
+COPY requirements.txt /opt/getitfixed
+RUN pip3 install -r /opt/getitfixed/requirements.txt
+COPY . /opt/getitfixed
+RUN pip3 install --no-deps -e /opt/getitfixed
+
 RUN mkdir /src
-COPY requirements.txt /src
-RUN pip3 install -r /src/requirements.txt
-COPY . /src/
 WORKDIR /src
-RUN pip3 install --no-deps -e .
 
 CMD ["make"]
 
