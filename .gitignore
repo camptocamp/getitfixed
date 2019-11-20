@@ -8,6 +8,8 @@
 
 *.egg-info
 
+build
+dist
 getitfixed/static/lib
 .env
 config.yaml

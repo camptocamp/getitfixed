@@ -5,9 +5,29 @@ sudo: false
 dist: xenial
 
 python:
-  - "3.7"
+- '3.7'
+
+env:
+  global:
+  - secure: "QTkwFKbPsIiNjsOaVsVp2ROTniYyoBAJI0qDSX3yXKuoUhwYuoVGid3j5C1DXGQA339Q9D+XRt27zbz5Gq+LuOtu06LW8DMUwco3ElBQEjPAL+UKOLWJbaJHFCFwUJZEQWQqUu516W/5eFsDiu0BohgBNAmopeWW/ect4wyDBAp6pToAcSU5Ls/0SpLPWB9DuaUDQJxALuVhbQHD21qD41zWLaaKbxomsxmyo8uCmwmfblAb7CvDyc79+KeDxwWkjtkEF4KdgVKHTBqJV/IvQTGFsw5nQNroKPyAhMR5osSKtniw90bVshuSaKD4Gw08fjzzQ8Nzlh8dt34lvzEyEITKuFv0lJE1Ft4qIz1De1YRWrFuzueXb5fEuH3pFixgkPs0JNE/2lDbIGk8DU4Ah7SnnxQqHv8br4OfvOrnujYc5i7jmh8C5uoa3qHOwWzixZWaCl1mKIFv7f7grk6AganfVnZA4Qsk4R881HPJAJKod6XEAjyYr+aiZfRLJ0c62bEtHUFvpjOaPDoKuk9FJpEXvZjDqXSCqtNKh08yI2govyQGH6ZbbpT48PaRvuKuMua8WmU7FwDiVqYIxf3SMKNY3XV9XWatN1xu8gXPZ5l1R8pPoRx39CCXuAei/Z5dy68dKenmPCwGaYbrF/acfKPag/HTH8fyXEJqiEWmlXw="
 
 install:
 - make build
 
-script: make check && make test
+script:
+- make check
+- make test
+
+deploy:
+- provider: script
+  script: travis/deploy-pypi
+  on:
+    tags: true
+    repo: camptocamp/getitfixed
+    python: '3.7'
+- provider: script
+  script: travis/deploy-pypi
+  on:
+    condition: '"${TRAVIS_EVENT_TYPE}" = cron'
+    repo: camptocamp/getitfixed
+    python: '3.7'

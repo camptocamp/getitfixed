@@ -181,6 +181,10 @@ docker-pull: ## Pull docker images from docker hub
 	docker pull ${DOCKER_BASE}-build:${DOCKER_TAG}
 	docker pull ${DOCKER_BASE}-getitfixed:${DOCKER_TAG}
 
+.PHONY: docker-compile-catalog
+docker-compile-catalog: docker-build-build
+	$(DOCKER_MAKE_CMD) compile-catalog config.yaml
+
 # Targets used inside docker build container
 
 .PHONY: compile-catalog
