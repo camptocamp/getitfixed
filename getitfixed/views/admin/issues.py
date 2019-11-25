@@ -26,12 +26,12 @@ route = "c2cgeoform_item"
 event_schema = GeoFormSchemaNode(Event)
 
 
-@view_defaults(match_param=("application=admin", "table=issues"))
+@view_defaults(match_param=("application=getitfixed_admin", "table=issues"))
 class IssueAdminViews(IssueViews):
 
     _author = USER_ADMIN
     _event_schema = event_schema
-    _application = "admin"
+    _application = "getitfixed_admin"
 
     _list_fields = [
         _list_field("id"),
@@ -74,7 +74,8 @@ class IssueAdminViews(IssueViews):
         return query
 
     @view_config(
-        route_name="c2cgeoform_index", renderer="../../templates/admin/index.jinja2"
+        route_name="c2cgeoform_index",
+        renderer="getitfixed:templates/admin/issues/index.jinja2",
     )
     def index(self):
         resp = super().index()
@@ -105,7 +106,7 @@ class IssueAdminViews(IssueViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="GET",
-        renderer="../../templates/admin/issue/edit.jinja2",
+        renderer="getitfixed:templates/admin/issues/edit.jinja2",
     )
     def edit(self):
         return super().edit()
@@ -117,7 +118,7 @@ class IssueAdminViews(IssueViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="POST",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/admin/issues/edit.jinja2",
     )
     def save(self):
         return super().save()

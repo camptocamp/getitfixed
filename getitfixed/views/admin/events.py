@@ -11,7 +11,7 @@ from getitfixed.emails.email_service import send_email
 base_schema = GeoFormSchemaNode(Event)
 
 
-@view_defaults(match_param=("application=admin", "table=events"))
+@view_defaults(match_param=("application=getitfixed_admin", "table=events"))
 class EventViews(AbstractViews):
 
     _model = Event
@@ -21,7 +21,7 @@ class EventViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="GET",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def edit(self):
         return super().edit()
@@ -29,7 +29,7 @@ class EventViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="POST",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def save(self):
         resp = super().save()

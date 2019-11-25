@@ -27,7 +27,7 @@ class EventViews(AbstractViews):
     @view_config(
         route_name="c2cgeoform_item",
         request_method="POST",
-        renderer="../../templates/edit.jinja2",
+        renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def save(self):
         resp = super().save()
@@ -42,7 +42,7 @@ class EventViews(AbstractViews):
                         "username": "",
                         "issue-link": self._request.route_url(
                             "c2cgeoform_item",
-                            application="admin",
+                            application="getitfixed_admin",
                             table="issues",
                             id=self._obj.issue.hash,
                             _anchor="existing_events_form",

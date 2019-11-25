@@ -2,115 +2,60 @@ vars:
    project: getitfixed
    smtp:
       host: smtp
-   emails:
-      fr:
-         admin_new_issue_email:
-            email_from: info@camptocamp.com
-            email_subject: Nouveau problème remonté dans votre categorie
-            email_body: |
-               Un nouveau problème a été remonté dans votre catégorie
-               Vous pouvez le consulter ici : {issue-link}
+   getitfixed:
+      admin_new_issue_email:
+         email_from: info@camptocamp.com
+         email_subject: A new issue has been created
+         email_body: |
+            A new issue has been submitted
+            You can find the link here : {issue-link}
 
-         new_issue_email:
-            # Used to send a email when an issue has been created
-            email_from: info@camptocamp.com
-            email_subject: Confirmation de la remontée du problème
-            email_body: |
-               Bonjour {username},
+      new_issue_email:
+         # Used to send a email when an issue has been created
+         email_from: info@camptocamp.com
+         email_subject: Issue declaration confirmation
+         email_body: |
+            Hello {username},
 
-               Nous avons bien pris en compte votre demande située à {issue.localisation}.
-               Vous pouvez suivre l'avancement ici : {issue-link}
-               Une fois traitée, vous en serez informé par email.
+            We confirm that we have received a new issue situated at {issue.localisation}.
 
-               Cordialement,
+            You can follow the status here : {issue-link}
+            You will receive a new email as soon as it has been updated.
 
-               Get It Fixed Team
+            Best
 
-         update_issue_email:
-            # Used to send a email when an issue has been updated
-            email_from: info@camptocamp.com
-            email_subject: Mise à jour du statut du problème déclaré
-            email_body: |
-               Bonjour {username},
+            Get It Fixed Team
 
-               Le problème déclaré le {issue.request_date} est en : {issue.status}.
-               {event.comment}
-               Vous pouvez le consultez ici {issue-link}
-               Cordialement,
+      update_issue_email:
+         # Used to send a email when an issue has been updated
+         email_from: info@camptocamp.com
+         email_subject: Status update for an issue
+         email_body: |
+            Hello {username},
 
-               Get It Fixed Team
+            The issue {issue.hash} created on the {issue.request_date} has evolved it is now {issue.status}.
+            {event.comment}
+            You can follow it here {issue-link}
 
-         resolved_issue_email:
-            # Used to send a when an issue has been resolved
-            email_from: info@camptocamp.com
-            email_subject: Le problème à été résolu
-            email_body: |
-               Bonjour {username},
+            Best
 
-               Le problème déclaré le {issue.request_date} à été traité.
+            Get It Fixed Team
 
-               Cordialement,
+      resolved_issue_email:
+         # Used to send a when an issue has been resolved
+         email_from: info@camptocamp.com
+         email_subject: Issue resolved
+         email_body: |
+            Hello {username},
 
-               Get It Fixed Team
+            The issue {issue.hash} created on the {issue.request_date} has now been resolved.
 
-      en:
-         admin_new_issue_email:
-            email_from: info@camptocamp.com
-            email_subject: A new issue has been created
-            email_body: |
-               A new issue has been submitted
-               You can find the link here : {issue-link}
+            Best
 
-         new_issue_email:
-            # Used to send a email when an issue has been created
-            email_from: info@camptocamp.com
-            email_subject: Issue declaration confirmation
-            email_body: |
-               Hello {username},
-
-               We confirm that we have received a new issue situated at {issue.localisation}.
-
-               You can follow the status here : {issue-link}
-               You will receive a new email as soon as it has been updated.
-
-               Best
-
-               Get It Fixed Team
-
-         update_issue_email:
-            # Used to send a email when an issue has been updated
-            email_from: info@camptocamp.com
-            email_subject: Status update for an issue
-            email_body: |
-               Hello {username},
-
-               The issue {issue.hash} created on the {issue.request_date} has evolved it is now {issue.status}.
-               {event.comment}
-               You can follow it here {issue-link}
-
-               Best
-
-               Get It Fixed Team
-
-         resolved_issue_email:
-            # Used to send a when an issue has been resolved
-            email_from: info@camptocamp.com
-            email_subject: Issue resolved
-            email_body: |
-               Hello {username},
-
-               The issue {issue.hash} created on the {issue.request_date} has now been resolved.
-
-               Best
-
-               Get It Fixed Team
+            Get It Fixed Team
 
 no_interpreted:
-   - emails.fr.admin_new_issue_email.email_body
-   - emails.en.admin_new_issue_email.email_body
-   - emails.fr.new_issue_email.email_body
-   - emails.en.new_issue_email.email_body
-   - emails.fr.update_issue_email.email_body
-   - emails.en.update_issue_email.email_body
-   - emails.fr.resolved_issue_email.email_body
-   - emails.en.resolved_issue_email.email_body
+   - getitfixed.admin_new_issue_email.email_body
+   - getitfixed.new_issue_email.email_body
+   - getitfixed.update_issue_email.email_body
+   - getitfixed.resolved_issue_email.email_body

@@ -41,6 +41,18 @@ export SMTP_PASSWORD
 
 # End of customisable environment variables
 
+JS_LIBS_FOLDER = getitfixed/static/lib
+JS_LIBS = \
+	bootstrap/dist/css/bootstrap.min.css \
+	bootstrap/dist/fonts/glyphicons-halflings-regular.ttf \
+	bootstrap/dist/fonts/glyphicons-halflings-regular.woff2 \
+	bootstrap/dist/js/bootstrap.min.js \
+	bootstrap-table/dist/bootstrap-table.min.css \
+	bootstrap-table/dist/bootstrap-table.min.js \
+	bootstrap-table/dist/bootstrap-table-locale-all.js \
+	jquery/dist/jquery.min.js \
+	jquery.scrollintoview/jquery.scrollintoview.js
+
 MO_FILES = $(addprefix getitfixed/locale/, fr/LC_MESSAGES/getitfixed.mo de/LC_MESSAGES/getitfixed.mo)
 
 COMMON_DOCKER_RUN_OPTIONS ?= \
@@ -143,6 +155,7 @@ pshell:
 update-catalog: ## Update the source localisation files (*.po)
 	$(DOCKER_MAKE_CMD) update-catalog-internal
 
+
 # Docker images
 
 .PHONY: docker-build-postgresql
@@ -151,12 +164,12 @@ docker-build-postgresql:
 
 .PHONY: docker-build-build
 docker-build-build:
-	docker build -t ${DOCKER_BASE}-build:${DOCKER_TAG} build
+	docker build --target=build -t ${DOCKER_BASE}-build:${DOCKER_TAG} .
 
 .PHONY: docker-build-getitfixed
 docker-build-getitfixed: docker-build-build
-	$(DOCKER_MAKE_CMD) compile-catalog config.yaml
-	docker build --build-arg GIT_HASH=${GIT_HASH} -t ${DOCKER_BASE}-getitfixed:${DOCKER_TAG} .
+	$(DOCKER_MAKE_CMD) jslibs compile-catalog config.yaml
+	docker build --target=getitfixed --build-arg GIT_HASH=${GIT_HASH} -t ${DOCKER_BASE}-getitfixed:${DOCKER_TAG} .
 
 .PHONY: docker-push
 docker-push: ## Push docker images on docker hub
@@ -168,24 +181,35 @@ docker-pull: ## Pull docker images from docker hub
 	docker pull ${DOCKER_BASE}-build:${DOCKER_TAG}
 	docker pull ${DOCKER_BASE}-getitfixed:${DOCKER_TAG}
 
-# Targets used inside docker build container
+.PHONY: docker-compile-catalog
+docker-compile-catalog: docker-build-build
+	$(DOCKER_MAKE_CMD) compile-catalog config.yaml
 
-.PHONY: update-catalog-internal
-update-catalog-internal:
-	pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
-		getitfixed/models/ \
-		getitfixed/views/ \
-		getitfixed/templates/
-	msgmerge --update getitfixed/locale/fr/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
-	msgmerge --update getitfixed/locale/de/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
+# Targets used inside docker build container
 
 .PHONY: compile-catalog
 compile-catalog: $(MO_FILES)
 
+update-catalog-internal:
+	pot-create -c lingua.cfg --keyword _ -o getitfixed/locale/getitfixed.pot \
+		getitfixed/models/ \
+		getitfixed/views/ \
+		getitfixed/templates/ \
+		config.yaml && \
+	msgmerge --update getitfixed/locale/fr/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot && \
+	msgmerge --update getitfixed/locale/de/LC_MESSAGES/getitfixed.po getitfixed/locale/getitfixed.pot
+
 # .env depends on user makefile
 .env: $(MAKEFILE_LIST)
 
+.PHONY: jslibs
+jslibs: $(addprefix $(JS_LIBS_FOLDER)/,$(JS_LIBS))
+
 # Rules
+
+$(JS_LIBS_FOLDER)/%: /opt/getitfixed/node_modules/%
+	mkdir -p $(dir $@)
+	cp $< $@
 
 %.mo: %.po
 	msgfmt $< --output-file=$@
@@ -198,4 +222,4 @@ compile-catalog: $(MO_FILES)
 		--files $<
 
 config.yaml: vars.yaml
-	c2c-template --vars vars.yaml --get-config config.yaml project smtp emails
+	c2c-template --vars vars.yaml --get-config config.yaml project smtp getitfixed

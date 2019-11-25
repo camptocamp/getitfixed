@@ -11,8 +11,8 @@
     <link rel="shortcut icon" href="{{request.static_url('getitfixed:static/favicon.ico')}}">
 
     <!-- Bootstrap core CSS -->
-    <link href="{{request.static_url('getitfixed:node_modules/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table.min.css')}}" rel="stylesheet">
+    <link href="{{request.static_url('getitfixed:static/lib/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{request.static_url('getitfixed:static/lib/bootstrap-table/dist/bootstrap-table.min.css')}}" rel="stylesheet">
     <link href="{{request.static_url('c2cgeoform:static/theme.css')}}" rel="stylesheet">
 
     <!-- Deform dependecies CSS -->
@@ -33,11 +33,11 @@
     <![endif]-->
 
     <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/jquery/dist/jquery.min.js')}}"></script>
-    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table.min.js')}}"></script>
-    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/bootstrap-table/dist/bootstrap-table-locale-all.js')}}"></script>
-    <script type="text/javascript" src="{{request.static_url('getitfixed:node_modules/jquery.scrollintoview/jquery.scrollintoview.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:static/lib/jquery/dist/jquery.min.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:static/lib/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:static/lib/bootstrap-table/dist/bootstrap-table.min.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:static/lib/bootstrap-table/dist/bootstrap-table-locale-all.js')}}"></script>
+    <script type="text/javascript" src="{{request.static_url('getitfixed:static/lib/jquery.scrollintoview/jquery.scrollintoview.js')}}"></script>
 
     <!-- c2cgeoform  -->
     <script src="{{request.static_url('c2cgeoform:static/dist/index.js')}}"></script>
@@ -68,11 +68,9 @@
       <h3 class="title">{{_('Problem declaration')}}</h3>
     </header>
 
-    <div class="content">
-      {% block content %}
-        <p>No content</p>
-      {% endblock content %}
-    </div>
+    {% block content %}
+      <p>No content</p>
+    {% endblock content %}
 
     <footer class="footer text-muted">
       <div class="container">
