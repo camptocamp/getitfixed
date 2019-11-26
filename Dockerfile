@@ -74,7 +74,7 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     rm --recursive --force /var/lib/apt/lists/*
 
 # For development
-RUN pip3 install waitress pydevd pyramid_ipython ipdb webtest ipython==5.8.0
+RUN pip3 install waitress pydevd pyramid_ipython ipdb webtest ipython==5.8.0 pytest==5.1.3 mock
 
 RUN mkdir /app
 COPY requirements.txt /app
