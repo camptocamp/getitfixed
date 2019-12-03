@@ -1,25 +1,3 @@
-
-# We need to compile c2cgeoform l10n files
-FROM ubuntu:18.04 AS c2cgeoform
-
-RUN apt-get update && \
-    apt-get install --assume-yes --no-install-recommends \
-        ca-certificates \
-        gettext \
-        git \
-        nodejs \
-        npm \
-        make
-
-RUN mkdir -p /src && \
-    git clone https://github.com/camptocamp/c2cgeoform.git /opt/c2cgeoform && \
-    cd /opt/c2cgeoform && \
-    mkdir .build/ && \
-    git checkout 5fda87acc14ff0f59380c5a5e0f14abf580406d4 && \
-    make c2cgeoform/static/dist/index.js compile-catalog
-
-
-
 FROM camptocamp/c2cwsgiutils:3 AS build
 
 RUN \
@@ -79,10 +57,6 @@ RUN pip3 install waitress pydevd pyramid_ipython ipdb webtest ipython==5.8.0 pyt
 RUN mkdir /app
 COPY requirements.txt /app
 RUN pip3 install -r /app/requirements.txt
-
-# Install c2cgeoform from getitfixed branch
-COPY --from=c2cgeoform /opt/c2cgeoform /opt/c2cgeoform
-RUN pip3 install -e /opt/c2cgeoform
 
 COPY . /app/
 WORKDIR /app
