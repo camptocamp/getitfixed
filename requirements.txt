@@ -1,5 +1,5 @@
 c2c.template
-c2cgeoform>=2.1.1
+c2cgeoform>=2.1.2
 colander
 ColanderAlchemy>=0.3.2
 geoalchemy2
