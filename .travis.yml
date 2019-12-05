@@ -20,12 +20,14 @@ script:
 
 deploy:
 - provider: script
+  skip_cleanup: true
   script: travis/deploy-pypi
   on:
     tags: true
     repo: camptocamp/getitfixed
     python: '3.7'
 - provider: script
+  skip_cleanup: true
   script: travis/deploy-pypi
   on:
     condition: '"${TRAVIS_EVENT_TYPE}" = cron'
