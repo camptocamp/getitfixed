@@ -206,7 +206,7 @@ body {
   flex-direction: column;
   align-items: center;
 }
-form.deform {
+body > div.container {
   padding-bottom: 4em;
 }
 
