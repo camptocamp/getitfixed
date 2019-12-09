@@ -25,6 +25,22 @@ base_schema = GeoFormSchemaNode(Issue, excludes=["events", "public_events"])
 route = "c2cgeoform_item"
 event_schema = GeoFormSchemaNode(Event)
 
+schema = GeoFormSchemaNode(
+    Issue,
+    includes=[
+        "status",
+        "request_date",
+        "type_id",
+        "description",
+        "localisation",
+        "geometry",
+        "firstname",
+        "lastname",
+        "phone",
+        "email",
+    ],
+)
+
 
 @view_defaults(
     match_param=("application=getitfixed_admin", "table=issues"),
@@ -34,6 +50,7 @@ class IssueAdminViews(IssueViews):
 
     _author = USER_ADMIN
     _event_schema = event_schema
+    _base_schema = schema
     _application = "getitfixed_admin"
 
     _list_fields = [
