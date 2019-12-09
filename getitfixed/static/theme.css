@@ -190,6 +190,10 @@ body {
   display: none;
 }
 
+.event-link {
+  padding: 0;
+}
+
 /*
  * Menu Buttons
  */

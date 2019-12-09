@@ -3,8 +3,8 @@
 <div class="container {{ 'issue-view' if issue else '' }}">
 
   <ol class="breadcrumb">
-    <li><a href="{{request.route_url('c2cgeoform_index', application='getitfixed', table='issues')}}">{{_('Issues')}}</a></li>
-    <li class="active">{{item_name}}</li>
+    <li><a href="{{request.route_url('c2cgeoform_index')}}">{{_('Issues')}}</a></li>
+    <li class="active">{{item_name[:80]}}</li>
   </ol>
 
   {% include 'c2cgeoform:/templates/edit.jinja2' %}

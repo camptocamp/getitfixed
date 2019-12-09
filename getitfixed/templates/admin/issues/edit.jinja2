@@ -1,7 +1,13 @@
 {% extends "getitfixed:templates/layout.jinja2" %}
 {% block content %}
 <div class="container">
-    <a class="btn btn-link" href="#existing_events_form">{% trans %} See events {% endtrans %}</a>
+    <ol class="breadcrumb">
+      <li><a href="{{request.route_url('c2cgeoform_index')}}">{{_('Issues')}}</a></li>
+      <li class="active">
+        {{title[:80]}}
+        (<a class="btn btn-link event-link" href="#existing_events_form">{% trans %}See events{% endtrans %}</a>)
+      </li>
+    </ol>
     {% include 'c2cgeoform:/templates/edit.jinja2' %}
     <hr/>
     <h3>{% trans %}Events{% endtrans %}</h3>
