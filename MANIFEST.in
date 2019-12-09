@@ -1,3 +1,3 @@
 include *.txt *.ini *.cfg *.rst
 recursive-include getitfixed *.ico *.png *.css *.jpeg *.pt *.txt *.mako *.js *.html *.mo *.jinja2 *.ttf *.woff2
-prune acceptance_tests
+prune acceptance_tests docs
