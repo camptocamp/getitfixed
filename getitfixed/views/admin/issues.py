@@ -21,13 +21,13 @@ from getitfixed.views.private.semi_private_issues import IssueViews
 
 _list_field = partial(ListField, Issue)
 
-base_schema = GeoFormSchemaNode(Issue, excludes=["events", "public_events"])
 route = "c2cgeoform_item"
 event_schema = GeoFormSchemaNode(Event)
 
-schema = GeoFormSchemaNode(
+base_schema = GeoFormSchemaNode(
     Issue,
     includes=[
+        "id",
         "status",
         "request_date",
         "type_id",
@@ -50,7 +50,7 @@ class IssueAdminViews(IssueViews):
 
     _author = USER_ADMIN
     _event_schema = event_schema
-    _base_schema = schema
+    _base_schema = base_schema
     _application = "getitfixed_admin"
 
     _list_fields = [
