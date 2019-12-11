@@ -3,6 +3,25 @@ Getting Started
 
 Start by cloning the repository
 
+Containers
+----------
+
+GetItFixed is based on docker containers.
+
+*The docker-compose.yaml* file defines the containers used.
+
+The services are
+
+ * **database** (hosts the postgresql database)
+
+ * **web application** (hosts the wsgi python application)
+
+ * webmail, courier-imap and smtp
+
+Webmail, courier-imap and smtp are used for demo purpose, and can be removed in order
+to use your own.
+
+
 Build with data
 ---------------
 

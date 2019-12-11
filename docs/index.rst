@@ -13,26 +13,8 @@ Welcome to GIF's documentation!
    gettingStarted
    database
    customization
-
-
-GetItFixed is based on docker containers.
-
-The docker-compose.yaml file defines the containers used.
-
-The services are
-
- * database (hosts the postgresql database)
-
- * webapplication (hosts the wsgi python application)
-
- * webmail, courier-imap and smtp are used as démo purpose and can be removed in order to use your own.
-
-
-
-
-
-
-
+   usingWithGMF
+   devCorner
 
 
 Indices and tables
