@@ -202,8 +202,8 @@ msgid "All Categories"
 msgstr "Déclaration de problèmes"
 
 #: getitfixed/templates/admin/issue/edit.jinja2:4
-msgid " See events "
-msgstr " Voir les événements"
+msgid "See events"
+msgstr "Voir les mises à jour"
 
 #: getitfixed/templates/admin/issue/edit.jinja2:21
 msgid "You"

@@ -21,9 +21,27 @@ from getitfixed.views.private.semi_private_issues import IssueViews
 
 _list_field = partial(ListField, Issue)
 
-base_schema = GeoFormSchemaNode(Issue, excludes=["events", "public_events"])
 route = "c2cgeoform_item"
 event_schema = GeoFormSchemaNode(Event)
+
+base_schema = GeoFormSchemaNode(
+    Issue,
+    includes=[
+        "id",
+        "status",
+        "request_date",
+        "type_id",
+        "description",
+        "localisation",
+        "geometry",
+        "firstname",
+        "lastname",
+        "phone",
+        "email",
+    ],
+)
+
+MAX_DESCR_LEN = 40
 
 
 @view_defaults(
@@ -34,6 +52,7 @@ class IssueAdminViews(IssueViews):
 
     _author = USER_ADMIN
     _event_schema = event_schema
+    _base_schema = base_schema
     _application = "getitfixed_admin"
 
     _list_fields = [
@@ -46,7 +65,12 @@ class IssueAdminViews(IssueViews):
             sort_column=Type.label_fr,
             filter_column=Type.label_fr,
         ),
-        _list_field("description"),
+        _list_field(
+            "description",
+            renderer=lambda issue: (issue.description[:MAX_DESCR_LEN] + "…")
+            if len(issue.description) > MAX_DESCR_LEN
+            else issue.description,
+        ),
         _list_field("localisation"),
         _list_field("firstname"),
         _list_field("lastname"),

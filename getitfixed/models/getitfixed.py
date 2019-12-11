@@ -251,6 +251,7 @@ class Issue(Base):
                     center=[738260, 5864270],
                     zoom=12,
                     item_css_class="item-geometry",
+                    focus_only=True,
                 ),
             }
         },

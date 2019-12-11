@@ -197,7 +197,7 @@ msgid "All Categories"
 msgstr ""
 
 #: getitfixed/templates/admin/issue/edit.jinja2:4
-msgid " See events "
+msgid "See events"
 msgstr ""
 
 #: getitfixed/templates/admin/issue/edit.jinja2:21

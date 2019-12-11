@@ -1,4 +1,4 @@
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid.threadlocal import get_current_request
@@ -175,6 +175,8 @@ class IssueViews(AbstractViews):
             base_edit["item_name"] = _("New")
             return base_edit
         else:
+            if not self._request.matchdict["id"].isdigit():
+                raise HTTPNotFound()
             base_edit = super().edit(schema=follow_schema, readonly=True)
             base_edit["item_name"] = self._get_object().description
             base_edit["form_render_kwargs"].update(
