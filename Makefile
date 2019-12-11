@@ -74,20 +74,22 @@ help: ## Display this help message
 
 .PHONY: meadeca
 meadeca: ## Build, run init_db and show logs
-meadeca: build initdb up-and-log
-	docker-compose up -d
-
-.PHONY: meacoffee
-meacoffee: ## Build, run init db with data and show logs
-meacoffee: build initdb-with-data up-and-log
-	docker-compose up -d
+meadeca: up
+	make initdb-with-data
 	docker-compose logs -f getitfixed
 
-.PHONY: up-and-log
+.PHONY: meacoffee
+meacoffee: ## Build, run and show logs
+meacoffee: up
+	make initdb
+	docker-compose logs -f getitfixed
+
+.PHONY: up
 up: ## docker-compose up
 up:
-	docker-compose stop getitfixed
-	docker-compose rm --force getitfixed
+	make build
+	docker-compose rm --stop --force getitfixed
+	docker-compose up -d
 
 .PHONY: build
 build: ## Build runtime files and docker images
@@ -102,11 +104,11 @@ docker-compose-env: ## Build docker-compose environment file
 
 .PHONY: initdb
 initdb:
-	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini#app
+	docker-compose exec getitfixed initialize_getitfixed_db c2c://development.ini#app --with-data=1
 
 .PHONY: initdb-with-data
 initdb-with-data:
-	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini#app --with-data=1
+	docker-compose exec getitfixed initialize_getitfixed_db c2c://development.ini#app
 
 .PHONY: reinitdb
 reinitdb: ## Drop schema and regenerate it with development dataset

@@ -7,7 +7,6 @@ def includeme(config):
 
     config.add_route("getitfixed", "/getitfixed")
     config.add_c2cgeoform_application("getitfixed", [("issues", Issue)])
-    config.add_route("issues_geojson", "{application}/{table}/data/geojson.json")
 
     config.add_route(
         "c2cgeoform_item_private",

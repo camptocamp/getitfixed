@@ -3,10 +3,8 @@ from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid.threadlocal import get_current_request
 from functools import partial
-from geojson import FeatureCollection, Feature
 
 from sqlalchemy.orm import subqueryload
-from sqlalchemy import JSON
 
 from colander import SchemaNode, Int
 from c2cgeoform.schema import GeoFormSchemaNode
@@ -55,15 +53,19 @@ def get_types(request):
     }
 
 
-def get_issue_link(issue):
+def get_issue_url(issue):
     # Request isn't available here without breaking changes in c2cgeoform
     # use of get_current_request should be safe here, cf
     # https://docs.pylonsproject.org/projects/pyramid/en/latest/api/threadlocal.html
     request = get_current_request()
-    if request is None:
-        return issue.description
-    uri = request.route_url("c2cgeoform_item", id=issue.id)
-    return '<a href="{}">{}</a>'.format(uri, issue.description)
+    return request.route_url("c2cgeoform_item", id=issue.id)
+
+
+def get_issue_icon(issue):
+    request = get_current_request()
+    return request.static_url(
+        "getitfixed:static/assets/{}".format(issue.type.category.icon)
+    )
 
 
 @view_defaults(match_param=("application=getitfixed", "table=issues"))
@@ -72,25 +74,15 @@ class IssueViews(AbstractViews):
     _model = Issue
     _base_schema = new_schema
     _id_field = "id"
+    _geometry_field = "geometry"
 
     _list_fields = [
-        # _list_field('id'),
-        _list_field("description", renderer=get_issue_link),
+        _list_field("id", key="url", renderer=get_issue_url),
         _list_field(
-            "type_id",
-            renderer=lambda issue: issue.type.label_fr,
-            sort_column=Type.label_fr,
-            filter_column=Type.label_fr,
+            "type", key="category", renderer=lambda issue: issue.type.category.label_fr
         ),
-        _list_field("localisation"),
-        _list_field(
-            "request_date",
-            renderer=lambda issue: issue.request_date.strftime("%d/%m/%Y"),
-        ),
-        # _list_field('firstname'),
-        # _list_field('lastname'),
-        # _list_field('phone'),
-        # _list_field('email'),
+        _list_field("type", renderer=lambda issue: issue.type.label_fr),
+        _list_field("type", key="icon", renderer=get_issue_icon),
     ]
 
     MSG_COL = {
@@ -115,44 +107,12 @@ class IssueViews(AbstractViews):
         route_name="c2cgeoform_index",
         renderer="getitfixed:templates/public/issues/index.jinja2",
     )
-    def index(self):
-        return super().index()
+    def map(self):
+        return super().map(self._request.registry.settings["getitfixed"].get("map", {}))
 
-    @view_config(route_name="c2cgeoform_grid", renderer="json")
-    def grid(self):
-        return super().grid()
-
-    @view_config(route_name="issues_geojson", renderer="json", request_method="GET")
+    @view_config(route_name="c2cgeoform_geojson", renderer="json", request_method="GET")
     def geojson(self):
-        query = (
-            self._request.dbsession.query(
-                Issue.id,
-                Issue.geometry.ST_Transform(3857).ST_AsGeoJSON().cast(JSON),
-                Type,
-            )
-            .join(Type)
-            .join(Category, Type.category_id == Category.id)
-        )
-
-        features = list()
-        for id, geom, type in query.all():
-            url = self._request.route_url(
-                "c2cgeoform_item", application="getitfixed", id=id
-            )
-            features.append(
-                Feature(
-                    geometry=geom,
-                    properties={
-                        "url": url,
-                        "category": type.category.label_fr,
-                        "type": type.label_fr,
-                        "icon": self._request.static_url(
-                            "getitfixed:static/assets/{}".format(type.category.icon)
-                        ),
-                    },
-                )
-            )
-        return FeatureCollection(features)
+        return super().geojson()
 
     def _grid_actions(self):
         return []
