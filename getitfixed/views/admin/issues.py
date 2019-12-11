@@ -41,6 +41,8 @@ base_schema = GeoFormSchemaNode(
     ],
 )
 
+MAX_DESCR_LEN = 40
+
 
 @view_defaults(
     match_param=("application=getitfixed_admin", "table=issues"),
@@ -63,7 +65,12 @@ class IssueAdminViews(IssueViews):
             sort_column=Type.label_fr,
             filter_column=Type.label_fr,
         ),
-        _list_field("description"),
+        _list_field(
+            "description",
+            renderer=lambda issue: (issue.description[:MAX_DESCR_LEN] + "…")
+            if len(issue.description) > MAX_DESCR_LEN
+            else issue.description,
+        ),
         _list_field("localisation"),
         _list_field("firstname"),
         _list_field("lastname"),
