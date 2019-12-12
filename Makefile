@@ -76,6 +76,7 @@ help: ## Display this help message
 meadeca: ## Build, run init_db and show logs
 meadeca: build initdb up-and-log
 	docker-compose up -d
+
 .PHONY: meacoffee
 meacoffee: ## Build, run init db with data and show logs
 meacoffee: build initdb-with-data up-and-log
