@@ -72,13 +72,21 @@ help: ## Display this help message
 	@echo "Possible targets:"
 	@grep -Eh '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "    %-20s%s\n", $$1, $$2}'
 
+.PHONY: meadeca
+meadeca: ## Build, run init_db and show logs
+meadeca: build initdb up-and-log
+	docker-compose up -d
 .PHONY: meacoffee
-meacoffee: ## Build, run and show logs
-meacoffee: build initdb
-	docker-compose stop getitfixed
-	docker-compose rm --force getitfixed
+meacoffee: ## Build, run init db with data and show logs
+meacoffee: build initdb-with-data up-and-log
 	docker-compose up -d
 	docker-compose logs -f getitfixed
+
+.PHONY: up-and-log
+up: ## docker-compose up
+up:
+	docker-compose stop getitfixed
+	docker-compose rm --force getitfixed
 
 .PHONY: build
 build: ## Build runtime files and docker images
@@ -93,6 +101,10 @@ docker-compose-env: ## Build docker-compose environment file
 
 .PHONY: initdb
 initdb:
+	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini#app
+
+.PHONY: initdb-with-data
+initdb-with-data:
 	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini#app --with-data=1
 
 .PHONY: reinitdb
@@ -145,6 +157,11 @@ bash: docker-build-build
 psql: ## Launch psql in postgres image
 psql:
 	docker-compose exec -u postgres db psql getitfixed
+
+.PHONY: psqldocs
+psqldocs: ## Launch psql in postgres image
+psqldocs:
+	docker-compose exec -u postgres db postgresql-autodoc getitfixed
 
 .PHONY: pshell
 pshell: ## Launch getitfixed pshell

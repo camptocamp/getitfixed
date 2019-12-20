@@ -1,6 +1,15 @@
 GetItFixed!
 ===========
 
+Documentation
+-------------
+Build the docs
+
+.. code-block:: bash
+
+    cd getitfixed/docs
+    make html
+
 Demo :
 https://geomapfish-demo.camptocamp.com/getitfixed/getitfixed/issues
 
