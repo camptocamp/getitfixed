@@ -14,3 +14,6 @@ getitfixed/static/lib
 .env
 config.yaml
 docker-compose.override.yaml
+
+# docs
+docs/_build
