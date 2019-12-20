@@ -28,8 +28,10 @@ from deform.widget import (
     TextAreaWidget,
     TextInputWidget,
 )
-from c2cgeoform.ext.deform_ext import RelationSelectWidget
+from c2c.template.config import config
 
+from c2cgeoform import default_map_settings
+from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.ext import colander_ext, deform_ext
 from c2cgeoform.models import FileData
 
@@ -38,12 +40,9 @@ from getitfixed.models.meta import Base
 
 schema = "getitfixed"
 
-gmf_demo_map = {
-    "type_": "XYZ",
-    "url": "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token="
-    "pk.eyJ1IjoianVsc2JyZWFrZG93biIsImEiOiJjanB3Y216bWowYXJlNDNqbmhwY3Fia3VrIn0.Yo9vCvuv-0sXSIbZag6QYg",
-    "opacity": 0.8,
-}  # noqa
+_getitfixed_config = (config.get_config() or {}).get("getitfixed", {})
+_map_config = {**default_map_settings, **_getitfixed_config.get("map", {})}
+
 
 STATUS_NEW = "new"
 STATUS_VALIDATED = "validated"
@@ -245,13 +244,11 @@ class Issue(Base):
         info={
             "colanderalchemy": {
                 "title": _("Position"),
-                "typ": colander_ext.Geometry("POINT", srid=4326, map_srid=3857),
+                "typ": colander_ext.Geometry(
+                    "POINT", srid=4326, map_srid=_map_config["srid"]
+                ),
                 "widget": deform_ext.MapWidget(
-                    base_layer=gmf_demo_map,
-                    center=[738260, 5864270],
-                    zoom=12,
-                    item_css_class="item-geometry",
-                    focus_only=True,
+                    map_options=_map_config, item_css_class="item-geometry"
                 ),
             }
         },
