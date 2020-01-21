@@ -16,6 +16,7 @@ setup(
     long_description=README + "\n\n" + CHANGES,
     classifiers=[
         "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
