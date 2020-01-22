@@ -270,7 +270,15 @@ class Issue(Base):
     email = Column(
         String(100),
         nullable=False,
-        info={"colanderalchemy": {"title": _("Email"), "validator": colander.Email()}},
+        info={
+            "colanderalchemy": {
+                "title": _("Email"),
+                "validator": colander.Email(),
+                "description": _(
+                    "This field is required to keep you informed about issue events"
+                ),
+            }
+        },
     )
     events = relationship(
         "Event",
