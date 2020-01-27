@@ -8,15 +8,8 @@ from random import randrange
 
 from pyramid.scripts.common import parse_vars, get_config_loader
 
-from ..models.meta import Base
-from ..models import get_engine, get_session_factory, get_tm_session
-
-from getitfixed.models.getitfixed import schema, Issue, Category, Type, STATUSES
-
 from getitfixed.scripts import wait_for_db
 
-
-STATUSES = list(STATUSES.keys())
 ICONS = ["gif-black.png", "gif-green.png", "gif-red.png"]
 
 
@@ -39,6 +32,9 @@ def main(argv=sys.argv):
     loader.setup_logging()
     settings = loader.get_wsgi_app_settings(defaults=options)
 
+    # Import the model after settings are loaded
+    from getitfixed.models import get_engine
+
     engine = get_engine(settings)
     wait_for_db(engine)
 
@@ -49,6 +45,11 @@ def main(argv=sys.argv):
 
 
 def init_db(connection, force=False, with_data=False):
+    # Import the model after settings are loaded
+    from getitfixed.models import get_session_factory, get_tm_session
+    from getitfixed.models.getitfixed import schema
+    from getitfixed.models.meta import Base
+
     if force:
         if schema_exists(connection, schema):
             connection.execute("DROP SCHEMA {} CASCADE;".format(schema))
@@ -89,6 +90,9 @@ def get_geometry(dbsession):
 
 
 def setup_test_data(dbsession):
+    # Import the model after settings are loaded
+    from getitfixed.models.getitfixed import Issue, Category, Type
+
     if dbsession.query(Category).count() == 0:
         for i in range(5):
             dbsession.add(
@@ -125,6 +129,10 @@ def get_value(col, i):
 
 
 def _issue(i, type_id, dbsession):
+    from getitfixed.models.getitfixed import Issue, STATUSES
+
+    STATUSES = list(STATUSES.keys())
+
     issue = Issue(
         request_date=date.today() - timedelta(days=100 - i),
         type_id=type_id,
