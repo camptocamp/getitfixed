@@ -1,8 +1,6 @@
 c2c.template
-c2cgeoform>=2.1.6
+c2cgeoform>=2.1.7
 plaster_pastedeploy
 psycopg2-binary
-pyramid_debugtoolbar
-pyramid_retry
 pyramid_tm
 transaction
