@@ -1,0 +1,9 @@
+ipdb
+ipython==5.8.0
+mock
+pydevd
+pyramid_debugtoolbar
+pyramid_ipython
+pytest==5.1.3
+waitress
+webtest
