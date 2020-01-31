@@ -58,6 +58,9 @@ def includeme(config):
     settings = config.get_settings()
     settings["tm.manager_hook"] = "pyramid_tm.explicit_manager"
 
+    # use pyramid_tm to hook the transaction lifecycle to the request
+    config.include("pyramid_tm")
+
     session_factory = get_session_factory(get_engine(settings))
     config.registry["dbsession_factory"] = session_factory
 
