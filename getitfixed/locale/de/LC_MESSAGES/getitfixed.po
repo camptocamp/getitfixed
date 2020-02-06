@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2020-01-21 12:46+0000\n"
+"POT-Creation-Date: 2020-02-06 15:20+0000\n"
 "PO-Revision-Date: 2016-01-29 14:19+0100\n"
 "Last-Translator: Arnaud Morvan <contact@camptocamp.com>\n"
 "Language-Team: German\n"
@@ -205,6 +205,10 @@ msgstr ""
 
 #: getitfixed/templates/public/issues/index.jinja2:7
 msgid "Report an issue"
+msgstr ""
+
+#: getitfixed/templates/public/issues/index.jinja2:10
+msgid "Display legend"
 msgstr ""
 
 #: getitfixed/templates/public/issues/index.jinja2:20
