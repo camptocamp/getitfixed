@@ -76,12 +76,14 @@
               Made by <a href="http://www.camptocamp.com">camptocamp</a>
             </p>
           </div>
+          {% if request.c2cgeoform_application is not none %}
           <div class="col-xs-8">
             <p class="text-right">
               <a href="{{request.route_url('c2cgeoform_locale', _query=(('language', 'en'),))}}" class="label label-{{'primary' if request.locale_name=='en' else 'default'}}">en</a>
               <a href="{{request.route_url('c2cgeoform_locale', _query=(('language', 'fr'),))}}" class="label label-label label-{{'primary' if request.locale_name=='fr' else 'default'}}">fr</a>
             </p>
           </div>
+          {% endif %}
         </div>
       </div>
     </footer>
