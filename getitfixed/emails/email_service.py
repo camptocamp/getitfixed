@@ -39,10 +39,10 @@ def send_email(request, to, template_name, template_args=[], template_kwargs={})
         server = smtplib.SMTP_SSL(smtp_host)
     else:
         server = smtplib.SMTP(smtp_host)
-    if "user" in smtp and smtp["user"]:
-        server.login(smtp["user"], smtp["password"])
     if "starttls" in smtp and smtp["starttls"]:
         server.starttls()
+    if "user" in smtp and smtp["user"]:
+        server.login(smtp["user"], smtp["password"])
 
     # Send message
     server.sendmail(sender, [to, sender], msg.as_string())

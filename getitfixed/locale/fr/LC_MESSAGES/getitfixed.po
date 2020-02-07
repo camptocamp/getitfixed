@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2020-01-21 12:46+0000\n"
+"POT-Creation-Date: 2020-02-06 17:35+0000\n"
 "PO-Revision-Date: 2016-01-29 14:18+0100\n"
 "Last-Translator: Arnaud Morvan <contact@camptocamp.com>\n"
 "Language-Team: French\n"
@@ -39,9 +39,8 @@ msgid "Resolved"
 msgstr "Résolu"
 
 #: getitfixed/models/getitfixed.py:63
-#, fuzzy
 msgid "Reporter"
-msgstr "Déclarer un problème"
+msgstr ""
 
 #: getitfixed/models/getitfixed.py:63
 msgid "Administrator"
@@ -52,6 +51,7 @@ msgid "Photo"
 msgstr "Photo"
 
 #: getitfixed/models/getitfixed.py:92 getitfixed/models/getitfixed.py:151
+#: getitfixed/views/public/issues.py:28
 msgid "Category"
 msgstr "Catégorie"
 
@@ -105,7 +105,6 @@ msgid "Issues"
 msgstr "Problèmes"
 
 #: getitfixed/models/getitfixed.py:194
-#, fuzzy
 msgid "Request date"
 msgstr "Date de la demande"
 
@@ -123,15 +122,13 @@ msgstr "Localisation"
 
 #: getitfixed/models/getitfixed.py:246
 msgid "Position"
-msgstr "Sur la carte"
+msgstr "Emplacement"
 
 #: getitfixed/models/getitfixed.py:262
-#, fuzzy
 msgid "Firstname"
 msgstr "Prénom"
 
 #: getitfixed/models/getitfixed.py:265
-#, fuzzy
 msgid "Lastname"
 msgstr "Nom"
 
@@ -141,7 +138,8 @@ msgstr "Téléphone"
 
 #: getitfixed/models/getitfixed.py:277
 msgid "This field is required to keep you informed about issue events"
-msgstr "Ce champ est obligatoire pour vous tenir informé de l'évolution du ticket"
+msgstr ""
+"Ce champ est obligatoire pour vous tenir informé de l'évolution du ticket"
 
 #: getitfixed/models/getitfixed.py:289 getitfixed/models/getitfixed.py:306
 #: getitfixed/templates/admin/issues/edit.jinja2:13
@@ -157,9 +155,8 @@ msgid "Date"
 msgstr "Date"
 
 #: getitfixed/models/getitfixed.py:337
-#, fuzzy
 msgid "Comment"
-msgstr "Commentaires"
+msgstr "Commentaire"
 
 #: getitfixed/models/getitfixed.py:344
 msgid "Private"
@@ -185,20 +182,23 @@ msgstr ""
 msgid "Please check that the copy fits before submitting."
 msgstr "Merci de vérifier que la copie correspond bien avant de l'envoyer"
 
-#: getitfixed/templates/layout.jinja2:10
-#, fuzzy
+#: getitfixed/templates/layout.jinja2:10 getitfixed/templates/layout.jinja2:64
 msgid "getitfixed"
 msgstr "Déclaration de problèmes"
 
-#: getitfixed/templates/layout.jinja2:64
-msgid "Problem declaration"
-msgstr "Toutes les Catégories"
+#: getitfixed/templates/admin/issues/grid.jinja2:61
+#: getitfixed/templates/admin/issues/grid.jinja2:65
+msgid "Open issues"
+msgstr "Problèmes ouverts"
 
-#: getitfixed/templates/admin/issues/grid.jinja2:46
-#: getitfixed/templates/admin/issues/grid.jinja2:55
-#, fuzzy
+#: getitfixed/templates/admin/issues/grid.jinja2:66
+msgid "All issues"
+msgstr "Tous les problèmes"
+
+#: getitfixed/templates/admin/issues/grid.jinja2:72
+#: getitfixed/templates/admin/issues/grid.jinja2:75
 msgid "All Categories"
-msgstr "Déclaration de problèmes"
+msgstr "Toutes les Catégories"
 
 #: getitfixed/templates/admin/issues/edit.jinja2:8
 msgid "See events"
@@ -209,13 +209,16 @@ msgid "You"
 msgstr "Vous"
 
 #: getitfixed/templates/admin/issues/edit.jinja2:30
-#, fuzzy
 msgid "No Comment"
 msgstr "Commentaires"
 
 #: getitfixed/templates/public/issues/index.jinja2:7
 msgid "Report an issue"
 msgstr "Déclarer un problème"
+
+#: getitfixed/templates/public/issues/index.jinja2:10
+msgid "Display legend"
+msgstr "Afficher la légende"
 
 #: getitfixed/templates/public/issues/index.jinja2:20
 msgid "Legend"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2020-01-21 12:46+0000\n"
+"POT-Creation-Date: 2020-02-06 17:35+0000\n"
 "PO-Revision-Date: 2016-01-29 14:19+0100\n"
 "Last-Translator: Arnaud Morvan <contact@camptocamp.com>\n"
 "Language-Team: German\n"
@@ -51,6 +51,7 @@ msgid "Photo"
 msgstr ""
 
 #: getitfixed/models/getitfixed.py:92 getitfixed/models/getitfixed.py:151
+#: getitfixed/views/public/issues.py:28
 msgid "Category"
 msgstr ""
 
@@ -178,16 +179,21 @@ msgstr ""
 msgid "Please check that the copy fits before submitting."
 msgstr ""
 
-#: getitfixed/templates/layout.jinja2:10
+#: getitfixed/templates/layout.jinja2:10 getitfixed/templates/layout.jinja2:64
 msgid "getitfixed"
 msgstr ""
 
-#: getitfixed/templates/layout.jinja2:64
-msgid "Problem declaration"
+#: getitfixed/templates/admin/issues/grid.jinja2:61
+#: getitfixed/templates/admin/issues/grid.jinja2:65
+msgid "Open issues"
 msgstr ""
 
-#: getitfixed/templates/admin/issues/grid.jinja2:46
-#: getitfixed/templates/admin/issues/grid.jinja2:55
+#: getitfixed/templates/admin/issues/grid.jinja2:66
+msgid "All issues"
+msgstr ""
+
+#: getitfixed/templates/admin/issues/grid.jinja2:72
+#: getitfixed/templates/admin/issues/grid.jinja2:75
 msgid "All Categories"
 msgstr ""
 
@@ -205,6 +211,10 @@ msgstr ""
 
 #: getitfixed/templates/public/issues/index.jinja2:7
 msgid "Report an issue"
+msgstr ""
+
+#: getitfixed/templates/public/issues/index.jinja2:10
+msgid "Display legend"
 msgstr ""
 
 #: getitfixed/templates/public/issues/index.jinja2:20

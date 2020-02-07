@@ -12,10 +12,7 @@ from getitfixed.models.getitfixed import (
     Issue,
     Type,
     USER_ADMIN,
-    STATUS_IN_PROGRESS,
-    STATUS_VALIDATED,
-    STATUS_REPORTER,
-    STATUS_NEW,
+    STATUS_RESOLVED,
 )
 from getitfixed.views.private.semi_private_issues import IssueViews
 
@@ -86,18 +83,16 @@ class IssueAdminViews(IssueViews):
             .outerjoin(Issue.type)
             .options(subqueryload(Issue.type))
         )
-        # return all issues that are not closed
-        if self._request.params.get("all") != "true":
-            query = query.filter(
-                Issue.status.in_(
-                    [STATUS_IN_PROGRESS, STATUS_VALIDATED, STATUS_REPORTER, STATUS_NEW]
-                )
-            )
-        category_filter = int(self._request.params.get("category", 0))
+
+        status = self._request.params.get("status", "open")
+        if status == "open":
+            # return all issues that are not closed
+            query = query.filter(Issue.status != STATUS_RESOLVED)
 
         # filter issues based on category id
-        if category_filter != 0:  # 0 is for all issues
-            query = query.filter(Issue.category.has(id=category_filter))
+        category = int(self._request.params.get("category", 0))
+        if category != 0:  # 0 is for all issues
+            query = query.filter(Issue.category.has(id=category))
         return query
 
     @view_config(

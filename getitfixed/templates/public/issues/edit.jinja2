@@ -4,7 +4,7 @@
 
   <ol class="breadcrumb">
     <li><a href="{{request.route_url('c2cgeoform_index')}}">{{_('Issues')}}</a></li>
-    <li class="active">{{item_name[:80] if item_name else _('Issue')}}</li>
+    <li class="active">{{request.translate(item_name[:80]) if item_name else _('Issue')}}</li>
   </ol>
 
   {% include 'c2cgeoform:/templates/edit.jinja2' %}

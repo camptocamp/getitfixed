@@ -7,7 +7,7 @@
      role="button">{{_("Report an issue")}}</a>
   <div id="map" class="map">
     <div class="ol-control legend-btn">
-      <button type="button">
+      <button title="{{_("Display legend")}}" type="button">
         <i class="glyphicon glyphicon-list gif-glyphicon"></i>
       </button>
     </div>
@@ -27,6 +27,7 @@
 </div>
 <script src="{{request.static_path("getitfixed:static/scripts/legend.js")}}"></script>
 <script>
+(function() {
   let map = c2cgeoform.initMap('map', Object.assign(
     {{ map_options | tojson }},
     {
@@ -45,5 +46,6 @@
   }
   $('.gif-glyphicon').on('click', toggleLegend)
   $('.close-button').on('click', toggleLegend)
+}())
 </script>
 {% endblock content %}

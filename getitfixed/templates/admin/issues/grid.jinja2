@@ -6,60 +6,75 @@ return $(window).height() - $('footer').height() - $('header').height() - 30
     {{ super() }}
 <script>
   $(function() {
-     const bsTable = $('#grid')
-     let dataUrl = bsTable.data()['bootstrap.table'].options.url
-     let openIssues = '{{request.localizer.translate("Get open")}}'
-     let allIssues = '{{request.localizer.translate("Get all")}}'
-     const url  = new URL(dataUrl)
+    const bsTable = $('#grid')
+    let dataUrl = bsTable.data()['bootstrap.table'].options.url
+    const url  = new URL(dataUrl)
 
-     let buttonElement = $('<button/>', {class: 'btn btn-default'})
-          .append($(`<span class="hidden">${openIssues}</span>`).data('issues', 'open'))
-          .append($(`<span>${allIssues}</span>`).data('issues', 'all'))
+    let fetchIssues = function() {
+      bsTable.data()['bootstrap.table'].options.url = url.toString()
+      bsTable.bootstrapTable('refresh')
+    }
 
-     let fetchIssues = function() {
-          bsTable.data()['bootstrap.table'].options.url = url.toString()
-          bsTable.bootstrapTable('refresh')
-     }
+    let onStatusClick = function (e) {
+      $(statusDropDown.find('.status-label')).text(e.currentTarget.textContent)
+      url.searchParams.set('status', $(e.currentTarget).data().value)
+      fetchIssues()
+    }
 
-     let toggleOpenFilter = function () {
-         let spans = buttonElement.find('span')
-         spans.toggleClass("hidden")
-         let status = spans.not('.hidden').data().issues
-         url.searchParams.set('all', status === 'all' ? 'false' : 'true')
-         fetchIssues()
-     }
-
-     let onCategoryClick = function (e) {
-         $(dropDownElement.find('.category-label')).text(e.currentTarget.textContent)
-         url.searchParams.set('category', $(e.currentTarget).data().categoryId)
-         fetchIssues()
-     }
+    let onCategoryClick = function (e) {
+      $(categoryDropDown.find('.category-label')).text(e.currentTarget.textContent)
+      url.searchParams.set('category', $(e.currentTarget).data().value)
+      fetchIssues()
+    }
 
     const buttonGroup = $('.list-grid .btn-group.pull-right')
-    buttonElement.click(toggleOpenFilter)
-    buttonGroup.append(buttonElement)
 
-    // category filter
-    const categories = {{ categories|tojson|safe }}
-    let dropDownElement = $('<button/>', {class: 'btn btn-default dropdown-toggle',
-          'data-toggle': 'dropdown'})
-          .append($('<span/>', {class: 'category-label'}).text('{{ _('All Categories') }}'))
-          .append($('<span/>', {class: 'caret'}))
-    // add dropDown to button group
-    buttonGroup.append(dropDownElement)
-    // dropDown content
-    let dropDownMenu = $('<ul/>', {class: 'dropdown-menu'})
+    let createDropDown = function(options) {
+      let dropDown = $('<div>', {class: 'dropdown btn-group'})
 
-    buttonGroup.append(dropDownMenu)
-    // add extra li for all categories
-    categories.splice(0,0, {id: '0', value: '{{ _('All Categories') }}'})
-    for (let cat of categories) {
+      let button = $(
+        '<button/>',
+        {
+          class: 'btn btn-default dropdown-toggle',
+          'data-toggle': 'dropdown'
+        }
+      )
+      .append($('<span/>', {class: options.css+'-label'}).text(options.text))
+      .append($('<span/>', {class: 'caret'}))
+      dropDown.append(button)
+
+      let dropDownMenu = $('<ul/>', {class: 'dropdown-menu'})
+      dropDown.append(dropDownMenu)
+
+      for (let val of options.values) {
         dropDownMenu.append($('<li/>')
-            .append($('<a/>', {href: '#'}).text(cat.value).data('categoryId', cat.id)
-                .click(onCategoryClick)
-            )
+          .append($('<a/>', {href: '#'}).text(val[1]).data('value', val[0])
+            .click(options.callback)
+          )
         )
+      }
+      buttonGroup.append(dropDown)
+      return dropDown
     }
+
+    let statusDropDown = createDropDown({
+      text: '{{ _('Open issues') }}',
+      css: 'status',
+      callback: onStatusClick,
+      values: [
+        ['open', '{{ _('Open issues') }}'],
+        ['all', '{{ _('All issues') }}']
+      ]
+    })
+
+    const categories = {{ categories|tojson|safe }}
+    let categoryDropDown = createDropDown({
+      text: '{{ _('All Categories') }}',
+      css: 'category',
+      callback: onCategoryClick,
+      values: [['0', '{{ _('All Categories') }}']].concat(categories.map(c => [c.id, c.value]))
+    })
+
   })
 </script>
 {% endblock %}

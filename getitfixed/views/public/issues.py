@@ -25,7 +25,7 @@ new_schema.add_before(
     SchemaNode(
         Int(),
         name="category_id",
-        title="Category",
+        title=_("Category"),
         widget=RelationSelectWidget(Category, "id", "label_fr", order_by="label_fr"),
     ),
 )
