@@ -63,16 +63,6 @@ USER_REPORTER = "customer"
 USER_AUTHORS = {USER_REPORTER: _("Reporter"), USER_ADMIN: _("Administrator")}
 
 
-# FIXME a file upload memory store is not appropriate for production
-# See http://docs.pylonsproject.org/projects/deform/en/latest/interfaces.html#deform.interfaces.FileUploadTempStore  # noqa
-class FileUploadTempStore(dict):
-    def preview_url(self, name):
-        return None
-
-
-_file_upload_temp_store = FileUploadTempStore()
-
-
 class Photo(FileData, Base):
     __tablename__ = "photo"
     __table_args__ = {"schema": schema}
@@ -81,7 +71,7 @@ class Photo(FileData, Base):
     __colanderalchemy_config__ = {
         "title": _("Photo"),
         "unknown": "preserve",
-        "widget": deform_ext.FileUploadWidget(_file_upload_temp_store),
+        "widget": deform_ext.FileUploadWidget(),
     }
     issue_id = Column(Integer, ForeignKey("{}.issue.id".format(schema)))
 
@@ -256,7 +246,7 @@ class Issue(Base):
     photos = relationship(
         Photo,
         cascade="all, delete-orphan",
-        info={"colanderalchemy": {"title": _("Photo")}},
+        info={"colanderalchemy": {"title": _("Photos")}},
     )
     firstname = Column(
         String(100), nullable=False, info={"colanderalchemy": {"title": _("Firstname")}}
