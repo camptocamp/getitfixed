@@ -1,7 +1,13 @@
-<div tal:repeat="child field.children"
-     tal:replace="structure child.render_template(field.widget.item_template)" >
-</div>
 <?python import json ?>
+<script tal:condition="exists: category_icon">
+(function(){
+  c2cgeoform.setItemIcon(${structure: json.dumps(category_icon)})
+})()
+</script>
+<div tal:define="item_template item_template|field.widget.readonly_item_template if readonly else field.widget.item_template;"
+     tal:repeat="child field.children"
+     tal:replace="structure child.render_template(item_template)" >
+</div>
 <script tal:condition="exists: deps">
 (function(){
   const dependencies = ${structure: json.dumps(deps)}
