@@ -1,7 +1,7 @@
 <?python import json ?>
-<script tal:condition="exists: category_icon">
+<script>
 (function(){
-  c2cgeoform.setItemIcon(${structure: json.dumps(category_icon)})
+  c2cgeoform.setItemIcon(${structure: json.dumps(obj.icon_url)})
 })()
 </script>
 <div tal:define="item_template item_template|field.widget.readonly_item_template if readonly else field.widget.item_template;"

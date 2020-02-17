@@ -61,11 +61,6 @@ def get_issue_url(issue):
     return request.route_url("c2cgeoform_item", id=issue.id)
 
 
-def get_issue_icon(issue):
-    request = get_current_request()
-    return issue.type.category.icon or "/getitfixed_static/icons/cat-default.png"
-
-
 @view_defaults(match_param=("application=getitfixed", "table=issues"))
 class IssueViews(AbstractViews):
 
@@ -80,7 +75,7 @@ class IssueViews(AbstractViews):
             "type", key="category", renderer=lambda issue: issue.type.category.label_fr
         ),
         _list_field("type", renderer=lambda issue: issue.type.label_fr),
-        _list_field("type", key="icon", renderer=get_issue_icon),
+        _list_field("type", key="icon", renderer=lambda issue: issue.icon_url),
     ]
 
     MSG_COL = {
@@ -137,15 +132,6 @@ class IssueViews(AbstractViews):
                 raise HTTPNotFound()
             base_edit = super().edit(schema=follow_schema, readonly=True)
             base_edit["item_name"] = self._get_object().description
-            base_edit["form_render_kwargs"].update(
-                {
-                    "category_icon": self._request.static_url(
-                        "getitfixed:static/assets/{}".format(
-                            self._get_object().category.icon
-                        )
-                    )
-                }
-            )
             return base_edit
 
     # For development/testing purpose

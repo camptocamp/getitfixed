@@ -298,6 +298,14 @@ class Issue(Base):
 
     category = association_proxy("type", "category")
 
+    @property
+    def icon_url(self):
+        return (
+            self.category.icon
+            if self.category and self.category.icon
+            else _getitfixed_config.get("default_icon")
+        )
+
 
 class Event(Base):
     __tablename__ = "event"
