@@ -94,13 +94,15 @@ def setup_test_data(dbsession):
     from getitfixed.models.getitfixed import Issue, Category, Type
 
     if dbsession.query(Category).count() == 0:
-        for i in range(5):
+        for i in range(4):
             dbsession.add(
                 Category(
                     label_en="Category «{}»".format(i),
                     label_fr="Catégorie «{}»".format(i),
                     email="test{}@toto.com".format(i),
-                    icon="/icons/{}".format(ICONS[i % 3]),
+                    icon="/getitfixed_static/icons/{}".format(ICONS[i % 3])
+                    if i != 3
+                    else None,
                 )
             )
     if dbsession.query(Type).count() == 0:
@@ -109,7 +111,7 @@ def setup_test_data(dbsession):
                 Type(
                     label_en="Type «{}»".format(i),
                     label_fr="Type «{}»".format(i),
-                    category_id=(i % 3) + 1,
+                    category_id=(i % 4) + 1,
                 )
             )
     if dbsession.query(Issue).count() == 0:

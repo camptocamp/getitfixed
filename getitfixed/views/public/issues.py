@@ -63,9 +63,7 @@ def get_issue_url(issue):
 
 def get_issue_icon(issue):
     request = get_current_request()
-    return request.static_url(
-        "getitfixed:static/assets/{}".format(issue.type.category.icon)
-    )
+    return issue.type.category.icon or "/getitfixed_static/icons/cat-default.png"
 
 
 @view_defaults(match_param=("application=getitfixed", "table=issues"))
