@@ -71,7 +71,11 @@ class Photo(FileData, Base):
     __colanderalchemy_config__ = {
         "title": _("Photo"),
         "unknown": "preserve",
-        "widget": deform_ext.FileUploadWidget(),
+        "widget": deform_ext.FileUploadWidget(
+            get_url=lambda request, id: request.route_url(
+                "c2cgeoform_item", table="photos", id=id
+            )
+        ),
     }
     issue_id = Column(Integer, ForeignKey("{}.issue.id".format(schema)))
 

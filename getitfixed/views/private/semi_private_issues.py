@@ -17,15 +17,7 @@ _list_field = partial(ListField, Issue)
 
 base_schema = GeoFormSchemaNode(
     Issue,
-    excludes=[
-        "email",
-        "firstname",
-        "lastname",
-        "phone",
-        "photos",
-        "events",
-        "public_events",
-    ],
+    excludes=["email", "firstname", "lastname", "phone", "events", "public_events"],
 )
 event_schema = GeoFormSchemaNode(Event)
 event_schema["status"].widget = HiddenWidget()
