@@ -4,3 +4,4 @@ plaster_pastedeploy
 psycopg2-binary
 pyramid_tm
 transaction
+beaker_redis

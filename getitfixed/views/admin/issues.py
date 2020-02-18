@@ -31,6 +31,7 @@ base_schema = GeoFormSchemaNode(
         "description",
         "localisation",
         "geometry",
+        "photos",
         "firstname",
         "lastname",
         "phone",

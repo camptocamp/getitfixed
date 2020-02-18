@@ -10,7 +10,12 @@ volumes:
 services:
 
   db:
-     image: camptocamp/getitfixed-postgresql:latest
+    image: camptocamp/getitfixed-postgresql:latest
+    restart: unless-stopped
+
+  redis:
+    image: redis:5
+    restart: unless-stopped
 
   getitfixed:
     image: ${DOCKER_BASE}-getitfixed:${DOCKER_TAG}
