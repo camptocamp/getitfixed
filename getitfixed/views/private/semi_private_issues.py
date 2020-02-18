@@ -76,6 +76,7 @@ class IssueViews(AbstractViews):
                     "event_form_render_kwargs": {
                         "request": self._request,
                         "user_admin": USER_ADMIN,
+                        "obj": issue,
                     },
                 }
             )

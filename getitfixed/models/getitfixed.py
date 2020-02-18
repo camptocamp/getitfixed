@@ -117,7 +117,6 @@ class Category(Base):
     icon = Column(
         String(150),
         info={"colanderalchemy": {"title": _("Label(en)"), "widget": HiddenWidget()}},
-        default_value={"/assets/icons/cat-default.png"},
     )
 
 
@@ -298,6 +297,14 @@ class Issue(Base):
     )
 
     category = association_proxy("type", "category")
+
+    @property
+    def icon_url(self):
+        return (
+            self.category.icon
+            if self.category and self.category.icon
+            else _getitfixed_config.get("default_icon")
+        )
 
 
 class Event(Base):
