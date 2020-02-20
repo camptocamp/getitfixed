@@ -31,15 +31,9 @@ services:
       - PGPASSWORD
       - PGDATABASE
       - PGOPTIONS
-      - GUNICORN_PARAMS
-      - VISIBLE_WEB_PROTOCOL
-      - VISIBLE_WEB_HOST
-      - VISIBLE_ENTRY_POINT
-      - PRINT_URL
-      - C2CWSGIUTILS_CONFIG
-      - SMTP_USER
-      - SMTP_PASSWORD
+      - INI_FILE
       - PROXY_PREFIX
+    command: 'pserve getitfixed://${INI_FILE} -n public'
     ports:
       - ${DOCKER_PORT}:8080
 

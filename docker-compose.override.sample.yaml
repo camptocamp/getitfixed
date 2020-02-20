@@ -7,10 +7,9 @@ version: '2'
 services:
 
   getitfixed:
+    image: ${DOCKER_BASE}-build:${DOCKER_TAG}
     volumes:
       - ${PWD}/getitfixed:/app/getitfixed
       - ${PWD}/acceptance_tests:/app/acceptance_tests
       - ${PWD}/../c2cgeoform/c2cgeoform:/opt/c2cgeoform/c2cgeoform
-    environment:
-      - GUNICORN_PARAMS=-b :8080 --worker-class gthread --threads 10 --workers 1 --max-requests 1000 --max-requests-jitter 50
-      - GUNICORN_CMD_ARGS=--reload
+    command: pserve --reload getitfixed://development.ini
