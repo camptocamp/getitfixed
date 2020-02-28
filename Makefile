@@ -24,20 +24,8 @@ export PGDATABASE
 export PGUSER
 export PGPASSWORD
 
-VISIBLE_WEB_PROTOCOL ?= http
-VISIBLE_WEB_HOST ?= localhost
-VISIBLE_ENTRY_POINT ?= /
-export VISIBLE_WEB_PROTOCOL
-export VISIBLE_WEB_HOST
-export VISIBLE_ENTRY_POINT
-
 PROXY_PREFIX ?=
 export PROXY_PREFIX
-
-SMTP_USER ?= truite
-SMTP_PASSWORD ?= brochet
-export SMTP_USER
-export SMTP_PASSWORD
 
 # End of customisable environment variables
 
@@ -57,7 +45,7 @@ MO_FILES = $(addprefix getitfixed/locale/, fr/LC_MESSAGES/getitfixed.mo de/LC_ME
 
 COMMON_DOCKER_RUN_OPTIONS ?= \
 	--name="getitfixed-build" \
-	--volume="${PWD}:/src" \
+	--volume="${PWD}:/app" \
 	--user=$(shell id -u) \
 	${DOCKER_BASE}-build:${DOCKER_TAG}
 
@@ -86,8 +74,7 @@ meacoffee: up
 
 .PHONY: up
 up: ## docker-compose up
-up:
-	make build
+up: build
 	docker-compose rm --stop --force getitfixed
 	docker-compose up -d
 
@@ -104,15 +91,15 @@ docker-compose-env: ## Build docker-compose environment file
 
 .PHONY: initdb
 initdb:
-	docker-compose exec getitfixed initialize_getitfixed_db c2c://development.ini#app --with-data=1
+	docker-compose exec getitfixed initialize_getitfixed_db getitfixed://development.ini#app --with-data=1
 
 .PHONY: initdb-with-data
 initdb-with-data:
-	docker-compose exec getitfixed initialize_getitfixed_db c2c://development.ini#app
+	docker-compose exec getitfixed initialize_getitfixed_db getitfixed://development.ini#app
 
 .PHONY: reinitdb
 reinitdb: ## Drop schema and regenerate it with development dataset
-	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://development.ini#app --force=1 --with-data=1
+	docker-compose run --rm getitfixed initialize_getitfixed_db getitfixed://development.ini#app --force=1 --with-data=1
 
 .PHONY: black
 black: docker-build-build
@@ -131,8 +118,7 @@ check: docker-build-build
 .PHONY: test
 test: ## Run tests
 test:
-	docker-compose run --rm getitfixed initialize_getitfixed_db c2c://tests.ini --force=1
-	docker-compose run --rm --user=$(shell id -u) getitfixed pytest /app/acceptance_tests
+	docker-compose -f docker-compose-test.yaml run --rm test
 
 .PHONY: clean
 clean: ## Clean generated files
@@ -169,7 +155,7 @@ psqldocs:
 .PHONY: pshell
 pshell: ## Launch getitfixed pshell
 pshell:
-	docker-compose run --rm getitfixed pshell c2c://development.ini
+	docker-compose run --rm getitfixed pshell getitfixed://development.ini
 
 .PHONY: update-catalog
 update-catalog: ## Update the source localisation files (*.po)

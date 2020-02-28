@@ -1,4 +1,28 @@
-FROM camptocamp/c2cwsgiutils:3 AS build
+##########################################
+# Common base for build/test and runtime #
+##########################################
+FROM python:3.8-slim AS base
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# install dependencies
+COPY ./requirements.txt /app/requirements.txt
+RUN pip3 install --disable-pip-version-check --no-cache-dir -r /app/requirements.txt && \
+  rm --recursive --force /tmp/* /var/tmp/* /root/.cache/*
+
+
+########################
+# Build and test image #
+########################
+FROM base AS build
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    gettext \
+    gnupg \
+    make
 
 RUN \
   . /etc/os-release && \
@@ -7,61 +31,38 @@ RUN \
   apt-get update && \
   apt-get install --assume-yes --no-install-recommends \
     'nodejs=10.*' \
-    gettext git make openjdk-8-jre-headless python-pip python-setuptools unzip wget && \
-  echo "Keep apt cache for now"
-  #apt-get clean && \
-  #rm --recursive --force /var/lib/apt/lists/*
+  && \
+  apt-get clean && \
+  rm --recursive --force /var/lib/apt/lists/*
 
-RUN \
-  pip3 install --disable-pip-version-check --no-cache-dir \
-    babel \
-    black==18.6b1 \
-    c2c.template \
-    flake8==3.7.8 \
-    lingua \
- && \
-  # for mypy
-  # touch /usr/local/lib/python3.6/dist-packages/zope/__init__.py && \
-  # touch /usr/local/lib/python3.6/dist-packages/c2c/__init__.py && \
-  rm --recursive --force /tmp/* /var/tmp/* /root/.cache/*
-
-RUN mkdir /opt/getitfixed
-
-COPY package.json /opt/getitfixed
+COPY package.json /opt/getitfixed/
 RUN cd /opt/getitfixed && npm install
 
-# We need to install getitfixed to get custom lingua_extractor
-COPY requirements.txt /opt/getitfixed
-RUN pip3 install -r /opt/getitfixed/requirements.txt
-COPY . /opt/getitfixed
-RUN pip3 install --no-deps -e /opt/getitfixed
+COPY requirements-dev.txt /tmp/
+RUN pip3 install --disable-pip-version-check --no-cache-dir -r /tmp/requirements-dev.txt && \
+  rm --recursive --force /tmp/* /var/tmp/* /root/.cache/*
 
-RUN mkdir /src
-WORKDIR /src
+WORKDIR /app
+COPY . /app/
+RUN pip3 install --no-deps -e .
 
 CMD ["make"]
 
 
-
-FROM camptocamp/c2cwsgiutils:3 AS getitfixed
+#################
+# Runtime image #
+#################
+FROM base AS getitfixed
 LABEL maintainer Camptocamp "info@camptocamp.com"
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-    apt-get install --assume-yes --no-install-recommends 'nodejs' && \
-    apt-get clean && \
-    rm --recursive --force /var/lib/apt/lists/*
+COPY --from=build /opt/getitfixed/ /opt/getitfixed/
+ENV NODE_PATH=/opt/thinkhazard/node_modules
 
-# For development
-COPY requirements-dev.txt /tmp/
-RUN pip3 install -r /tmp/requirements-dev.txt
-
-RUN mkdir /app
 COPY requirements.txt /app
 RUN pip3 install -r /app/requirements.txt
 
-COPY . /app/
 WORKDIR /app
-
-RUN pip3 install --no-deps -e .
+COPY --from=build /app/ /app/
+RUN pip install --no-deps -e .
 
 ENV PROXY_PREFIX=

@@ -9,6 +9,7 @@ from webtest import TestApp
 from wsgiref.simple_server import make_server
 
 from getitfixed.models import get_engine, get_session_factory, get_tm_session
+from getitfixed.scripts import wait_for_db
 from getitfixed.scripts.initializedb import init_db
 
 
@@ -22,6 +23,7 @@ def app_env():
 @pytest.mark.usefixtures("settings")
 def dbsession(settings):
     engine = get_engine(settings)
+    wait_for_db(engine)
     init_db(engine, force=True)
     session_factory = get_session_factory(engine)
     session = get_tm_session(session_factory, transaction.manager)

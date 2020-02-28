@@ -33,7 +33,9 @@ def main(global_config, **settings):
         request.response.status = 404
         return {}
 
-    config.add_notfound_view(notfound_view, renderer="getitfixed:templates/404.jinja2")
+    config.add_notfound_view(
+        notfound_view, append_slash=True, renderer="getitfixed:templates/404.jinja2"
+    )
 
     return config.make_wsgi_app()
 

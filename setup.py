@@ -31,11 +31,19 @@ setup(
     test_suite="getitfixed",
     install_requires=REQUIRES,
     entry_points="""\
-      [paste.app_factory]
-      main = getitfixed:main
-      [console_scripts]
-      initialize_getitfixed_db = getitfixed.scripts.initializedb:main
-      [lingua.extractors]
-      getitfixed = getitfixed.lingua_extractor:GetItFixedExtractor
-      """,
+        [paste.app_factory]
+            main = getitfixed:main
+        [console_scripts]
+            initialize_getitfixed_db = getitfixed.scripts.initializedb:main
+        [lingua.extractors]
+            getitfixed = getitfixed.lingua_extractor:GetItFixedExtractor
+        [plaster.loader_factory]
+            getitfixed = getitfixed.loader:Loader
+            getitfixed+ini = getitfixed.loader:Loader
+            getitfixed+egg = getitfixed.loader:Loader
+        [plaster.wsgi_loader_factory]
+            getitfixed = getitfixed.loader:Loader
+            getitfixed+ini = getitfixed.loader:Loader
+            getitfixed+egg = getitfixed.loader:Loader
+    """,
 )
