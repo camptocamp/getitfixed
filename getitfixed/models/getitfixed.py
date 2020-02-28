@@ -297,7 +297,9 @@ class Issue(Base):
         return (
             self.category.icon
             if self.category and self.category.icon
-            else _getitfixed_config.get("default_icon")
+            else _getitfixed_config.get(
+                "default_icon", "/getitfixed_static/icons/cat-default.png"
+            )
         )
 
 

@@ -21,10 +21,6 @@ def main(global_config, **settings):
         settings=settings, locale_negotiator="getitfixed.i18n.locale_negotiator"
     )
 
-    settings["getitfixed"].setdefault(
-        "default_icon", "/getitfixed_static/icons/cat-default.png"
-    )
-
     config.include("getitfixed")
     config.include("getitfixed.models")
     c2cgeoform.routes.register_routes(config)
