@@ -75,7 +75,13 @@ class IssueViews(AbstractViews):
             "type", key="category", renderer=lambda issue: issue.type.category.label_fr
         ),
         _list_field("type", renderer=lambda issue: issue.type.label_fr),
-        _list_field("type", key="icon", renderer=lambda issue: issue.icon_url),
+        _list_field(
+            "type",
+            key="icon",
+            renderer=lambda issue: partial(
+                issue.icon_url, request=get_current_request()
+            )(),
+        ),
     ]
 
     MSG_COL = {

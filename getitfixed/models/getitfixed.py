@@ -37,6 +37,7 @@ from c2cgeoform.models import FileData
 
 from getitfixed.i18n import _
 from getitfixed.models.meta import Base
+from getitfixed.url import generate_url
 
 schema = "getitfixed"
 
@@ -292,15 +293,15 @@ class Issue(Base):
 
     category = association_proxy("type", "category")
 
-    @property
-    def icon_url(self):
-        return (
+    def icon_url(self, request):
+        icon = (
             self.category.icon
             if self.category and self.category.icon
             else _getitfixed_config.get(
-                "default_icon", "/getitfixed_static/icons/cat-default.png"
+                "default_icon", "getitfixed:static/icons/cat-default.png"
             )
         )
+        return generate_url(request, icon)
 
 
 class Event(Base):
