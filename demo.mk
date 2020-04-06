@@ -22,8 +22,9 @@ docker-config: ## Build config.yaml file
 
 .PHONY: demo
 demo: ## Pull docker images, run composition and show logs
-demo: docker-compose-env docker-config docker-pull initdb
+demo: docker-compose-env docker-config docker-pull
 	docker-compose stop getitfixed
 	docker-compose rm --force getitfixed
 	docker-compose up -d
+	make initdb
 	docker-compose logs -f getitfixed
