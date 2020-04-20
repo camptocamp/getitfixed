@@ -158,36 +158,36 @@ class IssueViews(AbstractViews):
             if isinstance(base_save, HTTPFound):
                 # Send email to the issue Reporter
                 self.send_notification_email(
+                    self._obj.email,
                     "new_issue_email",
-                    **{
-                        "username": "{} {}".format(
-                            self._obj.firstname, self._obj.lastname
-                        ),
-                        "issue": self._obj,
-                        "issue-link": self._request.route_url(
-                            "c2cgeoform_item_private", id=self._obj.hash
-                        ),
-                    },
+                    self._request.route_url(
+                        "c2cgeoform_item_private",
+                        application="getitfixed",
+                        id=self._obj.hash,
+                    ),
                 )
                 # Send email to the category Manager
                 self.send_notification_email(
+                    self._obj.category.email,
                     "admin_new_issue_email",
-                    **{
-                        "username": "",
-                        "issue": self._obj,
-                        "issue-link": self._request.route_url(
-                            "c2cgeoform_item", application="admin", id=self._obj.hash
-                        ),
-                    },
+                    self._request.route_url(
+                        "c2cgeoform_item",
+                        application="getitfixed_admin",
+                        id=self._obj.hash,
+                    ),
                 )
             else:
                 base_save["item_name"] = _("New")
         return base_save
 
-    def send_notification_email(self, template_name, **template_kwargs):
+    def send_notification_email(self, send_to, template_name, link):
         send_email(
             request=self._request,
-            to=self._obj.email,
+            to=send_to,
             template_name=template_name,
-            template_kwargs=template_kwargs,
+            template_kwargs={
+                "username": "{} {}".format(self._obj.firstname, self._obj.lastname),
+                "issue": self._obj,
+                "issue-link": link,
+            },
         )

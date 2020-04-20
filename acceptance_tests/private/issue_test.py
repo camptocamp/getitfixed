@@ -5,7 +5,7 @@ from c2cgeoform.testing.views import AbstractViewsTests
 
 from getitfixed.models.getitfixed import Category, Event, Issue, Type
 
-from unittest.mock import patch
+from unittest.mock import patch, call, ANY
 
 
 @pytest.fixture(scope="function")
@@ -62,9 +62,9 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
 
     _prefix = "/getitfixed/private/issues"
 
-    @patch("getitfixed.emails.email_service.smtplib.SMTP")
+    @patch("getitfixed.views.private.semi_private_events.send_email")
     def test_edit_then_post_comment(
-        self, smtp_mock, test_app, issue_test_data, dbsession
+        self, send_email, test_app, issue_test_data, dbsession
     ):
         issue = issue_test_data["issues"][0]
         resp = self.get(test_app, "/{}".format(issue.hash), status=200)
@@ -106,7 +106,19 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
         assert "new" == obj.status
         assert "This is a user comment" == obj.comment
         assert "new" == issue.status
-        assert smtp_mock.call_count == 1
+
+        assert send_email.call_count == 1
+        assert send_email.mock_calls[0] == call(
+            request=ANY,
+            to='0.is@abit.ch',
+            template_name='update_issue_email',
+            template_kwargs={
+                'username': 'Firstname0 Lastname0',
+                'issue': obj.issue,
+                'event': obj,
+                'issue-link': 'http://localhost/getitfixed_admin/issues/{}#existing_events_form'.format(obj.issue.hash),
+            },
+        )
 
     @patch("getitfixed.emails.email_service.smtplib.SMTP")
     def test_edit_then_post_empty_comment(

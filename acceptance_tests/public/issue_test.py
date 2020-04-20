@@ -15,7 +15,7 @@ from getitfixed.models.getitfixed import (
 )
 from getitfixed.views.public.issues import IssueViews
 
-from unittest.mock import patch
+from unittest.mock import patch, call, ANY
 
 STATUSES = [STATUS_VALIDATED, STATUS_NEW]
 
@@ -87,8 +87,8 @@ class TestIssueViews(AbstractViewsTests):
         # We do not show new (not validated) issues
         assert 5 == len(resp.json["features"])
 
-    @patch("getitfixed.emails.email_service.smtplib.SMTP")
-    def test_new_then_save(self, smtp_mock, dbsession, test_app, issue_test_data):
+    @patch("getitfixed.views.public.issues.send_email")
+    def test_new_then_save(self, send_email, dbsession, test_app, issue_test_data):
         resp = test_app.get("/getitfixed/issues/new", status=200)
 
         form = resp.form
@@ -130,8 +130,27 @@ class TestIssueViews(AbstractViewsTests):
         assert "04 58 48 20 00" == obj.phone
         assert "andreas.ford@domain.net" == obj.email
 
-        assert smtp_mock.called, "method should have been called"
-        assert smtp_mock.call_count == 2
+        assert 2 == send_email.call_count
+        assert send_email.mock_calls[0] == call(
+            request=ANY,
+            to='andreas.ford@domain.net',
+            template_name='new_issue_email',
+            template_kwargs={
+                'username': 'Andreas Ford',
+                'issue': obj,
+                'issue-link': 'http://localhost/getitfixed/private/issues/{}'.format(obj.hash),
+            },
+        )
+        assert send_email.mock_calls[1] == call(
+            request=ANY,
+            to='0.is@abit.ch',
+            template_name='admin_new_issue_email',
+            template_kwargs={
+                'username': 'Andreas Ford',
+                'issue': obj,
+                'issue-link': 'http://localhost/getitfixed_admin/issues/{}'.format(obj.hash),
+            },
+        )
 
     def test_open(self, dbsession, test_app, issue_test_data):
 
