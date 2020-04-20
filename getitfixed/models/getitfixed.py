@@ -1,5 +1,8 @@
 # coding=utf-8
 from uuid import uuid4
+from pkg_resources import resource_filename
+
+from pyramid.i18n import make_localizer
 
 from sqlalchemy import (
     Boolean,
@@ -217,6 +220,23 @@ class Issue(Base):
             }
         },
     )
+
+    @property
+    def status_de(self):
+        return self.status_i18n("de")
+
+    @property
+    def status_en(self):
+        return self.status_i18n("en")
+
+    @property
+    def status_fr(self):
+        return self.status_i18n("fr")
+
+    def status_i18n(self, locale):
+        localizer = make_localizer(locale, [resource_filename("getitfixed", "locale")])
+        return localizer.translate(STATUSES[self.status])
+
     description = Column(
         Text,
         nullable=False,
