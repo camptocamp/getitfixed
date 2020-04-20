@@ -70,7 +70,7 @@ class TestAdminIssueViews(AbstractViewsTests):
             ("status", "Status", "true"),
             ("request_date", "Request date", "true"),
             ("type_id", "Type", "true"),
-            ("description", "Description", "true"),
+            ("description", "Description of the problem", "true"),
             ("localisation", "Localisation", "true"),
             ("firstname", "Firstname", "true"),
             ("lastname", "Lastname", "true"),

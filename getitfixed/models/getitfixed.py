@@ -222,7 +222,7 @@ class Issue(Base):
         nullable=False,
         info={
             "colanderalchemy": {
-                "title": _("Description"),
+                "title": _("Description of the problem"),
                 "widget": TextAreaWidget(rows=3),
             }
         },
