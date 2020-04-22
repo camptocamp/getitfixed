@@ -1,5 +1,5 @@
 c2c.template
-c2cgeoform>=2.1.10
+c2cgeoform>=2.1.13
 beaker_redis
 plaster_pastedeploy
 psycopg2-binary
