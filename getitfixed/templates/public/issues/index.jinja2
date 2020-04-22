@@ -41,6 +41,7 @@
       f => (window.location.href = f.getProperties()['url'])
     )
   )
+  map.getViewport().appendChild(document.querySelector('.legend-btn'))
   const toggleLegend = function () {
     $('.feature-legend').toggleClass('hidden')
   }
