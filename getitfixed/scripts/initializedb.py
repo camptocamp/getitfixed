@@ -100,7 +100,7 @@ def setup_test_data(dbsession):
                     label_en="Category «{}»".format(i),
                     label_fr="Catégorie «{}»".format(i),
                     email="test{}@toto.com".format(i),
-                    icon="/getitfixed_static/icons/{}".format(ICONS[i % 3])
+                    icon="getitfixed:static/icons/{}".format(ICONS[i % 3])
                     if i != 3
                     else None,
                 )
