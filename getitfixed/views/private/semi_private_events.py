@@ -36,18 +36,13 @@ class EventViews(AbstractViews):
                 self.send_notification_email(
                     self._obj.issue.category.email,
                     "update_issue_email",
-                    **{
-                        "issue": self._obj.issue,
-                        "event": self._obj,
-                        "username": "",
-                        "issue-link": self._request.route_url(
-                            "c2cgeoform_item",
-                            application="getitfixed_admin",
-                            table="issues",
-                            id=self._obj.issue.hash,
-                            _anchor="existing_events_form",
-                        ),
-                    }
+                    self._request.route_url(
+                        "c2cgeoform_item",
+                        application="getitfixed_admin",
+                        table="issues",
+                        id=self._obj.issue.hash,
+                        _anchor="existing_events_form",
+                    ),
                 )
             # Redirect to issue form
             return HTTPFound(
@@ -62,10 +57,17 @@ class EventViews(AbstractViews):
 
         return resp
 
-    def send_notification_email(self, send_to, template_name, **template_kwargs):
+    def send_notification_email(self, send_to, template_name, link):
         send_email(
             request=self._request,
             to=send_to,
             template_name=template_name,
-            template_kwargs=template_kwargs,
+            template_kwargs={
+                "username": "{} {}".format(
+                    self._obj.issue.firstname, self._obj.issue.lastname
+                ),
+                "issue": self._obj.issue,
+                "event": self._obj,
+                "issue-link": link,
+            },
         )
