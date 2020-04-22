@@ -24,16 +24,6 @@ body {
 }
 
 /*
- * Public issues
- */
-.btn-new-issue {
-  left: 50%;
-  width: 12em;
-  margin-right: 10em;
-  top: 7rem;
-}
-
-/*
  * Legend panel
  */
 
@@ -84,11 +74,11 @@ body {
   position: absolute;
   z-index: 10;
   left: 50%;
-  width: 12em;
+  width: 11em;
   height: 3em;
   display: inline-grid;
   align-items: center;
-  margin-left: -6em;
+  margin-left: -5.5em;
   top: 8.5rem;
   border-radius: 4px;
   padding: 2px;
