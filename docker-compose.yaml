@@ -33,7 +33,7 @@ services:
       - PGOPTIONS
       - INI_FILE
       - PROXY_PREFIX
-    command: 'pserve getitfixed://${INI_FILE} -n public'
+    command: 'pserve getitfixed://${INI_FILE}'
     ports:
       - ${DOCKER_PORT}:8080
 

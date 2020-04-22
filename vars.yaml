@@ -66,7 +66,7 @@ vars:
          email_body: |
             Hello {username},
 
-            The issue {issue.hash} created on the {issue.request_date} has evolved it is now {issue.status}.
+            The issue {issue.hash} created on the {issue.request_date} has evolved it is now {issue.status_en}.
             {event.comment}
             You can follow it here {issue-link}
 
