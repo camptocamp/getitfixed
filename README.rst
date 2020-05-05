@@ -13,6 +13,9 @@ Build the docs
 Demo :
 https://geomapfish-demo.camptocamp.com/getitfixed/getitfixed/issues
 
+Demo admin :
+https://geomapfish-demo.camptocamp.com/getitfixed/getitfixed_admin/issues
+
 Create a development instance
 -----------------------------
 
