@@ -318,7 +318,7 @@ class Issue(Base):
             self.category.icon
             if self.category and self.category.icon
             else _getitfixed_config.get(
-                "default_icon", "getitfixed:static/icons/cat-default.png"
+                "default_icon", "static://getitfixed:static/icons/cat-default.png"
             )
         )
         return generate_url(request, icon)
