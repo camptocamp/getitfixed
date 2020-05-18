@@ -67,6 +67,16 @@ USER_REPORTER = "customer"
 USER_AUTHORS = {USER_REPORTER: _("Reporter"), USER_ADMIN: _("Administrator")}
 
 
+def default_icon():
+    return _getitfixed_config.get(
+        "default_icon", "static://getitfixed:static/icons/cat-default.png"
+    )
+
+
+def default_icon_url(request):
+    return generate_url(request, default_icon())
+
+
 class Photo(FileData, Base):
     __tablename__ = "photo"
     __table_args__ = {"schema": schema}
@@ -117,6 +127,12 @@ class Category(Base):
         info={"colanderalchemy": {"title": _("Label(en)"), "widget": HiddenWidget()}},
     )
 
+    def icon_url(self, request):
+        return generate_url(request, self.icon or default_icon())
+
+    def label(self, locale):
+        return getattr(self, "label_{}".format(locale))
+
 
 class Type(Base):
     __tablename__ = "type"
@@ -157,6 +173,12 @@ class Type(Base):
         },
     )
     category = relationship(Category, backref="types")
+
+    def icon_url(self, request):
+        return self.category.icon_url(request)
+
+    def label(self, locale):
+        return getattr(self, "label_{}".format(locale))
 
 
 class Issue(Base):
@@ -314,14 +336,7 @@ class Issue(Base):
     category = association_proxy("type", "category")
 
     def icon_url(self, request):
-        icon = (
-            self.category.icon
-            if self.category and self.category.icon
-            else _getitfixed_config.get(
-                "default_icon", "static://getitfixed:static/icons/cat-default.png"
-            )
-        )
-        return generate_url(request, icon)
+        return self.type.icon_url(request) if self.type else default_icon_url(request)
 
 
 class Event(Base):
