@@ -9,6 +9,9 @@ def add_renderer_globals(event):
     request = event["request"]
     event["_"] = request.translate
     event["localizer"] = request.localizer
+    event["layout"] = request.registry.settings["getitfixed"].get(
+        "layout", "getitfixed:templates/layout.jinja2"
+    )
 
 
 tsf1 = TranslationStringFactory("getitfixed")

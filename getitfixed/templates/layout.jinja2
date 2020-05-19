@@ -7,7 +7,7 @@
     <meta name="description" content="pyramid web application">
     <meta name="author" content="Camptocamp">
 
-    <title>{{_('getitfixed')}}</title>
+    <title>{{_('GetItFixed!')}}</title>
     <link rel="shortcut icon" href="{{request.static_url('getitfixed:static/favicon.ico')}}">
 
     <!-- Bootstrap core CSS -->
@@ -60,14 +60,17 @@
 
   <body class="{% if request.c2cgeoform_application is not none %} app-{{request.c2cgeoform_application.name()}}{% endif %}">
 
+    {% block header %}
     <header class="container">
-      <h3 class="title">{{_('getitfixed')}}</h3>
+      <h3 class="title">{{_('GetItFixed!')}}</h3>
     </header>
+    {% endblock header  %}
 
     {% block content %}
       <p>No content</p>
     {% endblock content %}
 
+    {% block footer %}
     <footer class="footer text-muted">
       <div class="container">
         <div class="row">
@@ -87,6 +90,7 @@
         </div>
       </div>
     </footer>
+    {% endblock footer %}
 
   </body>
 </html>
