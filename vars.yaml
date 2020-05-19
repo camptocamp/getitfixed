@@ -5,7 +5,7 @@ vars:
       host: smtp
 
    getitfixed:
-      default_icon: "getitfixed:static/icons/cat-default.png"
+      default_icon: "static://getitfixed:static/icons/cat-default.png"
       map:
         srid: 21781
         projections:
