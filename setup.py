@@ -34,7 +34,7 @@ setup(
         [paste.app_factory]
             main = getitfixed:main
         [console_scripts]
-            initialize_getitfixed_db = getitfixed.scripts.initializedb:main
+            getitfixed_setup_test_data = getitfixed.scripts.setup_test_data:main
         [lingua.extractors]
             getitfixed = getitfixed.lingua_extractor:GetItFixedExtractor
         [plaster.loader_factory]

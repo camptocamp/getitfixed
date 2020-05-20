@@ -1,3 +1,4 @@
+alembic
 c2c.template
 c2cgeoform>=2.1.13
 beaker_redis

@@ -60,12 +60,6 @@ help: ## Display this help message
 	@echo "Possible targets:"
 	@grep -Eh '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "    %-20s%s\n", $$1, $$2}'
 
-.PHONY: meadeca
-meadeca: ## Build, run init_db and show logs
-meadeca: up
-	make initdb-with-data
-	docker-compose logs -f getitfixed
-
 .PHONY: meacoffee
 meacoffee: ## Build, run and show logs
 meacoffee: up
@@ -91,15 +85,8 @@ docker-compose-env: ## Build docker-compose environment file
 
 .PHONY: initdb
 initdb:
-	docker-compose exec getitfixed initialize_getitfixed_db getitfixed://development.ini#app --with-data=1
-
-.PHONY: initdb-with-data
-initdb-with-data:
-	docker-compose exec getitfixed initialize_getitfixed_db getitfixed://development.ini#app
-
-.PHONY: reinitdb
-reinitdb: ## Drop schema and regenerate it with development dataset
-	docker-compose run --rm getitfixed initialize_getitfixed_db getitfixed://development.ini#app --force=1 --with-data=1
+	docker-compose exec getitfixed alembic -n getitfixed upgrade head
+	docker-compose exec getitfixed getitfixed_setup_test_data getitfixed://development.ini#app
 
 .PHONY: black
 black: docker-build-build

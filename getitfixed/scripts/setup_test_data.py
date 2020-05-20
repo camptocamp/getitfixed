@@ -11,6 +11,9 @@ from pyramid.scripts.common import parse_vars, get_config_loader
 from getitfixed.scripts import wait_for_db
 
 ICONS = ["gif-black.png", "gif-green.png", "gif-red.png"]
+DESCRIPTIONS = ("Déchets sur la voie publique", "Nid de poule")
+FIRSTNAMES = ("Dale", "Teresa", "Beatrice", "Darcie")
+LASTNAMES = ("Lamb", "Evans", "Alexander", "Rowe", "Ford")
 
 
 def usage(argv):
@@ -33,51 +36,15 @@ def main(argv=sys.argv):
     settings = loader.get_wsgi_app_settings(defaults=options)
 
     # Import the model after settings are loaded
-    from getitfixed.models import get_engine
+    from getitfixed.models import get_engine, get_session_factory, get_tm_session
 
     engine = get_engine(settings)
     wait_for_db(engine)
 
-    with engine.begin() as connection:
-        init_db(
-            connection, force="--force" in options, with_data="--with-data" in options
-        )
-
-
-def init_db(connection, force=False, with_data=False):
-    # Import the model after settings are loaded
-    from getitfixed.models import get_session_factory, get_tm_session
-    from getitfixed.models.getitfixed import schema
-    from getitfixed.models.meta import Base
-
-    if force:
-        if schema_exists(connection, schema):
-            connection.execute("DROP SCHEMA {} CASCADE;".format(schema))
-
-    if not schema_exists(connection, schema):
-        connection.execute('CREATE SCHEMA "{}";'.format(schema))
-
-    Base.metadata.create_all(connection)
-
-    session_factory = get_session_factory(connection)
-
+    session_factory = get_session_factory(engine)
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
-        if with_data:
-            setup_test_data(dbsession)
-
-
-def schema_exists(connection, schema_name):
-    sql = """
-SELECT count(*) AS count
-FROM information_schema.schemata
-WHERE schema_name = '{}';
-""".format(
-        schema_name
-    )
-    result = connection.execute(sql)
-    row = result.first()
-    return row[0] == 1
+        setup_test_data(dbsession)
 
 
 def get_geometry(dbsession):
@@ -117,13 +84,6 @@ def setup_test_data(dbsession):
     if dbsession.query(Issue).count() == 0:
         for i in range(100):
             dbsession.add(_issue(i, (i % 15) + 1, dbsession))
-
-
-DESCRIPTIONS = ("Déchets sur la voie publique", "Nid de poule")
-
-FIRSTNAMES = ("Dale", "Teresa", "Beatrice", "Darcie")
-
-LASTNAMES = ("Lamb", "Evans", "Alexander", "Rowe", "Ford")
 
 
 def get_value(col, i):
