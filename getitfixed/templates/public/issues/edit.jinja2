@@ -11,3 +11,17 @@
 
 </div>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+  (function() {
+    let oid = '{{form['geometry'].oid}}'
+    let params = new URL(window.location).searchParams
+    deform.addCallback(oid, function () {
+      let view = c2cgeoform.getObjectMap(oid).getView()
+      view.setCenter([params.get('x'), params.get('y')].map(parseFloat))
+      view.setZoom(parseFloat(params.get('z')))
+    })
+  })()
+</script>
+{% endblock scripts %}

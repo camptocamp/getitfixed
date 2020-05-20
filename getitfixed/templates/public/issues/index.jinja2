@@ -47,6 +47,15 @@
   }
   $('.gif-glyphicon').on('click', toggleLegend)
   $('.close-button').on('click', toggleLegend)
+
+  $('.btn-new-issue').on('click', function() {
+    let center = map.getView().getCenter()
+    let zoom = map.getView().getZoom()
+    $(this).attr(
+      'href',
+      $(this).attr('href') + `?x=${center[0]}&y=${center[1]}&z=${zoom}`
+    )
+  })
 }())
 </script>
 {% endblock content %}
