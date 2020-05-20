@@ -173,6 +173,18 @@ class Type(Base):
         },
     )
     category = relationship(Category, backref="types")
+    wms_layer = Column(
+        String(255),
+        info={
+            "colanderalchemy": {
+                "title": _("WMS layer"),
+                "description": _(
+                    "Example: https://service.wms/?service=WMS&version=1.0.3&layer=layername"
+                ),
+                "widget": TextInputWidget(),
+            }
+        },
+    )
 
     def icon_url(self, request):
         return self.category.icon_url(request)
