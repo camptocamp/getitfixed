@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2020-04-20 15:51+0000\n"
+"POT-Creation-Date: 2020-05-25 09:41+0000\n"
 "PO-Revision-Date: 2016-01-29 14:19+0100\n"
 "Last-Translator: Arnaud Morvan <contact@camptocamp.com>\n"
 "Language-Team: German\n"
@@ -17,155 +17,155 @@ msgstr ""
 "Generated-By: Lingua 4.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: getitfixed/models/getitfixed.py:54 getitfixed/views/public/issues.py:128
-#: getitfixed/views/public/issues.py:146 getitfixed/views/public/issues.py:184
+#: getitfixed/models/getitfixed.py:58 getitfixed/views/public/issues.py:134
+#: getitfixed/views/public/issues.py:152 getitfixed/views/public/issues.py:186
 msgid "New"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:55
+#: getitfixed/models/getitfixed.py:59
 msgid "Validated"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:56
+#: getitfixed/models/getitfixed.py:60
 msgid "In progress"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:57
+#: getitfixed/models/getitfixed.py:61
 msgid "Waiting for Reporter"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:58
+#: getitfixed/models/getitfixed.py:62
 msgid "Resolved"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:63
+#: getitfixed/models/getitfixed.py:67
 msgid "Reporter"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:63
+#: getitfixed/models/getitfixed.py:67
 msgid "Administrator"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:72
+#: getitfixed/models/getitfixed.py:76
 msgid "Photo"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:86 getitfixed/models/getitfixed.py:144
+#: getitfixed/models/getitfixed.py:90 getitfixed/models/getitfixed.py:148
 #: getitfixed/views/public/issues.py:28
 msgid "Category"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:86
+#: getitfixed/models/getitfixed.py:90
 msgid "Categories"
 msgstr ""
 
 #.
 #. the `colanderalchemy` property allows to set a custom title for the column
 #. or to use a specific widget.
-#: getitfixed/models/getitfixed.py:91 getitfixed/models/getitfixed.py:125
-#: getitfixed/models/getitfixed.py:173 getitfixed/models/getitfixed.py:313
+#: getitfixed/models/getitfixed.py:95 getitfixed/models/getitfixed.py:129
+#: getitfixed/models/getitfixed.py:177 getitfixed/models/getitfixed.py:334
 msgid "Identifier"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:96 getitfixed/models/getitfixed.py:130
+#: getitfixed/models/getitfixed.py:100 getitfixed/models/getitfixed.py:134
 msgid "Label(fr)"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:102 getitfixed/models/getitfixed.py:113
-#: getitfixed/models/getitfixed.py:136
+#: getitfixed/models/getitfixed.py:106 getitfixed/models/getitfixed.py:117
+#: getitfixed/models/getitfixed.py:140
 msgid "Label(en)"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:108 getitfixed/models/getitfixed.py:268
+#: getitfixed/models/getitfixed.py:112 getitfixed/models/getitfixed.py:289
 msgid "Email"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:120 getitfixed/models/getitfixed.py:195
-#: getitfixed/models/getitfixed.py:319
+#: getitfixed/models/getitfixed.py:124 getitfixed/models/getitfixed.py:199
+#: getitfixed/models/getitfixed.py:340
 msgid "Type"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:120
+#: getitfixed/models/getitfixed.py:124
 msgid "Types"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:150 getitfixed/models/getitfixed.py:201
+#: getitfixed/models/getitfixed.py:154 getitfixed/models/getitfixed.py:205
 msgid "- Select -"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:162
+#: getitfixed/models/getitfixed.py:166
 #: getitfixed/templates/public/issues/edit.jinja2:7
 msgid "Issue"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:163
+#: getitfixed/models/getitfixed.py:167
 #: getitfixed/templates/admin/issues/edit.jinja2:5
 #: getitfixed/templates/public/issues/edit.jinja2:6
 msgid "Issues"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:187
+#: getitfixed/models/getitfixed.py:191
 msgid "Request date"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:213 getitfixed/models/getitfixed.py:326
+#: getitfixed/models/getitfixed.py:217 getitfixed/models/getitfixed.py:347
 msgid "Status"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:225
+#: getitfixed/models/getitfixed.py:246
 msgid "Description of the problem"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:233
+#: getitfixed/models/getitfixed.py:254
 msgid "Localisation"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:239
+#: getitfixed/models/getitfixed.py:260
 msgid "Position"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:252
+#: getitfixed/models/getitfixed.py:273
 msgid "Photos"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:255
+#: getitfixed/models/getitfixed.py:276
 msgid "Firstname"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:258
+#: getitfixed/models/getitfixed.py:279
 msgid "Lastname"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:261
+#: getitfixed/models/getitfixed.py:282
 msgid "Phone"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:270
+#: getitfixed/models/getitfixed.py:291
 msgid "This field is required to keep you informed about issue events"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:282 getitfixed/models/getitfixed.py:309
+#: getitfixed/models/getitfixed.py:303 getitfixed/models/getitfixed.py:330
 #: getitfixed/templates/admin/issues/edit.jinja2:13
 msgid "Events"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:309
+#: getitfixed/models/getitfixed.py:330
 msgid "Event"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:337
+#: getitfixed/models/getitfixed.py:358
 msgid "Date"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:340
+#: getitfixed/models/getitfixed.py:361
 msgid "Comment"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:347
+#: getitfixed/models/getitfixed.py:368
 msgid "Private"
 msgstr ""
 
-#: getitfixed/models/getitfixed.py:356
+#: getitfixed/models/getitfixed.py:377
 msgid "Author"
 msgstr ""
 
@@ -173,18 +173,18 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: getitfixed/views/public/issues.py:82
+#: getitfixed/views/public/issues.py:88
 msgid ""
 "Thank you for your report, it has been registered with following details, "
 "and will be treated as soon as possible."
 msgstr ""
 
-#: getitfixed/views/public/issues.py:87
+#: getitfixed/views/public/issues.py:93
 msgid "Please check that the copy fits before submitting."
 msgstr ""
 
-#: getitfixed/templates/layout.jinja2:10 getitfixed/templates/layout.jinja2:64
-msgid "getitfixed"
+#: getitfixed/templates/layout.jinja2:10 getitfixed/templates/layout.jinja2:65
+msgid "GetItFixed!"
 msgstr ""
 
 #: getitfixed/templates/admin/issues/grid.jinja2:61
@@ -263,7 +263,7 @@ msgid ""
 "Hello {username},\n"
 "\n"
 "The issue {issue.hash} created on the {issue.request_date} has evolved it is "
-"now {issue.status}.\n"
+"now {issue.status_en}.\n"
 "{event.comment}\n"
 "You can follow it here {issue-link}\n"
 "\n"
