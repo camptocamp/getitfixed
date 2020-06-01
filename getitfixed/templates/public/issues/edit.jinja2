@@ -7,6 +7,14 @@
     <li class="active">{{request.translate(item_name[:80]) if item_name else _('Issue')}}</li>
   </ol>
 
+  <div class="focus">
+    <div class="subform">
+      <div>
+        <button type="button" class="btn btn-primary next">{{_('Next')}}</button>
+      </div>
+    </div>
+  </div>
+
   {% include 'c2cgeoform:/templates/edit.jinja2' %}
 
 </div>
@@ -15,18 +23,54 @@
 {% block scripts %}
 <script>
   (function() {
-    let oid = '{{form['geometry'].oid}}'
+    let oid = '{{form['geometry'].oid if 'geometry' in form else ''}}'
+    if (!oid) { return }
+
+    let newIssue = {{'true' if new else 'false'}}
     let params = new URL(window.location).searchParams
     let [x, y, z] = ['x', 'y', 'z'].map(_ => params.get(_))
-    if (!x || !y || !z) {
-      return
+
+    const getSelectedText = el => {
+      const sel = el.querySelector('select')
+      return sel.options[sel.selectedIndex].text
     }
+
     deform.addCallback(oid, function () {
       let map = c2cgeoform.getObjectMap(oid)
-      if (map.getLayers().item(1).getSource().getFeatures().length === 0) {
-        map.getView().setCenter([params.get('x'), params.get('y')].map(parseFloat))
-        map.getView().setZoom(parseFloat(params.get('z')))
+      let features = map.getLayers().item(1).getSource().getFeatures()
+      if (features.length === 0) {
+        if (x && y && z) {
+          map.getView().setCenter([params.get('x'), params.get('y')].map(parseFloat))
+          map.getView().setZoom(parseFloat(params.get('z')))
+        }
+      } else {
+        map.getView().fit(features[0].getGeometry().getExtent())
       }
+
+      if (!window.matchMedia('(max-width: 576px)').matches || !newIssue) { return }
+
+      document.body.classList.add('focused')
+      window.scrollTo(0, 0)
+      let focus = document.querySelector('.focus')
+      let mapEl = document.querySelector(`#item-${oid}`)
+      focus.append(mapEl)
+
+      let subform = document.querySelector('.subform')
+      let typeEl = document.querySelector(`[class~=item-type_id]`)
+      let catEl = document.querySelector(`[class~=item-category_id]`)
+      let fieldset = document.querySelector('fieldset')
+      subform.prepend(typeEl)
+      subform.prepend(catEl)
+      map.updateSize()
+
+      focus.querySelector('.next').addEventListener('click', () => {
+        document.body.classList.remove('focused')
+        ;[typeEl, catEl, mapEl].forEach(e => (fieldset.prepend(e)))
+        c2cgeoform.setReadOnly(oid)
+        mapEl.querySelector('label').innerText = getSelectedText(catEl) + ' / ' + getSelectedText(typeEl)
+        ;[typeEl, catEl, focus].forEach(e => {e.style.display = 'none'})
+        mapEl.scrollIntoView({ behavior: 'smooth' })
+      })
     })
   })()
 </script>

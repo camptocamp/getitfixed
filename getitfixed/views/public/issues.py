@@ -136,12 +136,14 @@ class IssueViews(AbstractViews):
             base_edit = super().edit()
             base_edit["form_render_kwargs"].update({"deps": get_types(self._request)})
             base_edit["item_name"] = _("New")
+            base_edit["new"] = True
             return base_edit
         else:
             if not self._request.matchdict["id"].isdigit():
                 raise HTTPNotFound()
             base_edit = super().edit(schema=follow_schema, readonly=True)
             base_edit["item_name"] = self._get_object().description
+            base_edit["new"] = False
             return base_edit
 
     # For development/testing purpose
