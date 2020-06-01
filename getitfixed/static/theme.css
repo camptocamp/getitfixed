@@ -136,10 +136,13 @@ body {
   position: absolute;
   width: 100vw;
   height: 100vh;
-  background: rgb(255 255 255 / 80%);
+  background: rgb(255 255 255);
   z-index: 10;
   margin-left: -15px;
   top: 0;
+}
+.focus .item-geometry label {
+  display: none;
 }
 .focus .map.cross {
   position: absolute;
