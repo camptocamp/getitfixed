@@ -23,7 +23,7 @@
 {% block scripts %}
 <script>
   (function() {
-    let oid = '{{form['geometry'].oid if 'geometry' in form else ''}}'
+    let oid = '{{form['geometry'].oid if (form.__class__.__name__ != 'ValidationFailure') and ('geometry' in form) else ''}}'
     if (!oid) { return }
 
     let newIssue = {{'true' if new else 'false'}}
