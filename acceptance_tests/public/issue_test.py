@@ -153,7 +153,6 @@ class TestIssueViews(AbstractViewsTests):
         )
 
     def test_open(self, dbsession, test_app, issue_test_data):
-
         issue = dbsession.query(Issue).first()
         resp = test_app.get("/getitfixed/issues/{}".format(issue.id), status=200)
         self._check_mapping(
@@ -163,3 +162,9 @@ class TestIssueViews(AbstractViewsTests):
                 {"name": "localisation", "value": issue.localisation, "readonly": True},
             ],
         )
+
+    def test_open_private(self, dbsession, test_app, issue_test_data):
+        issue = issue_test_data["issues"][0]
+        issue.private = True
+        dbsession.flush()
+        test_app.get("/getitfixed/issues/{}".format(issue.id), status=404)

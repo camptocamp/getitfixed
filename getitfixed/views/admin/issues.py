@@ -4,8 +4,9 @@ from pyramid.view import view_config, view_defaults
 from sqlalchemy.orm import subqueryload
 
 from c2cgeoform.schema import GeoFormSchemaNode
-from c2cgeoform.views.abstract_views import ListField
+from c2cgeoform.views.abstract_views import ItemAction, ListField
 
+from getitfixed.i18n import _
 from getitfixed.models.getitfixed import (
     Event,
     Category,
@@ -36,7 +37,9 @@ base_schema = GeoFormSchemaNode(
         "lastname",
         "phone",
         "email",
+        "private",
     ],
+    overrides={"private": {"exclude": False}},
 )
 
 MAX_DESCR_LEN = 40
@@ -123,8 +126,33 @@ class IssueAdminViews(IssueViews):
     def _grid_actions(self):
         return []
 
-    def _item_actions(self, item):
-        return []
+    def _item_actions(self, item, readonly=False):
+        actions = []
+        if item.private:
+            actions.append(
+                ItemAction(
+                    name="set_private",
+                    label=_("Make this issue public"),
+                    icon="glyphicon glyphicon-lock",
+                    url=self._request.route_url(
+                        "getitfixed_set_public", id=getattr(item, self._id_field)
+                    ),
+                    method="POST",
+                )
+            )
+        else:
+            actions.append(
+                ItemAction(
+                    name="set_private",
+                    label=_("Make this issue private"),
+                    icon="glyphicon glyphicon-lock",
+                    url=self._request.route_url(
+                        "getitfixed_set_private", id=getattr(item, self._id_field)
+                    ),
+                    method="POST",
+                )
+            )
+        return actions
 
     @view_config(
         route_name="c2cgeoform_item",
@@ -145,3 +173,33 @@ class IssueAdminViews(IssueViews):
     )
     def save(self):
         return super().save()
+
+    @view_config(
+        route_name="getitfixed_set_private", request_method="POST", renderer="json"
+    )
+    def set_private(self):
+        obj = self._get_object()
+        obj.private = True
+        return {
+            "success": True,
+            "redirect": self._request.route_url(
+                "c2cgeoform_item",
+                id=getattr(obj, self._id_field),
+                _query=[("msg_col", "submit_ok")],
+            ),
+        }
+
+    @view_config(
+        route_name="getitfixed_set_public", request_method="POST", renderer="json"
+    )
+    def set_public(self):
+        obj = self._get_object()
+        obj.private = False
+        return {
+            "success": True,
+            "redirect": self._request.route_url(
+                "c2cgeoform_item",
+                id=getattr(obj, self._id_field),
+                _query=[("msg_col", "submit_ok")],
+            ),
+        }

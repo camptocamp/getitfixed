@@ -20,3 +20,13 @@ def includeme(config):
     config.add_c2cgeoform_application(
         "getitfixed_admin", [("issues", Issue), ("event", Event)]
     )
+    config.add_route(
+        "getitfixed_set_private",
+        "/{application:getitfixed_admin}/{table:issues}/{id}/set_private",
+        pregenerator=pregenerator,
+    )
+    config.add_route(
+        "getitfixed_set_public",
+        "/{application:getitfixed_admin}/{table:issues}/{id}/set_public",
+        pregenerator=pregenerator,
+    )

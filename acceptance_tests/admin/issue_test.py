@@ -99,6 +99,28 @@ class TestAdminIssueViews(AbstractViewsTests):
         assert 0 == len(json["rows"])
         assert 0 == json["total"]
 
+    def test_set_private(self, test_app, issue_test_data):
+        issue = issue_test_data["issues"][0]
+        issue.private = False
+        resp = test_app.post("/getitfixed_admin/issues/{}/set_private".format(issue.hash), status=200)
+        assert resp.json["success"]
+        assert (
+            "http://localhost/getitfixed_admin/issues/{}?msg_col=submit_ok".format(issue.hash)
+            == resp.json["redirect"]
+        )
+        assert issue.private
+
+    def test_set_public(self, test_app, issue_test_data):
+        issue = issue_test_data["issues"][0]
+        issue.public = False
+        resp = test_app.post("/getitfixed_admin/issues/{}/set_public".format(issue.hash), status=200)
+        assert resp.json["success"]
+        assert (
+            "http://localhost/getitfixed_admin/issues/{}?msg_col=submit_ok".format(issue.hash)
+            == resp.json["redirect"]
+        )
+        assert not issue.private
+
     @patch("getitfixed.views.admin.events.send_email")
     def test_edit_then_post_comment(
         self, send_email, test_app, issue_test_data, dbsession
