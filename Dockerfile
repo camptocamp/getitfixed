@@ -58,9 +58,6 @@ LABEL maintainer Camptocamp "info@camptocamp.com"
 COPY --from=build /opt/getitfixed/ /opt/getitfixed/
 ENV NODE_PATH=/opt/thinkhazard/node_modules
 
-COPY requirements.txt /app
-RUN pip3 install -r /app/requirements.txt
-
 WORKDIR /app
 COPY --from=build /app/ /app/
 RUN pip install --no-deps -e .

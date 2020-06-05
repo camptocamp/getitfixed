@@ -25,6 +25,6 @@ services:
       - PGPORT=5432
       - PGUSER=getitfixed
       - PGPASSWORD=getitfixed
-      - PGDATABASE=getitfixed
+      - PGDATABASE=getitfixed_tests
       - INI_FILE=tests.ini
     command: 'pytest /app/acceptance_tests'

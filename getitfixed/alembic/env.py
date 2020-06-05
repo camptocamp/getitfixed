@@ -2,9 +2,11 @@ import os
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import pool, text
 
 from alembic import context
+
+from getitfixed.scripts import wait_for_db
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -88,6 +90,8 @@ def run_migrations_online():
         else:
             return obj.table.schema == conf.get("schema")
 
+    wait_for_db(connectable)
+
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
@@ -95,6 +99,10 @@ def run_migrations_online():
             include_schemas=True,
             include_object=include_object,
             **conf
+        )
+
+        connection.execute(
+            text('CREATE SCHEMA IF NOT EXISTS "{}";'.format(conf.get("schema")))
         )
 
         with context.begin_transaction():

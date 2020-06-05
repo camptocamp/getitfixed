@@ -1,6 +1,8 @@
 import pytest
 import transaction
 import threading
+from alembic.config import Config
+from alembic import command
 from pyramid import testing
 from pyramid.paster import bootstrap
 from pyramid.view import view_config
@@ -10,7 +12,6 @@ from wsgiref.simple_server import make_server
 
 from getitfixed.models import get_engine, get_session_factory, get_tm_session
 from getitfixed.scripts import wait_for_db
-from getitfixed.scripts.initializedb import init_db
 
 
 @pytest.fixture(scope="session")
@@ -22,9 +23,11 @@ def app_env():
 @pytest.fixture(scope="session")
 @pytest.mark.usefixtures("settings")
 def dbsession(settings):
+    alembic_cfg = Config("alembic.ini", ini_section="getitfixed")
+    command.upgrade(alembic_cfg, "head")
+
     engine = get_engine(settings)
     wait_for_db(engine)
-    init_db(engine, force=True)
     session_factory = get_session_factory(engine)
     session = get_tm_session(session_factory, transaction.manager)
     return session
