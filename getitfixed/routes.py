@@ -14,7 +14,7 @@ def includeme(config):
         pregenerator=pregenerator,
     )
 
-    config.add_route("getitfixed_admin", "/getitfixed_admin")
+    config.add_route("getitfixed_admin", "/getitfixed_admin/")
     config.add_c2cgeoform_application(
         "getitfixed_admin", [("issues", Issue), ("event", Event)]
     )
