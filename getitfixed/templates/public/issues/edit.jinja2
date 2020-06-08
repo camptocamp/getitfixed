@@ -23,10 +23,12 @@
 {% block scripts %}
 <script>
   (function() {
-    let oid = '{{form['geometry'].oid if (form.__class__.__name__ != 'ValidationFailure') and ('geometry' in form) else ''}}'
-    if (!oid) { return }
+    {% set form_field = form.field if (form.__class__.__name__ == 'ValidationFailure') else form %}
+    let geometry_oid = '{{form_field['geometry'].oid}}'
 
-    let newIssue = {{'true' if new else 'false'}}
+    if (!geometry_oid) { return }
+
+    let newIssue = {{'true' if new or form.__class__.__name__ == 'ValidationFailure' else 'false'}}
     let params = new URL(window.location).searchParams
     let [x, y, z] = ['x', 'y', 'z'].map(_ => params.get(_))
 
@@ -35,8 +37,10 @@
       return sel.options[sel.selectedIndex].text
     }
 
-    deform.addCallback(oid, function () {
-      let map = c2cgeoform.getObjectMap(oid)
+    deform.addCallback(geometry_oid, function () {
+
+      // Recenter on feature or query params
+      let map = c2cgeoform.getObjectMap(geometry_oid)
       let features = map.getLayers().item(1).getSource().getFeatures()
       if (features.length === 0) {
         if (x && y && z) {
@@ -44,15 +48,18 @@
           map.getView().setZoom(parseFloat(params.get('z')))
         }
       } else {
-        map.getView().fit(features[0].getGeometry().getExtent())
+        map.getView().fit(features[0].getGeometry().getExtent(), {
+          maxZoom: 18
+        })
       }
 
       if (!window.matchMedia('(max-width: 576px)').matches || !newIssue) { return }
 
+      // On mobile move geometry/cat/type on a temporary focused subform
       document.body.classList.add('focused')
       window.scrollTo(0, 0)
       let focus = document.querySelector('.focus')
-      let mapEl = document.querySelector(`#item-${oid}`)
+      let mapEl = document.querySelector(`#item-${geometry_oid}`)
       focus.append(mapEl)
 
       let subform = document.querySelector('.subform')
@@ -63,10 +70,12 @@
       subform.prepend(catEl)
       map.updateSize()
 
+      // When validating subform, move back inputs into the form,
+      // turning those 3 fields read-only
       focus.querySelector('.next').addEventListener('click', () => {
         document.body.classList.remove('focused')
         ;[typeEl, catEl, mapEl].forEach(e => (fieldset.prepend(e)))
-        c2cgeoform.setReadOnly(oid)
+        c2cgeoform.setReadOnly(geometry_oid)
         mapEl.querySelector('label').innerText = getSelectedText(catEl) + ' / ' + getSelectedText(typeEl)
         ;[typeEl, catEl, focus].forEach(e => {e.style.display = 'none'})
         mapEl.scrollIntoView({ behavior: 'smooth' })
