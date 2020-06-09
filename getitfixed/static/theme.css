@@ -118,7 +118,7 @@ body {
 
 
 /*
- * Mobile workflow
+ * Mobile workflow, intermediate step(`.focus`) hidden by default
  */
 .focus {
   display:none;
@@ -129,21 +129,26 @@ body {
 .focused footer {
   display: none;
 }
+/* when body.focused, show intermediate step */
 .focused .focus {
   display: block;
 }
-.focus {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  background: rgb(255 255 255);
-  z-index: 10;
-  margin-left: -15px;
-  top: 0;
-}
-.focus .item-geometry label {
+.focused .deform {
   display: none;
 }
+.focus {
+  position: fixed;
+  background: white;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.focus label {
+  display: none;
+}
+/* show center pointer */
 .focus .map.cross {
   position: absolute;
   top: 0;
@@ -166,7 +171,7 @@ body {
   bottom: 0;
   width: calc(100vw - 1em);
   left: 0.5em;
-  height: 5em;
+  height: 3em;
   display: grid;
   grid-gap: 0.5em;
   grid-template-columns: repeat(3, 1fr);
@@ -174,7 +179,6 @@ body {
 }
 .next {
   width: 100%;
-  margin-top: 1.75em;
 }
 .map.c2cgeoform-readonly,
 .map.cross.c2cgeoform-readonly {
