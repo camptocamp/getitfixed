@@ -24,7 +24,7 @@
 <script>
   (function() {
     {% set form_field = form.field if (form.__class__.__name__ == 'ValidationFailure') else form %}
-    let geometry_oid = '{{form_field['geometry'].oid}}'
+    let geometry_oid = '{{form_field['geometry'].oid if 'geometry' in form_field else ''}}'
 
     if (!geometry_oid) { return }
 
