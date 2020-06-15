@@ -1,6 +1,6 @@
 alembic
 c2c.template
-c2cgeoform>=2.1.13
+c2cgeoform>=2.1.14
 beaker_redis
 plaster_pastedeploy
 psycopg2-binary

@@ -99,6 +99,7 @@ class IssueViews(AbstractViews):
             ._base_query()
             .outerjoin(Issue.type)
             .filter(Issue.status.notin_([STATUS_NEW]))
+            .filter(Issue.private.is_(False))
             .options(subqueryload(Issue.type))
         )
 
@@ -119,8 +120,11 @@ class IssueViews(AbstractViews):
     def _grid_item_actions(self, item):
         return {"dropdown": []}
 
-    def _item_actions(self, item):
-        return []
+    def _get_object(self):
+        obj = super()._get_object()
+        if obj.private:
+            raise HTTPNotFound()
+        return obj
 
     @view_config(
         route_name="c2cgeoform_item",

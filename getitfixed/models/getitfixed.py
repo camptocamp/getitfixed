@@ -14,6 +14,7 @@ from sqlalchemy import (
     ForeignKey,
     String,
     Text,
+    text,
 )
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql.expression import func
@@ -327,6 +328,12 @@ class Issue(Base):
                 ),
             }
         },
+    )
+    private = Column(
+        Boolean,
+        nullable=False,
+        server_default=text("False"),
+        info={"colanderalchemy": {"title": _("Private"), "exclude": True}},
     )
     events = relationship(
         "Event",
