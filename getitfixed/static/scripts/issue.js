@@ -1,0 +1,98 @@
+document.addEventListener('DOMContentLoaded', () => {
+  let geometry_oid = issue.geometry_oid
+
+  if (!geometry_oid) { return }
+
+  let newIssue = issue['new']
+  let params = new URL(window.location).searchParams
+  let [x, y, z] = ['x', 'y', 'z'].map(_ => params.get(_))
+
+  const getSelectedText = el => {
+    const sel = el.querySelector('select')
+    return sel.options[sel.selectedIndex].text
+  }
+
+  const typeEl = document.querySelector(`[class~=item-type_id]`)
+  const catEl = document.querySelector(`[class~=item-category_id]`)
+  const [catInput, typeInput] = [catEl, typeEl].map(el => el.querySelector('select'))
+
+  // Update caterogies/types on movend
+  let controller
+  let catId, typeId
+
+  // Build <option> element from config obj
+  const buildOption = (obj, selected) => {
+    const option = document.createElement('option')
+    option.value = obj.id
+    option.innerText = obj.label
+    if (obj.id == selected) option.selected = 'selected'
+    return option
+  }
+
+  // Fetch categories & update form fields
+  const updateCategories = () => {
+    if (controller) { controller.abort() }
+    controller = new AbortController()
+    fetch(issue.url, { signal: controller.signal })
+      .then(r => r.json())
+      .then(cats => {
+        // store selected values
+        ;[catId, typeId] = [catInput, typeInput].map(i => i.value)
+        // Empty categories list
+        catInput.innerHTML = ''
+        // Fill & restore values if possible
+        catInput.addEventListener('change', () => {
+          catId = catInput.value
+          const options = cats.find(e => e.id == catInput.value).types
+          typeInput.innerHTML = ''
+          options.forEach(o => typeInput.appendChild(buildOption(o, typeId)))
+        })
+        cats.forEach(c => catInput.appendChild(buildOption(c, catId)))
+        catInput.dispatchEvent(new Event('change', { bubbles: true }))
+      })
+      typeEl.addEventListener('change', () => { typeId = typeInput.value })
+  }
+  document.querySelector(`#${geometry_oid}`).addEventListener('input', updateCategories)
+
+  deform.addCallback(geometry_oid, function () {
+    // Recenter on feature or query params
+    let map = c2cgeoform.getObjectMap(geometry_oid)
+    let features = map.getLayers().item(1).getSource().getFeatures()
+    if (features.length === 0) {
+      if (x && y && z) {
+        map.getView().setCenter([params.get('x'), params.get('y')].map(parseFloat))
+        map.getView().setZoom(parseFloat(params.get('z')))
+      }
+    } else {
+      map.getView().fit(features[0].getGeometry().getExtent(), {
+        maxZoom: 18
+      })
+    }
+
+    if (!window.matchMedia('(max-width: 576px)').matches || !newIssue) { return }
+
+    // On mobile move geometry/cat/type on a temporary focused subform
+    document.body.classList.add('focused')
+    window.scrollTo(0, 0)
+    let focus = document.querySelector('.focus')
+    let mapEl = document.querySelector(`#item-${geometry_oid}`)
+    focus.append(mapEl)
+
+    let subform = document.querySelector('.subform')
+    let fieldset = document.querySelector('fieldset')
+    subform.prepend(typeEl)
+    subform.prepend(catEl)
+    map.updateSize()
+
+    // When validating subform, move back inputs into the form,
+    // turning those 3 fields read-only
+    focus.querySelector('.next').addEventListener('click', () => {
+      document.body.classList.remove('focused')
+      ;[typeEl, catEl, mapEl].forEach(e => (fieldset.prepend(e)))
+      c2cgeoform.setReadOnly(geometry_oid)
+      mapEl.querySelector('label').innerText = getSelectedText(catEl) + ' / ' + getSelectedText(typeEl)
+      ;[typeEl, catEl, focus].forEach(e => {e.style.display = 'none'})
+      mapEl.scrollIntoView({ behavior: 'smooth' })
+    })
+  })
+})
