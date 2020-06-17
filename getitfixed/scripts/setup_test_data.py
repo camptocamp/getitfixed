@@ -15,6 +15,23 @@ DESCRIPTIONS = ("Déchets sur la voie publique", "Nid de poule")
 FIRSTNAMES = ("Dale", "Teresa", "Beatrice", "Darcie")
 LASTNAMES = ("Lamb", "Evans", "Alexander", "Rowe", "Ford")
 
+WMS_BASE = (
+    "https://geomapfish-demo-2-4.camptocamp.com/mapserv_proxy"
+    "?ogcserver=Main+PNG"
+    "&SERVICE=WMS"
+    "&VERSION=1.3.0"
+    "&REQUEST=GetMap"
+    "&FORMAT=image%2Fpng"
+    "&TRANSPARENT=true"
+    "&SERVERTYPE=mapserver"
+)
+WMS_LAYERS = (
+    WMS_BASE + "&LAYERS={}&STYLES=%2C".format("post_office"),
+    WMS_BASE + "&LAYERS={}&STYLES=%2C".format("entertainment"),
+    WMS_BASE + "&LAYERS={}&STYLES=%2C".format("sustenance"),
+    None,
+)
+
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -79,6 +96,7 @@ def setup_test_data(dbsession):
                     label_en="Type «{}»".format(i),
                     label_fr="Type «{}»".format(i),
                     category_id=(i % 4) + 1,
+                    wms_layer=WMS_LAYERS[i % 4],
                 )
             )
     if dbsession.query(Issue).count() == 0:
