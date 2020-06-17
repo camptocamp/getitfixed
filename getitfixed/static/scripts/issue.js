@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const buildOption = (obj, selected) => {
     const option = document.createElement('option')
     option.value = obj.id
+    if (obj.wms_layer) {
+      option.setAttribute('data-wms', obj.wms_layer)
+    }
     option.innerText = obj.label
     if (obj.id == selected) option.selected = 'selected'
     return option
