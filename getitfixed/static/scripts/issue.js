@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let controller
   let catId, typeId
   let map, layer
+  let categories
 
   // Build <option> element from config obj
   const buildOption = (obj, selected) => {
@@ -41,47 +42,69 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(issue.url, { signal: controller.signal })
       .then(r => r.json())
       .then(cats => {
-        // store selected values
-        ;[catId, typeId] = [catInput, typeInput].map(i => i.value)
+
         const _ = JSON.stringify
         if (_(cats.map(c => c.id)) == _(Array.from(catInput.options).map(n => parseInt(n.value)))) {
           // Identical possible values
           return
         }
+
+        // Store categories
+        categories = cats
+
+        // store selected values
+        catId = catInput.value
+
         // Empty categories list
         catInput.innerHTML = ''
         // Fill & restore values if possible
-        catInput.addEventListener('change', () => {
-          catId = catInput.value
-          const options = cats.find(e => e.id == catInput.value).types
-          typeInput.innerHTML = ''
-          options.forEach(o => typeInput.appendChild(buildOption(o, typeId)))
-          // Autoselect first if no one selected
-          if (!typeInput.querySelector('[selected=selected]')) {
-            typeInput.options[0].selected = 'selected'
-            typeInput.dispatchEvent(new Event('change', { bubbles: true }))
-          }
-        })
         cats.forEach(c => catInput.appendChild(buildOption(c, catId)))
         catInput.dispatchEvent(new Event('change', { bubbles: true }))
       })
-      typeInput.addEventListener('change', () => {
-        if (!typeInput.value || typeId === typeInput.value) { return } // Avoid flickering
-        //store type value
-        typeId = typeInput.value
-        if (layer) {
-          map.removeLayer(layer)
-          layer = undefined
+      .catch(err => {
+        if (err.name === 'AbortError') {
+          console.log('Fetch aborted');
+        } else {
+          console.error(err);
         }
-        let option = typeInput.options[typeInput.selectedIndex]
-        if (!option.getAttribute('data-wms')) return
-        layer = c2cgeoform.addLayer(geometry_oid, {
-          type_: 'WMS',
-          url: option.getAttribute('data-wms')
-        })
       })
   }
   document.querySelector(`#${geometry_oid}`).addEventListener('input', updateCategories)
+
+  catInput.addEventListener('change', () => {
+    // store selected value
+    typeId = typeInput.value
+
+    // Update options
+    const types = categories.find(e => e.id == catInput.value).types
+    typeInput.innerHTML = ''
+    types.forEach(o => typeInput.appendChild(buildOption(o, typeId)))
+
+    // Autoselect first if no one selected
+    if (!typeInput.querySelector('[selected=selected]')) {
+      typeInput.options[0].selected = 'selected'
+      typeInput.dispatchEvent(new Event('change', { bubbles: true }))
+    }
+  })
+
+  typeInput.addEventListener('change', () => {
+    if (!typeInput.value || typeId === typeInput.value) { return } // Avoid flickering
+
+    //store type value
+    typeId = typeInput.value
+
+    // Update WMS layer in map
+    if (layer) {
+      map.removeLayer(layer)
+      layer = undefined
+    }
+    let option = typeInput.options[typeInput.selectedIndex]
+    if (!option.getAttribute('data-wms')) return
+    layer = c2cgeoform.addLayer(geometry_oid, {
+      type_: 'WMS',
+      url: option.getAttribute('data-wms')
+    })
+  })
 
   deform.addCallback(geometry_oid, function () {
     // Recenter on feature or query params
