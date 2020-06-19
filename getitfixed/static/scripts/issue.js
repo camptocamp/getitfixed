@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const updateCategories = () => {
     if (controller) { controller.abort() }
     controller = new AbortController()
-    fetch(issue.url, { signal: controller.signal })
+    fetch(issue.categories_url, { signal: controller.signal })
       .then(r => r.json())
       .then(cats => {
 
