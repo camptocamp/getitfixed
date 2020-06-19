@@ -2,6 +2,8 @@ import pytest
 import webtest
 
 from getitfixed.models.getitfixed import Category, Type
+from getitfixed.scripts.setup_test_data import WMS_LAYERS
+
 from ..model_test import ICONS
 
 
@@ -29,6 +31,7 @@ def categories_test_data(dbsession, transact):
                 label_en="Type «{}»".format(i),
                 label_fr="Type «{}»".format(i),
                 category=categories[i % 3],
+                wms_layer=WMS_LAYERS[i % 4],
             )
         )
     dbsession.add_all(types)
@@ -54,3 +57,4 @@ class TestCategories():
             for t, exp_t in zip(c["types"], exp_c.types):
                 assert t["id"] == exp_t.id
                 assert t["label"] == exp_t.label(locale)
+                assert t["wms_layer"] == exp_t.wms_layer

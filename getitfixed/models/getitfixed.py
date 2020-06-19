@@ -225,21 +225,26 @@ class Issue(Base):
         server_default=func.now(),
         info={"colanderalchemy": {"title": _("Request date")}},
     )
+    geometry = Column(
+        geoalchemy2.Geometry("POINT", 4326, management=True),
+        info={
+            "colanderalchemy": {
+                "title": _("Position"),
+                "typ": colander_ext.Geometry(
+                    "POINT", srid=4326, map_srid=_map_config["srid"]
+                ),
+                "widget": deform_ext.MapWidget(
+                    map_options=_map_config, item_css_class="item-geometry"
+                ),
+            }
+        },
+    )
     type_id = Column(
         Integer,
         ForeignKey("{}.type.id".format(schema)),
         nullable=False,
         info={
-            "colanderalchemy": {
-                "title": _("Type"),
-                "widget": RelationSelectWidget(
-                    Type,
-                    "id",
-                    "label_en",
-                    order_by="label_en",
-                    default_value=("", _("- Select -")),
-                ),
-            }
+            "colanderalchemy": {"title": _("Type"), "widget": SelectWidget(values=[])}
         },
     )
     type = relationship(Type, info={"colanderalchemy": {"exclude": True}})
@@ -287,20 +292,6 @@ class Issue(Base):
         String(254),
         nullable=False,
         info={"colanderalchemy": {"title": _("Localisation")}},
-    )
-    geometry = Column(
-        geoalchemy2.Geometry("POINT", 4326, management=True),
-        info={
-            "colanderalchemy": {
-                "title": _("Position"),
-                "typ": colander_ext.Geometry(
-                    "POINT", srid=4326, map_srid=_map_config["srid"]
-                ),
-                "widget": deform_ext.MapWidget(
-                    map_options=_map_config, item_css_class="item-geometry"
-                ),
-            }
-        },
     )
     photos = relationship(
         Photo,

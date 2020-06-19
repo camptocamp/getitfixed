@@ -7,7 +7,27 @@
     <li class="active">{{request.translate(item_name[:80]) if item_name else _('Issue')}}</li>
   </ol>
 
+  <div class="focus">
+    <div class="subform">
+      <div>
+        <button type="button" class="btn btn-primary next">{{_('Next')}}</button>
+      </div>
+    </div>
+  </div>
+
   {% include 'c2cgeoform:/templates/edit.jinja2' %}
 
 </div>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+  {% set form_field = form.field if (form.__class__.__name__ == 'ValidationFailure') else form %}
+  window.issue = {
+    geometry_oid: '{{form_field['geometry'].oid if 'geometry' in form_field else ''}}',
+    new: {{'true' if new or form.__class__.__name__ == 'ValidationFailure' else 'false'}},
+    categories_url: '{{request.route_url('getitfixed_categories')}}',
+  }
+</script>
+<script src="{{request.static_url('getitfixed:static/scripts/issue.js')}}"></script>
+{% endblock scripts %}

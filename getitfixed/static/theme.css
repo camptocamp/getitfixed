@@ -116,6 +116,79 @@ body {
   position: static; /* Override c2cgeoform panel-footer sticky */
 }
 
+
+/*
+ * Mobile workflow, intermediate step(`.focus`) hidden by default
+ */
+.focus {
+  display:none;
+}
+.focused {
+  overflow: hidden;
+}
+.focused footer {
+  display: none;
+}
+/* when body.focused, show intermediate step */
+.focused .focus {
+  display: block;
+}
+.focused .deform {
+  display: none;
+}
+.focus {
+  position: fixed;
+  background: white;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.focus label {
+  display: none;
+}
+/* show center pointer */
+.focus .map.cross {
+  position: absolute;
+  top: 0;
+  height: 100vh;
+}
+.focused [class~=item-category_id],
+.focused [class~=item-type_id] {
+  flex: 1;
+}
+.c2cgeoform-readonly .c2cgeoform-controls,
+.focused .c2cgeoform-controls {
+  display: none;
+}
+.focused label {
+  /* multiple rules for larger shadow */
+  text-shadow: 2px 2px 2px  #fff, -2px -2px 2px  #fff, 2px -2px 2px  #fff, -2px 2px 2px  #fff;
+}
+.subform {
+  position: absolute;
+  bottom: 0;
+  width: calc(100vw - 1em);
+  left: 0.5em;
+  height: 3em;
+  display: grid;
+  grid-gap: 0.5em;
+  grid-template-columns: repeat(3, 1fr);
+  z-index: 20;
+}
+.next {
+  width: 100%;
+}
+.map.c2cgeoform-readonly,
+.map.cross.c2cgeoform-readonly {
+  height: 150px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+
 /*
  * New issue form
  */

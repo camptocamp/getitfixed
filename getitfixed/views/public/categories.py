@@ -11,7 +11,12 @@ def categories(request):
             "label": c.label(request.locale_name),
             "icon": c.icon_url(request),
             "types": [
-                {"id": t.id, "label": t.label(request.locale_name)} for t in c.types
+                {
+                    "id": t.id,
+                    "label": t.label(request.locale_name),
+                    "wms_layer": t.wms_layer,
+                }
+                for t in c.types
             ],
         }
         for c in request.dbsession.query(Category)
