@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const catEl = document.querySelector(`[class~=item-category_id]`)
   const [catInput, typeInput] = [catEl, typeEl].map(el => el.querySelector('select'))
 
-  // Update caterogies/types on movend
+  // Update categories/types on moveend
   let controller
   let catId, typeId
   let map, layer
