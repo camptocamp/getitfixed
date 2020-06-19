@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return option
   }
 
-  catInput.innerHTML = ''
   // Fetch categories & update form fields
   const updateCategories = () => {
     if (controller) { controller.abort() }

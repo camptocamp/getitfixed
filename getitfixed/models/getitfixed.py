@@ -244,16 +244,7 @@ class Issue(Base):
         ForeignKey("{}.type.id".format(schema)),
         nullable=False,
         info={
-            "colanderalchemy": {
-                "title": _("Type"),
-                "widget": RelationSelectWidget(
-                    Type,
-                    "id",
-                    "label_en",
-                    order_by="label_en",
-                    default_value=("", _("- Select -")),
-                ),
-            }
+            "colanderalchemy": {"title": _("Type"), "widget": SelectWidget(values=[])}
         },
     )
     type = relationship(Type, info={"colanderalchemy": {"exclude": True}})
