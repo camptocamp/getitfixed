@@ -22,8 +22,9 @@ def upgrade():
         sa.Column(
             "private", sa.Boolean(), nullable=False, server_default=sa.text("False")
         ),
+        schema="getitfixed",
     )
 
 
 def downgrade():
-    op.drop_column("issue", "private")
+    op.drop_column("issue", "private", schema="getitfixed")
