@@ -75,12 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
     typeId = typeInput.value
 
     // Update options
-    const types = categories.find(e => e.id == catInput.value).types
+    const types = categories.find(e => e.id == catInput.value)?.types || []
     typeInput.innerHTML = ''
     types.forEach(o => typeInput.appendChild(buildOption(o, typeId)))
 
     // Autoselect first if no one selected
-    if (!typeInput.querySelector('[selected=selected]')) {
+    if (!typeInput.querySelector('[selected=selected]') && typeInput.options.length > 0) {
       typeInput.options[0].selected = 'selected'
       typeInput.dispatchEvent(new Event('change', { bubbles: true }))
     }
