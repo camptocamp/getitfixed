@@ -25,7 +25,6 @@ from xml.sax.saxutils import quoteattr
 
 import colander
 from deform.widget import (
-    Widget,
     CheckboxWidget,
     FormWidget,
     HiddenWidget,
@@ -80,12 +79,12 @@ def default_icon_url(request):
     return generate_url(request, default_icon())
 
 
-class TelWidget(Widget):
-    def serialize(self, field, cstruct=None, readonly=False):
+class TelWidget(TextInputWidget):
+    def serialize(self, field, cstruct=None, readonly=False, **kw):
         if cstruct is colander.null:
             cstruct = u""
         quoted = quoteattr(cstruct)
-        return u'<input type="tel" pattern="(\d| )+"value="%s">' % quoted
+        return u'<input type="tel" name="%s" pattern="(\d| )+" value=%s>' % (field.name, quoted)
 
 
 class Photo(FileData, Base):
