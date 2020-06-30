@@ -21,9 +21,11 @@ from sqlalchemy.sql.expression import func
 from sqlalchemy.ext.associationproxy import association_proxy
 
 import geoalchemy2
+from xml.sax.saxutils import quoteattr
 
 import colander
 from deform.widget import (
+    Widget,
     CheckboxWidget,
     FormWidget,
     HiddenWidget,
@@ -76,6 +78,14 @@ def default_icon():
 
 def default_icon_url(request):
     return generate_url(request, default_icon())
+
+
+class TelWidget(Widget):
+    def serialize(self, field, cstruct=None, readonly=False):
+        if cstruct is colander.null:
+            cstruct = u""
+        quoted = quoteattr(cstruct)
+        return u'<input type="tel" pattern="(\d| )+"value="%s">' % quoted
 
 
 class Photo(FileData, Base):
@@ -305,7 +315,9 @@ class Issue(Base):
         String(100), nullable=False, info={"colanderalchemy": {"title": _("Lastname")}}
     )
     phone = Column(
-        String(20), nullable=False, info={"colanderalchemy": {"title": _("Phone")}}
+        String(20),
+        nullable=False,
+        info={"colanderalchemy": {"title": _("Phone"), "widget": TelWidget()}},
     )
     email = Column(
         String(100),
