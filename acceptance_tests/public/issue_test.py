@@ -93,8 +93,7 @@ class TestIssueViews(AbstractViewsTests):
 
         form = resp.form
         assert "" == form["id"].value
-        assert None is form["category_id"].value
-        assert None is form["type_id"].value
+        assert "" == form["type_id"].value
         assert "" == form["description"].value
         assert "" == form["localisation"].value
         assert "" == form["firstname"].value
@@ -102,8 +101,7 @@ class TestIssueViews(AbstractViewsTests):
         assert "" == form["phone"].value
         assert "" == form["email"].value
 
-        form["category_id"].force_value([str(issue_test_data["categories"][0].id)])
-        form["type_id"].force_value([str(issue_test_data["types"][0].id)])
+        form["type_id"] = str(issue_test_data["types"][0].id)
         form["description"] = "Description"
         form["localisation"] = "234 long street"
         form["firstname"] = "Andreas"
