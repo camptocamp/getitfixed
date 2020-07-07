@@ -8,6 +8,7 @@ vars:
       default_icon: "static://getitfixed:static/icons/cat-default.png"
       map:
         srid: 21781
+        mobile: true
         projections:
          - code: "EPSG:21781"
            definition: "+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 \
