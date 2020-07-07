@@ -35,6 +35,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   catInput.innerHTML = ''
+
+  catInput.addEventListener('change', () => {
+    // store selected value
+    typeId = typeInput.value
+
+    // Update options
+    const types = categories.find(e => e.id == catInput.value)?.types || []
+    typeInput.innerHTML = ''
+    types.forEach(o => typeInput.appendChild(buildOption(o, typeId)))
+
+    // Autoselect first if no one selected
+    if (!typeInput.querySelector('[selected=selected]') && typeInput.options.length > 0) {
+      typeInput.options[0].selected = 'selected'
+      typeInput.dispatchEvent(new Event('change', { bubbles: true }))
+    }
+  })
+
   // Fetch categories & update form fields
   const updateCategories = () => {
     if (controller) { controller.abort() }
@@ -59,7 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
         catInput.innerHTML = ''
         // Fill & restore values if possible
         cats.forEach(c => catInput.appendChild(buildOption(c, catId)))
-        catInput.dispatchEvent(new Event('change', { bubbles: true }))
+        // Autoselect first if no one selected
+        if (!catInput.querySelector('[selected=selected]') && catInput.options.length > 0) {
+          catInput.options[0].selected = 'selected'
+          catInput.dispatchEvent(new Event('change', { bubbles: true }))
+        } else {
+          catInput.dispatchEvent(new Event('change', { bubbles: true }))
+        }
       })
       .catch(err => {
         if (err.name === 'AbortError') {
@@ -70,22 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
   }
   document.querySelector(`#${geometry_oid}`).addEventListener('input', updateCategories)
-
-  catInput.addEventListener('change', () => {
-    // store selected value
-    typeId = typeInput.value
-
-    // Update options
-    const types = categories.find(e => e.id == catInput.value)?.types || []
-    typeInput.innerHTML = ''
-    types.forEach(o => typeInput.appendChild(buildOption(o, typeId)))
-
-    // Autoselect first if no one selected
-    if (!typeInput.querySelector('[selected=selected]') && typeInput.options.length > 0) {
-      typeInput.options[0].selected = 'selected'
-      typeInput.dispatchEvent(new Event('change', { bubbles: true }))
-    }
-  })
+  updateCategories()
 
   typeInput.addEventListener('change', () => {
     if (!typeInput.value || typeId === typeInput.value) { return } // Avoid flickering
