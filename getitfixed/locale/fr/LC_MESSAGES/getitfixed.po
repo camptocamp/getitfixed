@@ -104,6 +104,10 @@ msgstr "Problème"
 msgid "Issues"
 msgstr "Problèmes"
 
+#: getitfixed/templates/public/issues/edit.jinja2:13
+msgid "Next"
+msgstr "Suivant"
+
 #: getitfixed/models/getitfixed.py:191
 msgid "Request date"
 msgstr "Date de la demande"
@@ -114,7 +118,7 @@ msgstr "État"
 
 #: getitfixed/models/getitfixed.py:246
 msgid "Description of the problem"
-msgstr "Description du problème"
+msgstr "Description"
 
 #: getitfixed/models/getitfixed.py:254
 msgid "Localisation"
