@@ -84,7 +84,10 @@ class TelWidget(TextInputWidget):
         if cstruct is colander.null:
             cstruct = u""
         quoted = quoteattr(cstruct)
-        return u'<input type="tel" name="%s" pattern="(\d| )+" value=%s>' % (field.name, quoted)
+        return u'<input type="tel" name="%s" pattern="(\d| )+" value=%s>' % (
+            field.name,
+            quoted,
+        )
 
 
 class Photo(FileData, Base):
