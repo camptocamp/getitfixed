@@ -34,19 +34,24 @@ document.addEventListener('DOMContentLoaded', () => {
     return option
   }
 
+  // store selected values
+  catId = parseInt(catInput.value, 10)
+  typeId = parseInt(typeInput.value, 10)
   catInput.innerHTML = ''
 
   catInput.addEventListener('change', () => {
     // store selected value
-    typeId = typeInput.value
+    if (typeInput.value !== '') {
+      typeId = parseInt(typeInput.value, 10)
+    }
 
     // Update options
-    const types = categories.find(e => e.id == catInput.value)?.types || []
+    const types = categories.find(e => e.id == parseInt(catInput.value, 10))?.types || []
     typeInput.innerHTML = ''
     types.forEach(o => typeInput.appendChild(buildOption(o, typeId)))
 
     // Autoselect first if no one selected
-    if (!typeInput.querySelector('[selected=selected]') && typeInput.options.length > 0) {
+    if (!Array.from(typeInput.options).find(x => x.selected) && typeInput.options.length > 0) {
       typeInput.options[0].selected = 'selected'
       typeInput.dispatchEvent(new Event('change', { bubbles: true }))
     }
@@ -61,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(cats => {
 
         const _ = JSON.stringify
-        if (_(cats.map(c => c.id)) == _(Array.from(catInput.options).map(n => parseInt(n.value)))) {
+        if (_(cats.map(c => c.id)) == _(Array.from(catInput.options).map(n => parseInt(n.value, 10)))) {
           // Identical possible values
           return
         }
@@ -70,14 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
         categories = cats
 
         // store selected values
-        catId = catInput.value
+        if (catInput.value !== '') {
+          catId = parseInt(catInput.value, 10)
+        }
 
         // Empty categories list
         catInput.innerHTML = ''
         // Fill & restore values if possible
         cats.forEach(c => catInput.appendChild(buildOption(c, catId)))
         // Autoselect first if no one selected
-        if (!catInput.querySelector('[selected=selected]') && catInput.options.length > 0) {
+        if (!Array.from(catInput.options).find(x => x.selected) && catInput.options.length > 0) {
           catInput.options[0].selected = 'selected'
           catInput.dispatchEvent(new Event('change', { bubbles: true }))
         } else {
@@ -96,10 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCategories()
 
   typeInput.addEventListener('change', () => {
-    if (!typeInput.value || typeId === typeInput.value) { return } // Avoid flickering
+    if (!typeInput.value || typeId === parseInt(typeInput.value, 10)) { return } // Avoid flickering
 
     //store type value
-    typeId = typeInput.value
+    typeId = parseInt(typeInput.value, 10)
 
     // Update WMS layer in map
     if (layer) {
