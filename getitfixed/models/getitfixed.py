@@ -21,6 +21,7 @@ from sqlalchemy.sql.expression import func
 from sqlalchemy.ext.associationproxy import association_proxy
 
 import geoalchemy2
+from xml.sax.saxutils import quoteattr
 
 import colander
 from deform.widget import (
@@ -76,6 +77,19 @@ def default_icon():
 
 def default_icon_url(request):
     return generate_url(request, default_icon())
+
+
+class TelWidget(TextInputWidget):
+    def serialize(self, field, cstruct=None, readonly=False, **kw):
+        if cstruct is colander.null:
+            cstruct = u""
+        quoted = quoteattr(cstruct)
+        if readonly:
+            return cstruct
+        return u'<input type="tel" name="%s" pattern="(\\d| )+" value=%s>' % (
+            field.name,
+            quoted,
+        )
 
 
 class Photo(FileData, Base):
@@ -244,7 +258,16 @@ class Issue(Base):
         ForeignKey("{}.type.id".format(schema)),
         nullable=False,
         info={
-            "colanderalchemy": {"title": _("Type"), "widget": SelectWidget(values=[])}
+            "colanderalchemy": {
+                "title": _("Type"),
+                "widget": RelationSelectWidget(
+                    Type,
+                    "id",
+                    "label_en",
+                    order_by="label_en",
+                    default_value=("", _("- Select -")),
+                ),
+            }
         },
     )
     type = relationship(Type, info={"colanderalchemy": {"exclude": True}})
@@ -305,7 +328,9 @@ class Issue(Base):
         String(100), nullable=False, info={"colanderalchemy": {"title": _("Lastname")}}
     )
     phone = Column(
-        String(20), nullable=False, info={"colanderalchemy": {"title": _("Phone")}}
+        String(20),
+        nullable=False,
+        info={"colanderalchemy": {"title": _("Phone"), "widget": TelWidget()}},
     )
     email = Column(
         String(100),

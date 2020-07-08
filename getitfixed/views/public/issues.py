@@ -8,10 +8,10 @@ from sqlalchemy.orm import subqueryload
 
 from colander import SchemaNode, Int
 from c2cgeoform.schema import GeoFormSchemaNode
+from c2cgeoform.ext.deform_ext import RelationSelectWidget
 from c2cgeoform.views.abstract_views import AbstractViews, ListField
-from deform.widget import SelectWidget
 
-from getitfixed.models.getitfixed import Issue, Type, STATUS_NEW
+from getitfixed.models.getitfixed import Category, Issue, Type, STATUS_NEW
 from getitfixed.emails.email_service import send_email
 
 from getitfixed.i18n import _
@@ -23,7 +23,10 @@ new_schema = GeoFormSchemaNode(Issue, excludes=["request_date", "events", "statu
 new_schema.add_before(
     "type_id",
     SchemaNode(
-        Int(), name="category_id", title=_("Category"), widget=SelectWidget(values=[])
+        Int(),
+        name="category_id",
+        title=_("Category"),
+        widget=RelationSelectWidget(Category, "id", "label_fr", order_by="label_fr"),
     ),
 )
 
