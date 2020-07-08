@@ -7,3 +7,4 @@ psycopg2-binary
 pyramid_tm
 transaction
 waitress
+deform>=2.0.10
