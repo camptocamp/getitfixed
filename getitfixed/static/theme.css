@@ -154,6 +154,11 @@ body {
   top: 0;
   height: 100vh;
 }
+@media (min-width: 768px) {
+  .map.cross {
+    max-height: 400px;
+  }
+}
 .focused [class~=item-category_id],
 .focused [class~=item-type_id] {
   flex: 1;
