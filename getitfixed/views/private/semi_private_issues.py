@@ -33,6 +33,15 @@ class IssueViews(AbstractViews):
     _event_schema = event_schema
     _application = "getitfixed"
 
+    MSG_COL = {
+        "submit_ok": _(
+            "Thank you for your report, "
+            "it has been registered with following details, "
+            "and will be treated as soon as possible."
+        ),
+        "copy_ok": _("Please check that the copy fits before submitting."),
+    }
+
     @view_config(
         route_name="c2cgeoform_item_private",
         request_method="GET",

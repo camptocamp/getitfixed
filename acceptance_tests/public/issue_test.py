@@ -7,13 +7,12 @@ from c2cgeoform.testing.views import AbstractViewsTests
 
 from getitfixed.models.getitfixed import (
     Category,
-    Event,
     Issue,
     Type,
     STATUS_VALIDATED,
     STATUS_NEW,
 )
-from getitfixed.views.public.issues import IssueViews
+from getitfixed.views.private.semi_private_issues import IssueViews as IssuePrivateViews
 
 from unittest.mock import patch, call, ANY
 
@@ -80,7 +79,7 @@ class TestIssueViews(AbstractViewsTests):
         return dbsession.query(Issue).filter(Issue.hash == hash_).one_or_none()
 
     def test_index(self, test_app):
-        resp = self.get(test_app, status=200)
+        self.get(test_app, status=200)
 
     def test_geojson(self, test_app):
         resp = self.get(test_app, "/geojson.json", status=200)
@@ -112,15 +111,15 @@ class TestIssueViews(AbstractViewsTests):
         resp = form.submit("submit", status=302)
 
         assert (
-            IssueViews.MSG_COL["submit_ok"]
+            IssuePrivateViews.MSG_COL["submit_ok"]
             == resp.follow().html.find("div", {"class": "msg-lbl"}).getText()
         )
 
-        id_ = re.match(
-            r"http://localhost/getitfixed/issues/(.*)\?msg_col=submit_ok", resp.location
+        hash_ = re.match(
+            r"http://localhost/getitfixed/private/issues/(.*)\?msg_col=submit_ok", resp.location
         ).group(1)
 
-        obj = dbsession.query(Issue).get(id_)
+        obj = dbsession.query(Issue).filter(Issue.hash == hash_).one()
         assert datetime.date.today() == obj.request_date
         assert issue_test_data["types"][0] is obj.type
         assert "Description" == obj.description
@@ -162,6 +161,12 @@ class TestIssueViews(AbstractViewsTests):
                 {"name": "localisation", "value": issue.localisation, "readonly": True},
             ],
         )
+
+    def test_open_new(self, dbsession, test_app, issue_test_data):
+        issue = issue_test_data["issues"][0]
+        issue.status = STATUS_NEW
+        dbsession.flush()
+        test_app.get("/getitfixed/issues/{}".format(issue.id), status=404)
 
     def test_open_private(self, dbsession, test_app, issue_test_data):
         issue = issue_test_data["issues"][0]
