@@ -2,8 +2,10 @@ from pyramid.view import view_config
 
 from getitfixed.models.getitfixed import Category
 
-
-@view_config(route_name="getitfixed_categories", renderer="json", request_method="GET")
+@view_config(route_name="c2cgeoform_index",
+             match_param=("application=getitfixed", "table=categories.json"),
+             request_method="GET",
+             renderer="json",)
 def categories(request):
     return [
         {

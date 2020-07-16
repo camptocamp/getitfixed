@@ -26,7 +26,7 @@
   window.issue = {
     geometry_oid: '{{form_field['geometry'].oid if 'geometry' in form_field else ''}}',
     new: {{'true' if new else 'false'}},
-    categories_url: '{{request.route_url('getitfixed_categories')}}',
+    categories_url: '{{request.route_url('c2cgeoform_index', table='categories.json')}}',
   }
 </script>
 <script src="{{request.static_url('getitfixed:static/scripts/issue.js')}}"></script>

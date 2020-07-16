@@ -8,8 +8,6 @@ def includeme(config):
     config.add_route("getitfixed", "/getitfixed/")
     config.add_c2cgeoform_application("getitfixed", [("issues", Issue)])
 
-    config.add_route("getitfixed_categories", "/getitfixed/categories")
-
     config.add_route(
         "c2cgeoform_item_private",
         "{application:getitfixed}/private/{table}/{id}",
