@@ -107,6 +107,10 @@ test: ## Run tests
 test:
 	docker-compose -f docker-compose-test.yaml run --rm test
 
+.PHONY: docs
+docs: ## Build documentation
+	docker run --rm ${COMMON_DOCKER_RUN_OPTIONS} make -C docs html
+
 .PHONY: clean
 clean: ## Clean generated files
 clean:

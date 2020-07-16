@@ -9,4 +9,6 @@ pydevd
 pyramid_debugtoolbar
 pyramid_ipython
 pytest==5.1.3
+sphinx
+sphinx_rtd_theme
 webtest
