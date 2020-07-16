@@ -47,7 +47,7 @@ class TestCategories():
         categories = categories_test_data["categories"]
 
         test_app.set_cookie("_LOCALE_", locale)
-        result = test_app.get("/getitfixed/categories", status=200).json
+        result = test_app.get("/getitfixed/categories.json", status=200).json
 
         assert len(result) == len(categories)
         for c, exp_c, icon in zip(result, categories, ICONS):
