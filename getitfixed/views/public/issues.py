@@ -84,15 +84,6 @@ class IssueViews(AbstractViews):
         ),
     ]
 
-    MSG_COL = {
-        "submit_ok": _(
-            "Thank you for your report, "
-            "it has been registered with following details, "
-            "and will be treated as soon as possible."
-        ),
-        "copy_ok": _("Please check that the copy fits before submitting."),
-    }
-
     def _base_query(self):
         return (
             super()
@@ -122,7 +113,7 @@ class IssueViews(AbstractViews):
 
     def _get_object(self):
         obj = super()._get_object()
-        if obj.private:
+        if obj.status == STATUS_NEW or obj.private:
             raise HTTPNotFound()
         return obj
 
@@ -187,6 +178,14 @@ class IssueViews(AbstractViews):
                         application="getitfixed_admin",
                         id=self._obj.hash,
                     ),
+                )
+                return HTTPFound(
+                    self._request.route_url(
+                        "c2cgeoform_item_private",
+                        application="getitfixed",
+                        id=self._obj.hash,
+                        _query=[("msg_col", "submit_ok")],
+                    )
                 )
             else:
                 base_save["item_name"] = _("New")
