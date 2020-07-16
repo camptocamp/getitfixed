@@ -17,8 +17,12 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column("type", sa.Column("wms_layer", sa.String(length=255), nullable=True))
+    op.add_column(
+        "type",
+        sa.Column("wms_layer", sa.String(length=255), nullable=True),
+        schema="getitfixed",
+    )
 
 
 def downgrade():
-    op.drop_column("type", "wms_layer")
+    op.drop_column("type", "wms_layer", schema="getitfixed")

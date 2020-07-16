@@ -12,12 +12,6 @@ from getitfixed.scripts import wait_for_db
 # This line sets up loggers basically.
 fileConfig(context.config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-from getitfixed import models  # noqa
-
-target_metadata = models.meta.Base.metadata
-
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
@@ -42,6 +36,12 @@ def get_config():
             **os.environ
         )
     conf.update({"version_table_schema": context.config.get_main_option("schema")})
+
+    # for 'autogenerate' support
+    from getitfixed import models  # noqa
+
+    conf["target_metadata"] = models.meta.Base.metadata
+
     return conf
 
 
@@ -58,12 +58,7 @@ def run_migrations_offline():
 
     """
     conf = get_config()
-    context.configure(
-        url=conf["sqlalchemy.url"],
-        target_metadata=target_metadata,
-        literal_binds=True,
-        **conf
-    )
+    context.configure(url=conf["sqlalchemy.url"], literal_binds=True, **conf)
 
     with context.begin_transaction():
         context.run_migrations()
@@ -95,7 +90,6 @@ def run_migrations_online():
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
-            target_metadata=target_metadata,
             include_schemas=True,
             include_object=include_object,
             **conf
