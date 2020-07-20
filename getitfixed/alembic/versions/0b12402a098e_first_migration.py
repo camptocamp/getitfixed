@@ -69,11 +69,7 @@ def upgrade():
         sa.Column(
             "geometry",
             geoalchemy2.types.Geometry(
-                geometry_type="POINT",
-                srid=4326,
-                management=True,
-                from_text="ST_GeomFromEWKT",
-                name="geometry",
+                geometry_type="POINT", srid=4326, management=True
             ),
             nullable=True,
         ),
