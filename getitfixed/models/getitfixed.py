@@ -47,8 +47,11 @@ from getitfixed.url import generate_url
 schema = "getitfixed"
 
 _getitfixed_config = (config.get_config() or {}).get("getitfixed", {})
-_map_config = {**default_map_settings, **_getitfixed_config.get("map", {})}
-
+_map_config = {
+    **default_map_settings,
+    **{"mobile": True},
+    **_getitfixed_config.get("map", {}),
+}
 
 STATUS_NEW = "new"
 STATUS_VALIDATED = "validated"
