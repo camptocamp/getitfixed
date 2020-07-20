@@ -30,7 +30,7 @@ Custom layout file might extends the default GetItFixed! layout and override hea
        <p>Contact: <a href="...">...</a></p>
      </div>
    </footer>
-   {% endblock header  %}
+   {% endblock footer  %}
 
 Change Email content
 --------------------
