@@ -7,8 +7,10 @@
     <meta name="description" content="pyramid web application">
     <meta name="author" content="Camptocamp">
 
-    <title>{{_('GetItFixed!')}}</title>
-    <link rel="shortcut icon" href="{{request.static_url('getitfixed:static/favicon.ico')}}">
+    {% block head_customization %}
+        <title>{{_('GetItFixed!')}}</title>
+        <link rel="shortcut icon" href="{{request.static_url('getitfixed:static/favicon.ico')}}">
+    {% endblock head_customization  %}
 
     <!-- Bootstrap core CSS -->
     <link href="{{request.static_url('getitfixed:static/lib/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
