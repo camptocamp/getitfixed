@@ -35,7 +35,9 @@ def get_config():
         ] = "postgresql://{PGUSER}:{PGPASSWORD}@{PGHOST}:{PGPORT}/{PGDATABASE}".format(
             **os.environ
         )
-    conf.update({"version_table_schema": context.config.get_main_option("schema")})
+    conf.update(
+        {"version_table_schema": conf.get("getitfixed", {}).get("schema", "getitfixed")}
+    )
 
     # for 'autogenerate' support
     from getitfixed import models  # noqa
@@ -72,6 +74,7 @@ def run_migrations_online():
 
     """
     conf = get_config()
+    schema = conf.get("getitfixed", {}).get("schema", "getitfixed")
 
     connectable = engine_from_config(
         conf, prefix="sqlalchemy.", poolclass=pool.NullPool
@@ -81,9 +84,9 @@ def run_migrations_online():
         obj, name, type_, reflected, compare_to
     ):  # pylint: disable=unused-argument
         if type_ == "table":
-            return obj.schema == conf.get("schema")
+            return obj.schema == schema
         else:
-            return obj.table.schema == conf.get("schema")
+            return obj.table.schema == schema
 
     wait_for_db(connectable)
 
@@ -95,9 +98,7 @@ def run_migrations_online():
             **conf
         )
 
-        connection.execute(
-            text('CREATE SCHEMA IF NOT EXISTS "{}";'.format(conf.get("schema")))
-        )
+        connection.execute(text('CREATE SCHEMA IF NOT EXISTS "{}";'.format(schema)))
 
         with context.begin_transaction():
             context.run_migrations()
