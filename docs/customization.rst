@@ -12,25 +12,39 @@ In section ``getitfixed`` add new key ``layout`` with as value the path to your 
 
    layout: geomapfish_geoportal:templates/getitfixed/layout.jinja2
 
-Custom layout file might extends the default GetItFixed! layout and override header and footer blocks:
+Custom layout file might extends the default GetItFixed! layout and override some blocks:
 
 .. code-block:: html+jinja
 
    {% extends "getitfixed:templates/layout.jinja2" %}
 
+   {% block title %}
+   <title>{{_('GeoMapFish / GetItFixed!')}}</title>
+   <link rel="shortcut icon" href="{{request.static_url('/etc/geomapfish/static/images/favicon.ico')}}">
+   {% endblock title %}
+
+   {% block style %}
+   <link href="{{request.static_url('/etc/geomapfish/static/css/getitfixed.css')}}" rel="stylesheet">
+   <style>
+     body {
+       background-color: #F0F0F0;
+     }
+   </style>
+   {% endblock style %}
+
    {% block header %}
    <header class="container">
      <h3 class="title">{{_('GeoMapFish / GetItFixed!')}}</h3>
    </header>
-   {% endblock header  %}
+   {% endblock header %}
 
    {% block footer %}
    <footer class="footer text-muted">
-     <div class="container">
-       <p>Contact: <a href="...">...</a></p>
-     </div>
+    <div class="container">
+      <p>Contact: <a href="...">Contact form</a></p>
+    </div>
    </footer>
-   {% endblock footer  %}
+   {% endblock footer %}
 
 Change Email content
 --------------------

@@ -7,15 +7,17 @@
     <meta name="description" content="pyramid web application">
     <meta name="author" content="Camptocamp">
 
+    {% block title %}
     <title>{{_('GetItFixed!')}}</title>
     <link rel="shortcut icon" href="{{request.static_url('getitfixed:static/favicon.ico')}}">
+    {% endblock title  %}
 
     <!-- Bootstrap core CSS -->
     <link href="{{request.static_url('getitfixed:static/lib/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{request.static_url('getitfixed:static/lib/bootstrap-table/dist/bootstrap-table.min.css')}}" rel="stylesheet">
     <link href="{{request.static_url('c2cgeoform:static/theme.css')}}" rel="stylesheet">
 
-    <!-- Deform dependecies CSS -->
+    <!-- Deform dependencies CSS -->
     {% if deform_dependencies %}
     <link rel="stylesheet" href="{{request.static_url('deform:static/css/form.css')}}" type="text/css" />
     {% for css in deform_dependencies['css'] %}
@@ -23,8 +25,12 @@
     {% endfor %}
     {% endif %}
 
-    <!-- Custom styles for this scaffold -->
+    <!-- Getitfixed styles for this scaffold -->
     <link href="{{request.static_url('getitfixed:static/theme.css')}}" rel="stylesheet">
+
+    <!-- Custom styles. Override this block to customize styling -->
+    {% block style %}
+    {% endblock style %}
 
     <!-- Bootstrap core JavaScript -->
     <script src="{{request.static_url('getitfixed:static/lib/jquery/dist/jquery.min.js')}}"></script>

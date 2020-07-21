@@ -133,8 +133,10 @@ class IssueViews(AbstractViews):
             if not self._request.matchdict["id"].isdigit():
                 raise HTTPNotFound()
             base_edit = super().edit(schema=follow_schema, readonly=True)
-            base_edit["item_name"] = self._get_object().description
+            obj = self._get_object()
+            base_edit["item_name"] = obj.description
             base_edit["new"] = False
+            base_edit["wms_layer"] = obj.type.wms_layer
             return base_edit
 
     # For development/testing purpose
@@ -155,10 +157,10 @@ class IssueViews(AbstractViews):
         renderer="getitfixed:templates/public/issues/edit.jinja2",
     )
     def save(self):
-        base_save = super().save()
+        resp = super().save()
         if self._is_new():
 
-            if isinstance(base_save, HTTPFound):
+            if isinstance(resp, HTTPFound):
                 # Send email to the issue Reporter
                 self.send_notification_email(
                     self._obj.email,
@@ -187,9 +189,9 @@ class IssueViews(AbstractViews):
                         _query=[("msg_col", "submit_ok")],
                     )
                 )
-            else:
-                base_save["item_name"] = _("New")
-        return base_save
+
+        resp.update({"item_name": _("New"), "new": self._is_new()})
+        return resp
 
     def send_notification_email(self, send_to, template_name, link):
         send_email(
