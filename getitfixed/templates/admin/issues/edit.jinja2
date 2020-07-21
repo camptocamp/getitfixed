@@ -32,4 +32,15 @@
         </ul>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const geometry_oid = '{{form['geometry'].oid}}'
+  deform.addCallback(geometry_oid, function () {
+    c2cgeoform.addLayer(geometry_oid, {
+      type_: 'WMS',
+      url: '{{wms_layer}}'
+    })
+  })
+})
+</script>
 {% endblock content %}

@@ -79,9 +79,10 @@ class IssueViews(AbstractViews):
                         "user_admin": USER_ADMIN,
                         "obj": issue,
                     },
+                    "events": self.events(issue),
+                    "wms_layer": self._get_object().type.wms_layer,
                 }
             )
-            resp.update({"events": self.events(issue)})
             return resp
 
     @staticmethod
