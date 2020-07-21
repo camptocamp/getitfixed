@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Autoselect first if no one selected
     if (!Array.from(typeInput.options).find(x => x.selected) && typeInput.options.length > 0) {
       typeInput.options[0].selected = 'selected'
-      typeInput.dispatchEvent(new Event('change', { bubbles: true }))
     }
+    typeInput.dispatchEvent(new Event('change', { bubbles: true }))
   })
 
   // Fetch categories & update form fields
