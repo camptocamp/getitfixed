@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
   deform.addCallback(geometry_oid, function () {
     // Recenter on feature or query params
     map = c2cgeoform.getObjectMap(geometry_oid)
-    let features = map.getLayers().item(1).getSource().getFeatures()
+    let features = map.getLayers().item(map.getLayers().getLength() - 1).getSource().getFeatures()
     if (features.length === 0) {
       if (x && y && z) {
         map.getView().setCenter([params.get('x'), params.get('y')].map(parseFloat))
