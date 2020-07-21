@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Autoselect first if no one selected
     if (!Array.from(typeInput.options).find(x => x.selected) && typeInput.options.length > 0) {
       typeInput.options[0].selected = 'selected'
-      typeInput.dispatchEvent(new Event('change', { bubbles: true }))
     }
+    typeInput.dispatchEvent(new Event('change', { bubbles: true }))
   })
 
   // Fetch categories & update form fields
@@ -124,7 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
   deform.addCallback(geometry_oid, function () {
     // Recenter on feature or query params
     map = c2cgeoform.getObjectMap(geometry_oid)
-    let features = map.getLayers().item(1).getSource().getFeatures()
+    let features = map.getLayers().getArray().find(l => l.getSource().getFeatures)
+      .getSource().getFeatures()
     if (features.length === 0) {
       if (x && y && z) {
         map.getView().setCenter([params.get('x'), params.get('y')].map(parseFloat))
