@@ -229,8 +229,8 @@ msgid "You"
 msgstr "Vous"
 
 #: getitfixed/templates/admin/issues/edit.jinja2:30
-msgid "No Comment"
-msgstr "Commentaires"
+msgid "No comment"
+msgstr "Pas de commentaire"
 
 #: getitfixed/templates/public/issues/index.jinja2:7
 msgid "Report an issue"
