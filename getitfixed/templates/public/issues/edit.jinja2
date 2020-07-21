@@ -21,6 +21,7 @@
 {% endblock content %}
 
 {% block scripts %}
+{% if new %}
 <script>
   {% set form_field = form.field if (form.__class__.__name__ == 'ValidationFailure') else form %}
   window.issue = {
@@ -30,4 +31,17 @@
   }
 </script>
 <script src="{{request.static_url('getitfixed:static/scripts/issue.js')}}"></script>
+{% else %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const geometry_oid = '{{form['geometry'].oid}}'
+  deform.addCallback(geometry_oid, function () {
+    c2cgeoform.addLayer(geometry_oid, {
+      type_: 'WMS',
+      url: '{{wms_layer}}'
+    })
+  })
+})
+</script>
+{% endif %}
 {% endblock scripts %}

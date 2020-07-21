@@ -133,8 +133,10 @@ class IssueViews(AbstractViews):
             if not self._request.matchdict["id"].isdigit():
                 raise HTTPNotFound()
             base_edit = super().edit(schema=follow_schema, readonly=True)
-            base_edit["item_name"] = self._get_object().description
+            obj = self._get_object()
+            base_edit["item_name"] = obj.description
             base_edit["new"] = False
+            base_edit["wms_layer"] = obj.type.wms_layer
             return base_edit
 
     # For development/testing purpose
