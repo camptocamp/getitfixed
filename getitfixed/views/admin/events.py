@@ -23,14 +23,6 @@ class EventViews(AbstractViews):
 
     @view_config(
         route_name="c2cgeoform_item",
-        request_method="GET",
-        renderer="getitfixed:templates/public/issues/edit.jinja2",
-    )
-    def edit(self):
-        return super().edit()
-
-    @view_config(
-        route_name="c2cgeoform_item",
         request_method="POST",
         renderer="getitfixed:templates/admin/events/edit.jinja2",
     )
