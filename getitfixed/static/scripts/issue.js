@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!geometry_oid) { return }
 
-  let newIssue = issue['new']
+  let validationFail = issue['validationFail']
   let params = new URL(window.location).searchParams
   let [x, y, z] = ['x', 'y', 'z'].map(_ => params.get(_))
 
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     }
 
-    if (!window.matchMedia('(max-width: 576px)').matches || !newIssue) { return }
+    if (!window.matchMedia('(max-width: 576px)').matches || validationFail) { return }
 
     // On mobile move geometry/cat/type on a temporary focused subform
     document.body.classList.add('focused')
