@@ -128,3 +128,20 @@ Here is some maps configuration examples.
 
       # Max zoom when fitting on features
       fitMaxZoom: 12
+
+
+Customize "404 Not Found" view
+------------------------------
+
+Register a view for ``HTTPNotFound`` exceptions:
+
+.. code: python
+
+   @notfound_view_config(template="mypackage:templates/404.jinja2")
+   def notfound(request):
+       return {}
+
+And put content you want in template ``404.jinja2``.
+Not that in a ``c2cgeoportal`` project you can name template ``404.html`` to use Mako for rendering.
+
+See Pyramid documentation for details: https://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/pylons/exceptions.html#exception-views
