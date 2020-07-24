@@ -62,6 +62,14 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
 
     _prefix = "/getitfixed_private/issues"
 
+    def test_old_url_redirect(self, test_app, issue_test_data):
+        """
+        Old private issue URLs must redirect to new one.
+        """
+        issue = issue_test_data["issues"][0]
+        resp = test_app.get("/getitfixed/private/issues/{}".format(issue.hash), status=302)
+        assert resp.location == "http://localhost/getitfixed_private/issues/{}".format(issue.hash)
+
     @patch("getitfixed.views.private.semi_private_events.send_email")
     def test_edit_then_post_comment(
         self, send_email, test_app, issue_test_data, dbsession

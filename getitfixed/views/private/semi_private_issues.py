@@ -1,7 +1,7 @@
 from functools import partial
 
 from pyramid.view import view_config, view_defaults
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 from deform import Button, Form
 from deform.widget import HiddenWidget
 
@@ -22,6 +22,21 @@ base_schema = GeoFormSchemaNode(
 event_schema = GeoFormSchemaNode(Event)
 event_schema["status"].widget = HiddenWidget()
 event_schema["private"].widget = HiddenWidget()
+
+
+@view_config(route_name="c2cgeoform_item_private", request_method="GET")
+def private_issue_legacy(request):
+    """
+    Temporary redirect URLs sent by email to new URL.
+    """
+    return HTTPFound(
+        request.route_url(
+            "c2cgeoform_item",
+            application="getitfixed_private",
+            table="issues",
+            id=request.matchdict["id"],
+        )
+    )
 
 
 @view_defaults(match_param=("application=getitfixed_private", "table=issues"))
