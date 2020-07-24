@@ -8,11 +8,7 @@ def includeme(config):
     config.add_route("getitfixed", "/getitfixed/")
     config.add_c2cgeoform_application("getitfixed", [("issues", Issue)])
 
-    config.add_route(
-        "c2cgeoform_item_private",
-        "{application:getitfixed}/private/{table}/{id}",
-        pregenerator=pregenerator,
-    )
+    config.add_c2cgeoform_application("getitfixed_private", [])
 
     config.add_route("getitfixed_admin", "/getitfixed_admin/")
     config.add_c2cgeoform_application(

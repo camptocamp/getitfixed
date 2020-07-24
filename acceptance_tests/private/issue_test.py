@@ -60,7 +60,7 @@ def issue_test_data(dbsession, transact):
 @pytest.mark.usefixtures("issue_test_data", "test_app")
 class TestSemiPrivateIssueViews(AbstractViewsTests):
 
-    _prefix = "/getitfixed/private/issues"
+    _prefix = "/getitfixed_private/issues"
 
     @patch("getitfixed.views.private.semi_private_events.send_email")
     def test_edit_then_post_comment(
@@ -90,7 +90,7 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
         resp = form.submit("submit", status=302)
 
         assert (
-            "http://localhost/getitfixed/private/issues/{}#existing_events_form".format(
+            "http://localhost/getitfixed_private/issues/{}#existing_events_form".format(
                 issue.hash
             )
             == resp.location
@@ -144,5 +144,5 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
 
         resp = form.submit("submit", status=200)
 
-        assert "http://localhost/getitfixed/events/new" == resp.request.path_url
+        assert "http://localhost/getitfixed_private/events/new" == resp.request.path_url
         assert smtp_mock.call_count == 0

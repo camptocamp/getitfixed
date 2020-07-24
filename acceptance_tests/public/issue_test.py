@@ -116,7 +116,7 @@ class TestIssueViews(AbstractViewsTests):
         )
 
         hash_ = re.match(
-            r"http://localhost/getitfixed/private/issues/(.*)\?msg_col=submit_ok", resp.location
+            r"http://localhost/getitfixed_private/issues/(.*)\?msg_col=submit_ok", resp.location
         ).group(1)
 
         obj = dbsession.query(Issue).filter(Issue.hash == hash_).one()
@@ -137,7 +137,7 @@ class TestIssueViews(AbstractViewsTests):
             template_kwargs={
                 'username': 'Andreas Ford',
                 'issue': obj,
-                'issue-link': 'http://localhost/getitfixed/private/issues/{}'.format(obj.hash),
+                'issue-link': 'http://localhost/getitfixed_private/issues/{}'.format(obj.hash),
             },
         )
         assert send_email.mock_calls[1] == call(

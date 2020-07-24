@@ -53,8 +53,8 @@ class EventViews(AbstractViews):
                     self._obj.issue.email,
                     "update_issue_email",
                     self._request.route_url(
-                        "c2cgeoform_item_private",
-                        application="getitfixed",
+                        "c2cgeoform_item",
+                        application="getitfixed_private",
                         table="issues",
                         id=self._obj.issue.hash,
                         _anchor="existing_events_form",
