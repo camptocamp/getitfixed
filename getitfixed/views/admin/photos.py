@@ -14,7 +14,7 @@ from getitfixed.models.getitfixed import Photo
 class PhotoViews(AbstractViews):
 
     _model = Photo
-    _id_field = "id"
+    _id_field = "hash"
 
     @view_config(route_name="c2cgeoform_item", request_method="GET")
     def get(self):

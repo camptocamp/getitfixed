@@ -105,9 +105,10 @@ class Photo(FileData, Base):
         "unknown": "preserve",
         "missing": colander.required,
         "widget": deform_ext.FileUploadWidget(
-            get_url=lambda request, id: request.route_url(
-                "c2cgeoform_item", table="photos", id=id
-            )
+            id_field="hash",
+            get_url=lambda request, id_: request.route_url(
+                "c2cgeoform_item", table="photos", id=id_
+            ),
         ),
     }
     hash = Column(
