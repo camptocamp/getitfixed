@@ -110,6 +110,13 @@ class Photo(FileData, Base):
             )
         ),
     }
+    hash = Column(
+        Text,
+        nullable=False,
+        unique=True,
+        default=lambda: str(uuid4()),
+        info={"c2cgeoform": {"duplicate": False}},
+    )
     issue_id = Column(Integer, ForeignKey("{}.issue.id".format(schema)))
 
 
