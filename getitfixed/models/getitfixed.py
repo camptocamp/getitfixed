@@ -89,7 +89,7 @@ class TelWidget(TextInputWidget):
         quoted = quoteattr(cstruct)
         if readonly:
             return cstruct
-        return u'<input type="tel" name="%s" pattern="(\\d| )+" value=%s>' % (
+        return u'<input type="tel" name="%s" pattern="(^\\+?\\d*$)" value=%s>' % (
             field.name,
             quoted,
         )
