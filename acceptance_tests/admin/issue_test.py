@@ -182,7 +182,7 @@ class TestAdminIssueViews(AbstractViewsTests):
                 'username': 'Firstname0 Lastname0',
                 'issue': obj.issue,
                 'event': obj,
-                'issue-link': 'http://localhost/getitfixed/private/issues/{}#existing_events_form'.format(obj.issue.hash),
+                'issue-link': 'http://localhost/getitfixed_private/issues/{}#existing_events_form'.format(obj.issue.hash),
             },
         )
 

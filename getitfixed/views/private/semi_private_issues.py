@@ -1,7 +1,7 @@
 from functools import partial
 
 from pyramid.view import view_config, view_defaults
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
 from deform import Button, Form
 from deform.widget import HiddenWidget
 
@@ -24,14 +24,28 @@ event_schema["status"].widget = HiddenWidget()
 event_schema["private"].widget = HiddenWidget()
 
 
-@view_defaults(match_param="table=issues")
+@view_config(route_name="c2cgeoform_item_private", request_method="GET")
+def private_issue_legacy(request):
+    """
+    Temporary redirect URLs sent by email to new URL.
+    """
+    return HTTPFound(
+        request.route_url(
+            "c2cgeoform_item",
+            application="getitfixed_private",
+            table="issues",
+            id=request.matchdict["id"],
+        )
+    )
+
+
+@view_defaults(match_param=("application=getitfixed_private", "table=issues"))
 class IssueViews(AbstractViews):
     _model = Issue
     _base_schema = base_schema
     _id_field = "hash"
     _author = USER_REPORTER
     _event_schema = event_schema
-    _application = "getitfixed"
 
     MSG_COL = {
         "submit_ok": _(
@@ -43,7 +57,7 @@ class IssueViews(AbstractViews):
     }
 
     @view_config(
-        route_name="c2cgeoform_item_private",
+        route_name="c2cgeoform_item",
         request_method="GET",
         renderer="getitfixed:templates/admin/issues/edit.jinja2",
     )
@@ -64,10 +78,7 @@ class IssueViews(AbstractViews):
                 formid="new_event_form",
                 buttons=[Button(name="formsubmit", title=_("Submit"))],
                 action=self._request.route_url(
-                    "c2cgeoform_item",
-                    application=self._application,
-                    table="events",
-                    id="new",
+                    "c2cgeoform_item", table="events", id="new"
                 ),
             )
             resp.update(

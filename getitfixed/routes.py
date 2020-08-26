@@ -8,6 +8,9 @@ def includeme(config):
     config.add_route("getitfixed", "/getitfixed/")
     config.add_c2cgeoform_application("getitfixed", [("issues", Issue)])
 
+    config.add_c2cgeoform_application("getitfixed_private", [])
+
+    # Temporary redirect URLs sent by email to new URL
     config.add_route(
         "c2cgeoform_item_private",
         "{application:getitfixed}/private/{table}/{id}",

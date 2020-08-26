@@ -166,8 +166,8 @@ class IssueViews(AbstractViews):
                     self._obj.email,
                     "new_issue_email",
                     self._request.route_url(
-                        "c2cgeoform_item_private",
-                        application="getitfixed",
+                        "c2cgeoform_item",
+                        application="getitfixed_private",
                         id=self._obj.hash,
                     ),
                 )
@@ -183,8 +183,8 @@ class IssueViews(AbstractViews):
                 )
                 return HTTPFound(
                     self._request.route_url(
-                        "c2cgeoform_item_private",
-                        application="getitfixed",
+                        "c2cgeoform_item",
+                        application="getitfixed_private",
                         id=self._obj.hash,
                         _query=[("msg_col", "submit_ok")],
                     )

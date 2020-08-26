@@ -17,7 +17,7 @@ base_schema["status"].widget = HiddenWidget()
 base_schema["private"].widget = HiddenWidget()
 
 
-@view_defaults(match_param=("application=getitfixed", "table=events"))
+@view_defaults(match_param=("application=getitfixed_private", "table=events"))
 class EventViews(AbstractViews):
 
     _model = Event
@@ -47,8 +47,7 @@ class EventViews(AbstractViews):
             # Redirect to issue form
             return HTTPFound(
                 self._request.route_url(
-                    "c2cgeoform_item_private",
-                    application="getitfixed",
+                    "c2cgeoform_item",
                     table="issues",
                     id=self._obj.issue.hash,
                     _anchor="existing_events_form",
