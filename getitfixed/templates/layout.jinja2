@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="pyramid web application">
     <meta name="author" content="Camptocamp">
+    {% if ((request.c2cgeoform_application) and (request.c2cgeoform_application.name() != "getitfixed")) %}
+    <meta name="robots" content="noindex">
+    {% endif %}
 
     {% block title %}
     <title>{{_('GetItFixed!')}}</title>
