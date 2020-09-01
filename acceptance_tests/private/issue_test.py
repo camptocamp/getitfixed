@@ -70,7 +70,7 @@ class TestSemiPrivateIssueViews(AbstractViewsTests):
         resp = test_app.get("/getitfixed/private/issues/{}".format(issue.hash), status=302)
         assert resp.location == "http://localhost/getitfixed_private/issues/{}".format(issue.hash)
 
-    @patch("getitfixed.views.private.semi_private_events.send_email")
+    @patch("getitfixed.views.private.events.send_email")
     def test_edit_then_post_comment(
         self, send_email, test_app, issue_test_data, dbsession
     ):

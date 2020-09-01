@@ -15,7 +15,7 @@ from getitfixed.models.getitfixed import (
     USER_ADMIN,
     STATUS_RESOLVED,
 )
-from getitfixed.views.private.semi_private_issues import IssueViews
+from getitfixed.views.private.issues import IssueViews
 
 _list_field = partial(ListField, Issue)
 
