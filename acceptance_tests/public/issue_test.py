@@ -12,7 +12,7 @@ from getitfixed.models.getitfixed import (
     STATUS_VALIDATED,
     STATUS_NEW,
 )
-from getitfixed.views.private.semi_private_issues import IssueViews as IssuePrivateViews
+from getitfixed.views.private.issues import IssueViews as IssuePrivateViews
 
 from unittest.mock import patch, call, ANY
 

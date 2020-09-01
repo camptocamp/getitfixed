@@ -175,15 +175,18 @@ body {
   bottom: 0;
   width: calc(100vw - 1em);
   left: 0.5em;
-  height: 3em;
-  display: grid;
+  display: flex;
+  gap: 0.5em;
   grid-gap: 0.5em;
-  grid-template-columns: repeat(3, 1fr);
   z-index: 20;
 }
-.next {
-  width: 100%;
+.subform select {
+  padding: 6px 3px;
 }
+.next span {
+  display: none;
+}
+
 .map.c2cgeoform-readonly,
 .map.cross.c2cgeoform-readonly {
   height: 150px;

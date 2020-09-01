@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
     <ol class="breadcrumb">
-      <li><a href="{{request.route_url('c2cgeoform_index')}}">{{_('Issues')}}</a></li>
+      <li><a href="{{request.route_url('c2cgeoform_index', application='getitfixed' if request.c2cgeoform_application.name() == "getitfixed_private")}}">{{_('Issues')}}</a></li>
       <li class="active">
         {{title[:80]}}
         (<a class="btn btn-link event-link" href="#existing_events_form">{% trans %}See events{% endtrans %}</a>)
@@ -33,6 +33,8 @@
     </div>
 </div>
 <script>
+deform.focusFirstInput = () => false
+
 document.addEventListener('DOMContentLoaded', () => {
   const geometry_oid = '{{form['geometry'].oid}}'
   deform.addCallback(geometry_oid, function () {
