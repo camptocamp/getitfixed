@@ -2,6 +2,7 @@ alembic
 c2c.template
 c2cgeoform>=2.1.17
 beaker_redis
+pyramid_debugtoolbar
 plaster_pastedeploy
 psycopg2-binary
 pyramid_tm
