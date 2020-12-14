@@ -291,7 +291,9 @@ class Issue(Base):
             "colanderalchemy": {
                 "title": _("Status"),
                 "widget": SelectWidget(
-                    values=STATUSES.items(), readonly=True, item_css_class="item-status"
+                    values=list(STATUSES.items()),
+                    readonly=True,
+                    item_css_class="item-status",
                 ),
             }
         },
@@ -408,7 +410,7 @@ class Event(Base):
             "colanderalchemy": {
                 "title": _("Status"),
                 "widget": SelectWidget(
-                    values=STATUSES.items(), item_css_class="item-status"
+                    values=list(STATUSES.items()), item_css_class="item-status"
                 ),
             }
         },
