@@ -17,7 +17,7 @@ def test_generate_url(app_env):
     assert "http://localhost/getitfixed_static/image.png" == generate_url(request, "static://static/image.png")
 
 def test_gmf_2_5():
-    with bootstrap("tests.ini") as env:
+    with bootstrap("getitfixed://tests.ini") as env:
         # Compatibility with GMF 2.5
         config = testing.setUp(registry=env["registry"])
         config.add_static_view(name="static", path="/etc/geomapfish/static")

@@ -22,7 +22,12 @@ jobs:
       - name: Lint
         run: make check
       - name: Tests
-        run: make test || (docker-compose logs && false)
+        run: make test
+      - name: Docker compose logs
+        if: ${{ always() }}
+        run: |
+          docker-compose logs
+          docker-compose down -v --remove-orphans
       - name: Deploy PyPI
         if: >
           github.repository == 'camptocamp/getitfixed'

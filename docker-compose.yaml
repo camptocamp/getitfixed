@@ -12,6 +12,10 @@ services:
   db:
     image: camptocamp/getitfixed-postgresql:latest
     restart: unless-stopped
+    environment:
+      - POSTGRES_USER=getitfixed
+      - POSTGRES_PASSWORD=getitfixed
+      - POSTGRES_DB=getitfixed
 
   redis:
     image: redis:5
@@ -56,3 +60,30 @@ services:
       - smtp_maildir:/home/smtp/Maildir/
     ports:
       - 8082:80
+
+  db_tests:
+    image: camptocamp/getitfixed-postgresql:latest
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=getitfixed
+      - POSTGRES_PASSWORD=getitfixed
+      - POSTGRES_DB=getitfixed_tests
+
+  test:
+    image: ${DOCKER_BASE}-build:${DOCKER_TAG}
+    user: www-data
+    restart: unless-stopped
+    depends_on:
+      - db_tests
+    volumes:
+      - ${PWD}/getitfixed:/app/getitfixed
+      - ${PWD}/acceptance_tests:/app/acceptance_tests
+    environment:
+      - PGHOST=db_tests
+      - PGHOST_SLAVE=db_tests
+      - PGPORT=5432
+      - PGUSER=getitfixed
+      - PGPASSWORD=getitfixed
+      - PGDATABASE=getitfixed_tests
+      - INI_FILE=tests.ini
+    command: 'pytest /app/acceptance_tests'

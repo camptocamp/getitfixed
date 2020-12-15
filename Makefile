@@ -105,7 +105,8 @@ check: docker-build-build
 .PHONY: test
 test: ## Run tests
 test:
-	docker-compose -f docker-compose-test.yaml run --rm test
+	docker-compose up -d db_tests
+	docker-compose run --rm test
 
 .PHONY: docs
 docs: ## Build documentation
