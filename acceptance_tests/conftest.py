@@ -16,7 +16,7 @@ from getitfixed.scripts import wait_for_db
 
 @pytest.fixture(scope="session")
 def app_env():
-    with bootstrap("tests.ini") as env:
+    with bootstrap("getitfixed://tests.ini") as env:
         yield env
 
 
@@ -25,9 +25,7 @@ def app_env():
 def dbsession(settings):
     alembic_cfg = Config("alembic.ini", ini_section="getitfixed")
     command.upgrade(alembic_cfg, "head")
-
     engine = get_engine(settings)
-    wait_for_db(engine)
     session_factory = get_session_factory(engine)
     session = get_tm_session(session_factory, transaction.manager)
     return session

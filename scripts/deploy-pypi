@@ -1,0 +1,26 @@
+#!/bin/bash -ex
+
+if [[ "${GITHUB_ACTIONS}" == "true" ]]
+then
+    if [[ "${GITHUB_REF}" =~ ^refs/tags/.* ]]
+    then
+      GIT_TAGS=$(echo "${GITHUB_REF}"|sed 's|^refs/tags/||g')
+    elif [[ "${GITHUB_REF}" =~ ^refs/heads/.* ]]
+    then
+      GIT_BRANCH=$(echo "${GITHUB_REF}"|sed 's|^refs/heads/||g')
+    fi
+else
+    GIT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+    GIT_TAGS=`git tag --points-at HEAD`
+fi
+
+deploy_pypi {
+    make docker-compile-catalog
+    VERSION=$1 python setup.py egg_info sdist bdist_wheel upload -r pypi
+}
+
+# Deploy tags
+for GIT_TAG in ${GIT_TAGS}
+do
+    deploy_pypi $GIT_TAG
+done

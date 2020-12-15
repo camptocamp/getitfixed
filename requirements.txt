@@ -8,3 +8,4 @@ pyramid_tm
 transaction
 waitress
 deform>=2.0.10
+SQLAlchemy>=1.1.13
