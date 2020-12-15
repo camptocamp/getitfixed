@@ -326,9 +326,7 @@ class Issue(Base):
         },
     )
     localisation = Column(
-        String(254),
-        nullable=False,
-        info={"colanderalchemy": {"title": _("Localisation")}},
+        String(254), info={"colanderalchemy": {"title": _("Localisation")}}
     )
     photos = relationship(
         Photo,
