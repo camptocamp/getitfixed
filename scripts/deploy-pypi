@@ -16,7 +16,8 @@ fi
 
 function deploy_pypi {
     make docker-compile-catalog
-    VERSION=$1 python setup.py egg_info sdist bdist_wheel upload -r pypi
+    VERSION=$1 python3 setup.py egg_info sdist bdist_wheel
+    twine upload dist/*
 }
 
 # Deploy tags
