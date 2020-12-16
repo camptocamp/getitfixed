@@ -30,6 +30,14 @@ jobs:
         run: |
           docker-compose logs
           docker-compose down -v --remove-orphans
+
+      # Publish
+      - run: sudo python3 -m pip install twine wheel
+      - name: Test deploy pypi
+        if: >
+          github.repository == 'camptocamp/getitfixed'
+          && !startsWith(github.ref, 'refs/tags/')
+        run: scripts/deploy-pypi --test
       - name: Deploy PyPI
         if: >
           github.repository == 'camptocamp/getitfixed'
@@ -37,6 +45,4 @@ jobs:
           && (
             startsWith(github.ref, 'refs/tags/')
           )
-        run: |
-          sudo python3 -m pip install twine wheel
-          scripts/deploy-pypi
+        run: scripts/deploy-pypi

@@ -1,4 +1,24 @@
-#!/bin/bash -ex
+#!/bin/bash -e
+
+function usage(){
+    printf "\n"
+    printf "Usage: $0 [-h] [--test]\n"
+    printf "\n"
+    printf "Options:\n"
+    printf "  -h       Show this help message\n"
+    printf "  --test   Test deployment on testpypi\n"
+}
+
+TEST=false
+
+while [ -n "$1" ]; do # while loop starts
+    case "$1" in
+    -h) usage; exit 0 ;; # Show help
+    --test) TEST=true ;; # This is a deploy test
+    *) echo "Option $1 not recognized" ;;
+    esac
+    shift
+done
 
 if [[ "${GITHUB_ACTIONS}" == "true" ]]
 then
@@ -14,14 +34,20 @@ else
     GIT_TAGS=`git tag --points-at HEAD`
 fi
 
+make docker-compile-catalog
+
 function deploy_pypi {
-    make docker-compile-catalog
     VERSION=$1 python3 setup.py egg_info sdist bdist_wheel
     twine upload dist/*
 }
 
-# Deploy tags
-for GIT_TAG in ${GIT_TAGS}
-do
-    deploy_pypi $GIT_TAG
-done
+if [ $TEST = true ] ; then
+    python3 setup.py egg_info sdist bdist_wheel
+    twine upload -r testpypi dist/*
+else
+    # Deploy tags
+    for GIT_TAG in ${GIT_TAGS}
+    do
+        deploy_pypi $GIT_TAG
+    done
+fi
