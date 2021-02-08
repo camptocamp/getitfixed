@@ -86,3 +86,16 @@ class TestIssue:
         )
         assert i.category.icon == icon
         assert i.icon_url(request) == icon_url
+
+    def test_full_name(self):
+        i = issue(
+            firstname="Firstname",
+            lastname="Lastname",
+        )
+        assert i.full_name() == "Firstname Lastname"
+
+        i = issue(
+            firstname=None,
+            lastname=None,
+        )
+        assert i.full_name() == ""
