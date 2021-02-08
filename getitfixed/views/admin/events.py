@@ -78,9 +78,7 @@ class EventViews(AbstractViews):
             to=send_to,
             template_name=template_name,
             template_kwargs={
-                "username": "{} {}".format(
-                    self._obj.issue.firstname, self._obj.issue.lastname
-                ),
+                "username": self._obj.issue.full_name(),
                 "issue": self._obj.issue,
                 "event": self._obj,
                 "issue-link": link,

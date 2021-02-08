@@ -151,6 +151,62 @@ class TestIssueViews(AbstractViewsTests):
             },
         )
 
+    @patch("getitfixed.views.public.issues.send_email")
+    def test_new_then_save_without_name(self, send_email, dbsession, test_app, issue_test_data):
+        resp = test_app.get("/getitfixed/issues/new", status=200)
+
+        form = resp.form
+        form["type_id"] = str(issue_test_data["types"][0].id)
+        form["description"] = "Description"
+        form["localisation"] = "234 long street"
+        form["firstname"] = ""
+        form["lastname"] = ""
+        form["phone"] = ""
+        form["email"] = "andreas.ford@domain.net"
+
+        resp = form.submit("submit", status=302)
+
+        assert (
+            IssuePrivateViews.MSG_COL["submit_ok"]
+            == resp.follow().html.find("div", {"class": "msg-lbl"}).getText()
+        )
+
+        hash_ = re.match(
+            r"http://localhost/getitfixed_private/issues/(.*)\?msg_col=submit_ok", resp.location
+        ).group(1)
+
+        obj = dbsession.query(Issue).filter(Issue.hash == hash_).one()
+        assert datetime.date.today() == obj.request_date
+        assert issue_test_data["types"][0] is obj.type
+        assert "Description" == obj.description
+        assert "234 long street" == obj.localisation
+        assert None == obj.firstname
+        assert None == obj.lastname
+        assert None == obj.phone
+        assert "andreas.ford@domain.net" == obj.email
+
+        assert 2 == send_email.call_count
+        assert send_email.mock_calls[0] == call(
+            request=ANY,
+            to='andreas.ford@domain.net',
+            template_name='new_issue_email',
+            template_kwargs={
+                'username': '',
+                'issue': obj,
+                'issue-link': 'http://localhost/getitfixed_private/issues/{}'.format(obj.hash),
+            },
+        )
+        assert send_email.mock_calls[1] == call(
+            request=ANY,
+            to='0.is@abit.ch',
+            template_name='admin_new_issue_email',
+            template_kwargs={
+                'username': '',
+                'issue': obj,
+                'issue-link': 'http://localhost/getitfixed_admin/issues/{}'.format(obj.hash),
+            },
+        )
+
     def test_open(self, dbsession, test_app, issue_test_data):
         issue = dbsession.query(Issue).first()
         resp = test_app.get("/getitfixed/issues/{}".format(issue.id), status=200)

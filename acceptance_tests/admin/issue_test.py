@@ -238,3 +238,45 @@ class TestAdminIssueViews(AbstractViewsTests):
 
         assert "in_progress" == issue.status
         assert smtp_mock.call_count == 0
+
+    @patch("getitfixed.views.admin.events.send_email")
+    def test_edit_then_post_comment_empty_reporter_name(
+        self, send_email, test_app, issue_test_data, dbsession
+    ):
+        issue = Issue(
+            type=issue_test_data["types"][0],
+            description="Truite sauvage",
+            localisation="1 rue du pont",
+            firstname=None,
+            lastname=None,
+            phone=None,
+            email="0.is@abit.ch",
+        )
+        dbsession.add(issue)
+        dbsession.flush()
+
+        resp = self.get(test_app, "/{}".format(issue.hash), status=200)
+
+        form = resp.forms["new_event_form"]
+        form["comment"].value = "This is a private comment"
+        resp = form.submit("submit", status=302)
+
+        obj = (
+            dbsession.query(Event)
+            .filter(Event.issue_id == issue.id)
+            .order_by(Event.date.desc())
+            .first()
+        )
+
+        assert send_email.call_count == 1
+        assert send_email.mock_calls[0] == call(
+            request=ANY,
+            to='0.is@abit.ch',
+            template_name='update_issue_email',
+            template_kwargs={
+                'username': '',
+                'issue': obj.issue,
+                'event': obj,
+                'issue-link': 'http://localhost/getitfixed_private/issues/{}#existing_events_form'.format(obj.issue.hash),
+            },
+        )

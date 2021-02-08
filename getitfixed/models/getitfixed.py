@@ -333,15 +333,10 @@ class Issue(Base):
         cascade="all, delete-orphan",
         info={"colanderalchemy": {"title": _("Photos")}},
     )
-    firstname = Column(
-        String(100), nullable=False, info={"colanderalchemy": {"title": _("Firstname")}}
-    )
-    lastname = Column(
-        String(100), nullable=False, info={"colanderalchemy": {"title": _("Lastname")}}
-    )
+    firstname = Column(String(100), info={"colanderalchemy": {"title": _("Firstname")}})
+    lastname = Column(String(100), info={"colanderalchemy": {"title": _("Lastname")}})
     phone = Column(
         String(20),
-        nullable=False,
         info={"colanderalchemy": {"title": _("Phone"), "widget": TelWidget()}},
     )
     email = Column(
@@ -384,6 +379,9 @@ class Issue(Base):
 
     def icon_url(self, request):
         return self.type.icon_url(request) if self.type else default_icon_url(request)
+
+    def full_name(self):
+        return "{} {}".format(self.firstname or "", self.lastname or "").strip()
 
 
 class Event(Base):

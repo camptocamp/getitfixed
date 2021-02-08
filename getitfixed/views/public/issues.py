@@ -199,7 +199,7 @@ class IssueViews(AbstractViews):
             to=send_to,
             template_name=template_name,
             template_kwargs={
-                "username": "{} {}".format(self._obj.firstname, self._obj.lastname),
+                "username": self._obj.full_name(),
                 "issue": self._obj,
                 "issue-link": link,
             },

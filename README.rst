@@ -34,27 +34,18 @@ http://localhost:8080/getitfixed_admin/issues
 Generate a new alembic revision
 -------------------------------
 
-Before the first release we will overwrite the first migration:
+Generate a new alembic revision:
 
 .. code-block:: bash
 
-    rm -rf getitfixed/alembic/versions/*.py
-    cat <<<EOF | docker-compose exec --user postgres db psql -d getitfixed
-    DROP SCHEMA getitfixed CASCADE;
-    CREATE SCHEMA getitfixed;
-    GRANT ALL ON SCHEMA getitfixed TO getitfixed;
-    EOF
-
-.. code-block:: bash
-
-    docker-compose run --rm --user `id -u ` getitfixed \
+    docker-compose run --rm --user `id -u` getitfixed \
         alembic -c /app/alembic.ini -n getitfixed revision --autogenerate -m 'First revision'
 
-Now try it:
+Now upgrade the database:
 
 .. code-block:: bash
 
-    docker-compose run --rm --user `id -u ` getitfixed \
+    docker-compose run --rm --user `id -u` getitfixed \
         alembic -c /app/alembic.ini -n getitfixed upgrade head
 
 Email

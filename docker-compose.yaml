@@ -86,4 +86,4 @@ services:
       - PGPASSWORD=getitfixed
       - PGDATABASE=getitfixed_tests
       - INI_FILE=tests.ini
-    command: 'pytest /app/acceptance_tests'
+    command: 'pytest -vv /app/acceptance_tests'

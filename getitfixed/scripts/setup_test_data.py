@@ -12,8 +12,8 @@ from getitfixed.scripts import wait_for_db
 
 ICONS = ["gif-black.png", "gif-green.png", "gif-red.png"]
 DESCRIPTIONS = ("Déchets sur la voie publique", "Nid de poule")
-FIRSTNAMES = ("Dale", "Teresa", "Beatrice", "Darcie")
-LASTNAMES = ("Lamb", "Evans", "Alexander", "Rowe", "Ford")
+FIRSTNAMES = (None, "Dale", "Teresa", "Beatrice", "Darcie")
+LASTNAMES = (None, "Lamb", "Evans", "Alexander", "Rowe", "Ford")
 
 WMS_BASE = (
     "https://geomapfish-demo-2-4.camptocamp.com/mapserv_proxy"
@@ -129,6 +129,7 @@ def _issue(i, type_id, dbsession):
         status=STATUSES[i % 5],
     )
     issue.email = "{}.{}@domain.net".format(
-        issue.firstname.lower(), issue.lastname.lower()
+        issue.firstname.lower() if issue.firstname else "firstname",
+        issue.lastname.lower() if issue.lastname else "lastname",
     )
     return issue
