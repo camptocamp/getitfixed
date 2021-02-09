@@ -18,23 +18,47 @@ depends_on = None
 
 def upgrade():
     op.alter_column(
-        "issue", "firstname", existing_type=sa.VARCHAR(length=100), nullable=True
+        "issue",
+        "firstname",
+        existing_type=sa.VARCHAR(length=100),
+        nullable=True,
+        schema="getitfixed",
     )
     op.alter_column(
-        "issue", "lastname", existing_type=sa.VARCHAR(length=100), nullable=True
+        "issue",
+        "lastname",
+        existing_type=sa.VARCHAR(length=100),
+        nullable=True,
+        schema="getitfixed",
     )
     op.alter_column(
-        "issue", "phone", existing_type=sa.VARCHAR(length=20), nullable=True
+        "issue",
+        "phone",
+        existing_type=sa.VARCHAR(length=20),
+        nullable=True,
+        schema="getitfixed",
     )
 
 
 def downgrade():
     op.alter_column(
-        "issue", "phone", existing_type=sa.VARCHAR(length=20), nullable=False
+        "issue",
+        "phone",
+        existing_type=sa.VARCHAR(length=20),
+        nullable=False,
+        schema="getitfixed",
     )
     op.alter_column(
-        "issue", "lastname", existing_type=sa.VARCHAR(length=100), nullable=False
+        "issue",
+        "lastname",
+        existing_type=sa.VARCHAR(length=100),
+        nullable=False,
+        schema="getitfixed",
     )
     op.alter_column(
-        "issue", "firstname", existing_type=sa.VARCHAR(length=100), nullable=False
+        "issue",
+        "firstname",
+        existing_type=sa.VARCHAR(length=100),
+        nullable=False,
+        schema="getitfixed",
     )
