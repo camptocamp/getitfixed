@@ -11,7 +11,7 @@ with open(os.path.join(here, "requirements.txt")) as f:
 
 setup(
     name="getitfixed",
-    version=os.environ.get("VERSION", "1.0.27"),
+    version=os.environ.get("VERSION", "1.0.28"),
     description="getitfixed",
     long_description=README + "\n\n" + CHANGES,
     classifiers=[
