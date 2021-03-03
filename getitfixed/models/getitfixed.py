@@ -144,7 +144,7 @@ class Category(Base):
         },
     )
     email = Column(
-        String(50),
+        String(254),
         nullable=False,
         info={"colanderalchemy": {"title": _("Email"), "widget": TextInputWidget()}},
     )
@@ -340,7 +340,7 @@ class Issue(Base):
         info={"colanderalchemy": {"title": _("Phone"), "widget": TelWidget()}},
     )
     email = Column(
-        String(100),
+        String(254),
         nullable=False,
         info={
             "colanderalchemy": {
