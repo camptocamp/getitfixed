@@ -35,7 +35,7 @@ def send_email(request, to, template_name, template_args=[], template_kwargs={})
 
     # Connect to server
     smtp_host = smtp["host"]
-    if "ssl" in smtp_host and smtp["ssl"]:
+    if "ssl" in smtp and smtp["ssl"]:
         server = smtplib.SMTP_SSL(smtp_host)
     else:
         server = smtplib.SMTP(smtp_host)
