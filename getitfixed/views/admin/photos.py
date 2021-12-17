@@ -22,4 +22,5 @@ class PhotoViews(AbstractViews):
         response = self._request.response
         response.body = obj.data
         response.content_type = guess_type(obj.filename)[0]
+        response.content_disposition = 'attachment; filename="{}"'.format(obj.filename)
         return response
