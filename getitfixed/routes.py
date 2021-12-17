@@ -1,4 +1,4 @@
-from c2cgeoform.routes import pregenerator
+from c2cgeoform.routes import pregenerator, register_routes
 from getitfixed.models.getitfixed import Event, Issue
 
 
@@ -9,6 +9,7 @@ def includeme(config):
     config.add_c2cgeoform_application("getitfixed", [("issues", Issue)])
 
     config.add_c2cgeoform_application("getitfixed_private", [])
+    register_routes(config)
 
     # Temporary redirect URLs sent by email to new URL
     config.add_route(
