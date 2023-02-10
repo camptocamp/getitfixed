@@ -2,7 +2,7 @@ babel
 black==18.6b1
 flake8==3.7.8
 ipdb
-ipython==5.8.0
+ipython==8.10.0
 lingua
 mock
 pydevd
