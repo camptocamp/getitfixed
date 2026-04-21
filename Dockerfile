@@ -1,7 +1,7 @@
 ##########################################
 # Common base for build/test and runtime #
 ##########################################
-FROM python:3.8-slim AS base
+FROM python:3.12-slim AS base
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
