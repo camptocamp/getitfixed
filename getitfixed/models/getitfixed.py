@@ -373,6 +373,7 @@ class Issue(Base):
         "Event",
         order_by="desc(Event.date)",
         primaryjoin="and_(Event.issue_id==Issue.id, Event.private==False)",
+        viewonly=True,
     )
 
     category = association_proxy("type", "category")
