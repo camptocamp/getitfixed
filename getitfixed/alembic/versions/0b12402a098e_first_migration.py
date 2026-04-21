@@ -68,9 +68,7 @@ def upgrade():
         sa.Column("localisation", sa.String(length=254), nullable=False),
         sa.Column(
             "geometry",
-            geoalchemy2.types.Geometry(
-                geometry_type="POINT", srid=4326, management=False
-            ),
+            geoalchemy2.types.Geometry(geometry_type="POINT", srid=4326),
             nullable=True,
         ),
         sa.Column("firstname", sa.String(length=100), nullable=False),

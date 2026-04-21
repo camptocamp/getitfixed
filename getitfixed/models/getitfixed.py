@@ -252,7 +252,7 @@ class Issue(Base):
         info={"colanderalchemy": {"title": _("Request date")}},
     )
     geometry = Column(
-        geoalchemy2.Geometry("POINT", 4326, management=False),
+        geoalchemy2.Geometry("POINT", 4326),
         info={
             "colanderalchemy": {
                 "title": _("Position"),
