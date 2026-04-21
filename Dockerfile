@@ -4,8 +4,8 @@
 FROM python:3.8-slim AS base
 
 # set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # install dependencies
 COPY ./requirements.txt /app/requirements.txt
@@ -50,7 +50,7 @@ CMD ["make"]
 # Runtime image #
 #################
 FROM base AS getitfixed
-LABEL maintainer Camptocamp "info@camptocamp.com"
+LABEL maintainer="Camptocamp <info@camptocamp.com>"
 
 COPY --from=build /opt/getitfixed/ /opt/getitfixed/
 ENV NODE_PATH=/opt/thinkhazard/node_modules
