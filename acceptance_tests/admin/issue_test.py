@@ -87,7 +87,7 @@ class TestAdminIssueViews(AbstractViewsTests):
         assert 10 == json["total"]
 
         row = json["rows"][5]
-        obj = dbsession.query(Issue).get(row["id"])
+        obj = dbsession.get(Issue, row["id"])
         assert obj.hash == row["_id_"]
         assert obj.request_date.isoformat() == row["request_date"]
         assert obj.description == row["description"]
