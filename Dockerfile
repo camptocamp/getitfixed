@@ -25,12 +25,9 @@ RUN apt-get update && apt-get install -y \
     make
 
 RUN \
-  . /etc/os-release && \
-  echo "deb https://deb.nodesource.com/node_10.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list && \
-  curl --silent https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-  apt-get update && \
+  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
   apt-get install --assume-yes --no-install-recommends \
-    'nodejs=10.*' \
+    nodejs \
   && \
   apt-get clean && \
   rm --recursive --force /var/lib/apt/lists/*
