@@ -7,6 +7,7 @@ from datetime import date, timedelta
 from random import randrange
 
 from pyramid.scripts.common import parse_vars, get_config_loader
+from sqlalchemy import text
 
 from getitfixed.scripts import wait_for_db
 
@@ -68,7 +69,11 @@ def get_geometry(dbsession):
     coord_x = random.uniform(5.9559113, 10.4922941)
     coord_y = random.uniform(45.817995, 47.8084648)
     result_proxy = dbsession.execute(
-        "SELECT ST_SetSRID( ST_Point( {}, {}), 4326) as geom;".format(coord_x, coord_y)
+        text(
+            "SELECT ST_SetSRID( ST_Point( {}, {}), 4326) as geom;".format(
+                coord_x, coord_y
+            )
+        )
     )
     return result_proxy.first()[0]
 
@@ -77,9 +82,10 @@ def setup_test_data(dbsession):
     # Import the model after settings are loaded
     from getitfixed.models.getitfixed import Issue, Category, Type
 
-    if dbsession.query(Category).count() == 0:
+    categories = dbsession.query(Category).order_by(Category.id).all()
+    if not categories:
         for i in range(4):
-            dbsession.add(
+            categories.append(
                 Category(
                     label_en="Category «{}»".format(i),
                     label_fr="Catégorie «{}»".format(i),
@@ -91,33 +97,40 @@ def setup_test_data(dbsession):
                     ),
                 )
             )
-    if dbsession.query(Type).count() == 0:
+        dbsession.add_all(categories)
+        dbsession.flush()
+
+    types = dbsession.query(Type).order_by(Type.id).all()
+    if not types:
         for i in range(15):
-            dbsession.add(
+            types.append(
                 Type(
                     label_en="Type «{}»".format(i),
                     label_fr="Type «{}»".format(i),
-                    category_id=(i % 4) + 1,
+                    category=categories[i % 4],
                     wms_layer=WMS_LAYERS[i % 4],
                 )
             )
+        dbsession.add_all(types)
+        dbsession.flush()
+
     if dbsession.query(Issue).count() == 0:
         for i in range(100):
-            dbsession.add(_issue(i, (i % 15) + 1, dbsession))
+            dbsession.add(_issue(i, types[i % 15], dbsession))
 
 
 def get_value(col, i):
     return col[i % len(col)]
 
 
-def _issue(i, type_id, dbsession):
+def _issue(i, type_, dbsession):
     from getitfixed.models.getitfixed import Issue, STATUSES
 
     STATUSES = list(STATUSES.keys())
 
     issue = Issue(
         request_date=date.today() - timedelta(days=100 - i),
-        type_id=type_id,
+        type=type_,
         description=get_value(DESCRIPTIONS, i),
         localisation="{} rue du pont".format(i),
         geometry=get_geometry(dbsession),
