@@ -127,6 +127,28 @@ cleanall: clean
 		${DOCKER_BASE}-build:${DOCKER_TAG} \
 		${DOCKER_BASE}-getitfixed:${DOCKER_TAG} || true
 
+# Local Python venv (for IDE tooling; Docker is still the source of truth)
+
+VENV_DIR ?= .venv
+VENV_BIN = $(VENV_DIR)/bin
+VENV_PIP = $(VENV_BIN)/pip
+VENV_STAMP = $(VENV_DIR)/.installed
+
+.PHONY: venv
+venv: ## Create local .venv and install all Python deps
+venv: $(VENV_STAMP)
+
+$(VENV_STAMP): requirements.txt requirements-dev.txt setup.py
+	python3 -m venv $(VENV_DIR)
+	$(VENV_PIP) install --upgrade pip
+	$(VENV_PIP) install -r requirements.txt -r requirements-dev.txt
+	$(VENV_PIP) install --no-deps -e .
+	touch $@
+
+.PHONY: clean-venv
+clean-venv: ## Remove the local .venv
+	rm -rf $(VENV_DIR)
+
 # Development tools
 
 .PHONY: bash
