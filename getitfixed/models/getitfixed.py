@@ -85,11 +85,11 @@ def default_icon_url(request):
 class TelWidget(TextInputWidget):
     def serialize(self, field, cstruct=None, readonly=False, **kw):
         if cstruct is colander.null:
-            cstruct = u""
+            cstruct = ""
         quoted = quoteattr(cstruct)
         if readonly:
             return cstruct
-        return u'<input type="tel" name="%s" pattern="(^\\+?\\d*$)" value=%s>' % (
+        return '<input type="tel" name="%s" pattern="(^\\+?\\d*$)" value=%s>' % (
             field.name,
             quoted,
         )

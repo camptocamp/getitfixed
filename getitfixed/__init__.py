@@ -11,8 +11,7 @@ c2cgeoform.default_search_paths = search_paths
 
 
 def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application.
-    """
+    """This function returns a Pyramid WSGI application."""
     # Update the settings object from the YAML application config file
     configuration.init(settings.get("app.cfg"))
     settings.update(configuration.get_config())

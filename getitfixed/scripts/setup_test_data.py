@@ -84,9 +84,11 @@ def setup_test_data(dbsession):
                     label_en="Category «{}»".format(i),
                     label_fr="Catégorie «{}»".format(i),
                     email="test{}@toto.com".format(i),
-                    icon="static://getitfixed:static/icons/{}".format(ICONS[i % 3])
-                    if i != 3
-                    else None,
+                    icon=(
+                        "static://getitfixed:static/icons/{}".format(ICONS[i % 3])
+                        if i != 3
+                        else None
+                    ),
                 )
             )
     if dbsession.query(Type).count() == 0:
