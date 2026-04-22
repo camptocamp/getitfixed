@@ -1,12 +1,12 @@
-alembic==1.14.1
+alembic==1.18.4
 c2c.template==2.4.2
 pyyaml-include==2.2
 c2cgeoform==2.5.1
 beaker_redis==1.1.0
 plaster_pastedeploy==1.0.1
-psycopg2-binary==2.9.10
-pyramid_tm==2.5
-transaction==5.0
-waitress==3.0.0
+psycopg2-binary==2.9.12
+pyramid_tm==2.6
+transaction==5.1
+waitress==3.0.2
 deform==2.0.15
 SQLAlchemy==2.0.49
