@@ -9,5 +9,6 @@ services:
     volumes:
       - ${PWD}/getitfixed:/app/getitfixed
       - ${PWD}/acceptance_tests:/app/acceptance_tests
+      - ${PWD}/config.yaml:/app/config.yaml
       - ${PWD}/../c2cgeoform/c2cgeoform:/usr/local/lib/python3.12/site-packages/c2cgeoform
     command: pserve --reload getitfixed://development.ini

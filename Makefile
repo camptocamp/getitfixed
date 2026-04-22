@@ -32,6 +32,7 @@ export PROXY_PREFIX
 JS_LIBS_FOLDER = getitfixed/static/lib
 JS_LIBS = \
 	bootstrap/dist/css/bootstrap.min.css \
+	bootstrap/dist/css/bootstrap.min.css.map \
 	bootstrap/dist/fonts/glyphicons-halflings-regular.ttf \
 	bootstrap/dist/fonts/glyphicons-halflings-regular.woff2 \
 	bootstrap/dist/js/bootstrap.min.js \
