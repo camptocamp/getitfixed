@@ -8,17 +8,15 @@ on:
 jobs:
   main:
     name: Continuous integration
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      TX_USR: ${{ secrets.TX_USR }}
-      TX_PWD: ${{ secrets.TX_PWD }}
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: Build
         run: make build
       - name: Lint
@@ -28,8 +26,8 @@ jobs:
       - name: Docker compose logs
         if: ${{ always() }}
         run: |
-          docker-compose logs
-          docker-compose down -v --remove-orphans
+          docker compose logs
+          docker compose down -v --remove-orphans
       - name: Deploy PyPI
         if: >
           github.repository == 'camptocamp/getitfixed'
@@ -38,5 +36,5 @@ jobs:
             startsWith(github.ref, 'refs/tags/')
           )
         run: |
-          sudo python3 -m pip install setuptools twine wheel
+          python3 -m pip install setuptools twine wheel
           scripts/deploy-pypi

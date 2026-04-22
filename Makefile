@@ -64,13 +64,13 @@ help: ## Display this help message
 meacoffee: ## Build, run and show logs
 meacoffee: up
 	make initdb
-	docker-compose logs -f getitfixed
+	docker compose logs -f getitfixed
 
 .PHONY: up
-up: ## docker-compose up
+up: ## docker compose up
 up: build
-	docker-compose rm --stop --force getitfixed
-	docker-compose up -d
+	docker compose rm --stop --force getitfixed
+	docker compose up -d
 
 .PHONY: build
 build: ## Build runtime files and docker images
@@ -80,13 +80,13 @@ build: \
 		docker-compose-env
 
 .PHONY: docker-compose-env
-docker-compose-env: ## Build docker-compose environment file
+docker-compose-env: ## Build docker compose environment file
 	$(DOCKER_MAKE_CMD) .env
 
 .PHONY: initdb
 initdb:
-	docker-compose exec getitfixed alembic -n getitfixed upgrade head
-	docker-compose exec getitfixed getitfixed_setup_test_data getitfixed://development.ini#app
+	docker compose exec getitfixed alembic -n getitfixed upgrade head
+	docker compose exec getitfixed getitfixed_setup_test_data getitfixed://development.ini#app
 
 .PHONY: black
 black: docker-build-build
@@ -105,8 +105,8 @@ check: docker-build-build
 .PHONY: test
 test: ## Run tests
 test:
-	docker-compose up -d db_tests
-	docker-compose run --rm test
+	docker compose up -d db_tests
+	docker compose run --rm test
 
 .PHONY: docs
 docs: ## Build documentation
@@ -120,7 +120,7 @@ clean:
 .PHONY: cleanall
 cleanall: ## Clean everything including docker containers and images
 cleanall: clean
-	docker-compose down --remove-orphans
+	docker compose down --remove-orphans
 	rm -f .env
 	docker rmi \
 		${DOCKER_BASE}-postgresql:${DOCKER_TAG} \
@@ -159,17 +159,17 @@ bash: docker-build-build
 .PHONY: psql
 psql: ## Launch psql in postgres image
 psql:
-	docker-compose exec -u postgres db psql getitfixed
+	docker compose exec -u postgres db psql getitfixed
 
 .PHONY: psqldocs
 psqldocs: ## Launch psql in postgres image
 psqldocs:
-	docker-compose exec -u postgres db postgresql-autodoc getitfixed
+	docker compose exec -u postgres db postgresql-autodoc getitfixed
 
 .PHONY: pshell
 pshell: ## Launch getitfixed pshell
 pshell:
-	docker-compose run --rm getitfixed pshell getitfixed://development.ini
+	docker compose run --rm getitfixed pshell getitfixed://development.ini
 
 .PHONY: update-catalog
 update-catalog: ## Update the source localisation files (*.po)
