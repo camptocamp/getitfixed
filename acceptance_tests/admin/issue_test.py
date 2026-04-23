@@ -64,8 +64,6 @@ class TestAdminIssueViews(AbstractViewsTests):
     def test_index(self, test_app):
         resp = self.get(test_app, status=200)
 
-        # Inlined check instead of self.check_grid_headers(): c2cgeoform 2.5.1's
-        # helper compares lists to tuples and always fails.
         expected = [
             ("actions", "", "false"),
             ("id", "Identifier", "true"),
