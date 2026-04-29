@@ -1,6 +1,6 @@
 # coding=utf-8
 from uuid import uuid4
-from pkg_resources import resource_filename
+from importlib.resources import files
 
 from pyramid.i18n import make_localizer
 
@@ -85,11 +85,11 @@ def default_icon_url(request):
 class TelWidget(TextInputWidget):
     def serialize(self, field, cstruct=None, readonly=False, **kw):
         if cstruct is colander.null:
-            cstruct = u""
+            cstruct = ""
         quoted = quoteattr(cstruct)
         if readonly:
             return cstruct
-        return u'<input type="tel" name="%s" pattern="(^\\+?\\d*$)" value=%s>' % (
+        return '<input type="tel" name="%s" pattern="(^\\+?\\d*$)" value=%s>' % (
             field.name,
             quoted,
         )
@@ -252,7 +252,7 @@ class Issue(Base):
         info={"colanderalchemy": {"title": _("Request date")}},
     )
     geometry = Column(
-        geoalchemy2.Geometry("POINT", 4326, management=False),
+        geoalchemy2.Geometry("POINT", 4326),
         info={
             "colanderalchemy": {
                 "title": _("Position"),
@@ -312,7 +312,7 @@ class Issue(Base):
         return self.status_i18n("fr")
 
     def status_i18n(self, locale):
-        localizer = make_localizer(locale, [resource_filename("getitfixed", "locale")])
+        localizer = make_localizer(locale, [str(files("getitfixed") / "locale")])
         return localizer.translate(STATUSES[self.status])
 
     description = Column(
@@ -373,6 +373,7 @@ class Issue(Base):
         "Event",
         order_by="desc(Event.date)",
         primaryjoin="and_(Event.issue_id==Issue.id, Event.private==False)",
+        viewonly=True,
     )
 
     category = association_proxy("type", "category")

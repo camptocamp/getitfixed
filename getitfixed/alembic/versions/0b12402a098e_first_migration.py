@@ -5,6 +5,7 @@ Revises:
 Create Date: 2020-05-20 16:47:03.128539
 
 """
+
 from alembic import op
 import sqlalchemy as sa
 import geoalchemy2
@@ -68,9 +69,7 @@ def upgrade():
         sa.Column("localisation", sa.String(length=254), nullable=False),
         sa.Column(
             "geometry",
-            geoalchemy2.types.Geometry(
-                geometry_type="POINT", srid=4326, management=False
-            ),
+            geoalchemy2.types.Geometry(geometry_type="POINT", srid=4326),
             nullable=True,
         ),
         sa.Column("firstname", sa.String(length=100), nullable=False),

@@ -35,12 +35,14 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const geometry_oid = '{{form['geometry'].oid}}'
+  {% if wms_layer %}
   deform.addCallback(geometry_oid, function () {
     c2cgeoform.addLayer(geometry_oid, {
       type_: 'WMS',
       url: '{{wms_layer}}'
     })
   })
+  {% endif %}
 })
 </script>
 {% endif %}

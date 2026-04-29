@@ -30,10 +30,10 @@ def get_config():
         conf.update(config.get_config())
 
     if "sqlalchemy.url" not in conf:
-        conf[
-            "sqlalchemy.url"
-        ] = "postgresql://{PGUSER}:{PGPASSWORD}@{PGHOST}:{PGPORT}/{PGDATABASE}".format(
-            **os.environ
+        conf["sqlalchemy.url"] = (
+            "postgresql://{PGUSER}:{PGPASSWORD}@{PGHOST}:{PGPORT}/{PGDATABASE}".format(
+                **os.environ
+            )
         )
     conf.update(
         {"version_table_schema": conf.get("getitfixed", {}).get("schema", "getitfixed")}

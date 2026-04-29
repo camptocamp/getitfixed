@@ -35,26 +35,18 @@
     {% block style %}
     {% endblock style %}
 
-    <!-- Bootstrap core JavaScript -->
+    <!-- c2cgeoform CSS and JS -->
+    <link href="{{request.static_url('c2cgeoform:static/dist/styles.css')}}" rel="stylesheet">
     <script src="{{request.static_url('getitfixed:static/lib/jquery/dist/jquery.min.js')}}"></script>
     <script src="{{request.static_url('getitfixed:static/lib/bootstrap/dist/js/bootstrap.min.js')}}"></script>
     <script src="{{request.static_url('getitfixed:static/lib/bootstrap-table/dist/bootstrap-table.min.js')}}"></script>
     <script src="{{request.static_url('getitfixed:static/lib/bootstrap-table/dist/bootstrap-table-locale-all.js')}}"></script>
     <script src="{{request.static_url('getitfixed:static/lib/jquery.scrollintoview/jquery.scrollintoview.js')}}"></script>
-
-    <!-- c2cgeoform  -->
     <script src="{{request.static_url('c2cgeoform:static/dist/index.js')}}"></script>
-    <link href="{{request.static_url('c2cgeoform:static/dist/styles.css')}}" rel="stylesheet">
     {% for projection in request.registry.settings['getitfixed'].get('map', {}).get('projections', []) %}
-    <script>
-      // Register custom projection
-      c2cgeoform.registerProjection("{{ projection['code'] }}", "{{ projection['definition'] }}")
-    </script>
+    <script>c2cgeoform.registerProjection("{{ projection['code'] }}", "{{ projection['definition'] }}")</script>
     {% endfor %}
-
-    <!-- Deform JavaScript -->
     {% if deform_dependencies %}
-    <script src="{{request.static_url('deform:static/scripts/deform.js')}}"></script>
     {% for js in deform_dependencies['js'] %}
     <script src="{{request.static_url(js)}}"></script>
     {% endfor %}

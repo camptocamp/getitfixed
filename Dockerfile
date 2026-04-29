@@ -1,11 +1,11 @@
 ##########################################
 # Common base for build/test and runtime #
 ##########################################
-FROM python:3.8-slim AS base
+FROM python:3.12-slim AS base
 
 # set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # install dependencies
 COPY ./requirements.txt /app/requirements.txt
@@ -25,12 +25,9 @@ RUN apt-get update && apt-get install -y \
     make
 
 RUN \
-  . /etc/os-release && \
-  echo "deb https://deb.nodesource.com/node_10.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list && \
-  curl --silent https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-  apt-get update && \
+  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
   apt-get install --assume-yes --no-install-recommends \
-    'nodejs=10.*' \
+    nodejs \
   && \
   apt-get clean && \
   rm --recursive --force /var/lib/apt/lists/*
@@ -53,7 +50,7 @@ CMD ["make"]
 # Runtime image #
 #################
 FROM base AS getitfixed
-LABEL maintainer Camptocamp "info@camptocamp.com"
+LABEL maintainer="Camptocamp <info@camptocamp.com>"
 
 COPY --from=build /opt/getitfixed/ /opt/getitfixed/
 ENV NODE_PATH=/opt/thinkhazard/node_modules

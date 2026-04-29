@@ -27,4 +27,4 @@ class GetItFixedExtractor(Extractor):  # pragma: no cover
             for key in path:
                 value = value[key]
             # yield Message(msgctxt msgid msgid_plural flags comment tcomment location)
-            yield Message(None, value, None, [], u"", u"", (filename, "/".join(path)))
+            yield Message(None, value, None, [], "", "", (filename, "/".join(path)))

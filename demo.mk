@@ -5,7 +5,7 @@ PROXY_PREFIX=/getitfixed
 include Makefile
 
 # Recreate .env with current user to allow docker to overwrite it.
-docker-compose-env: ## Build docker-compose environment file
+docker-compose-env: ## Build docker compose environment file
 	rm -f .env
 	touch .env
 	sleep 0.1
@@ -23,8 +23,8 @@ docker-config: ## Build config.yaml file
 .PHONY: demo
 demo: ## Pull docker images, run composition and show logs
 demo: docker-compose-env docker-config docker-pull
-	docker-compose stop getitfixed
-	docker-compose rm --force getitfixed
-	docker-compose up -d
+	docker compose stop getitfixed
+	docker compose rm --force getitfixed
+	docker compose up -d
 	make initdb
-	docker-compose logs -f getitfixed
+	docker compose logs -f getitfixed

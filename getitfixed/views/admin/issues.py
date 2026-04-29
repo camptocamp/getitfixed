@@ -68,9 +68,11 @@ class IssueAdminViews(IssueViews):
         ),
         _list_field(
             "description",
-            renderer=lambda issue: (issue.description[:MAX_DESCR_LEN] + "…")
-            if len(issue.description) > MAX_DESCR_LEN
-            else issue.description,
+            renderer=lambda issue: (
+                (issue.description[:MAX_DESCR_LEN] + "…")
+                if len(issue.description) > MAX_DESCR_LEN
+                else issue.description
+            ),
         ),
         _list_field("localisation"),
         _list_field("firstname"),

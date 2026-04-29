@@ -77,7 +77,11 @@ class TestAdminIssueViews(AbstractViewsTests):
             ("phone", "Phone", "true"),
             ("email", "Email", "true"),
         ]
-        self.check_grid_headers(resp, expected)
+        effective = [
+            (th.attrs["data-field"], th.getText(), th.attrs["data-sortable"])
+            for th in resp.html.select("th")
+        ]
+        assert expected == effective
 
     def test_grid(self, test_app, dbsession):
         json = self.check_search(
@@ -87,7 +91,7 @@ class TestAdminIssueViews(AbstractViewsTests):
         assert 10 == json["total"]
 
         row = json["rows"][5]
-        obj = dbsession.query(Issue).get(row["id"])
+        obj = dbsession.get(Issue, row["id"])
         assert obj.hash == row["_id_"]
         assert obj.request_date.isoformat() == row["request_date"]
         assert obj.description == row["description"]

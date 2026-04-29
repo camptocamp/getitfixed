@@ -8,6 +8,8 @@
 
 *.egg-info
 
+.venv/
+
 build
 dist
 getitfixed/static/lib
