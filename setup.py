@@ -18,6 +18,7 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.12",
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
@@ -30,6 +31,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     test_suite="getitfixed",
+    python_requires=">=3.12",
     install_requires=REQUIRES,
     entry_points="""\
         [paste.app_factory]

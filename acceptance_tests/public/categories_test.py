@@ -8,7 +8,6 @@ from ..model_test import ICONS
 
 
 @pytest.fixture(scope="function")
-@pytest.mark.usefixtures("dbsession", "transact")
 def categories_test_data(dbsession, transact):
     del transact
 

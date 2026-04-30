@@ -20,7 +20,6 @@ STATUSES = [STATUS_VALIDATED, STATUS_NEW]
 
 
 @pytest.fixture(scope="function")
-@pytest.mark.usefixtures("dbsession", "transact")
 def issue_test_data(dbsession, transact):
     del transact
 

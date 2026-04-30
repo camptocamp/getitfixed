@@ -8,7 +8,6 @@ from unittest.mock import patch, call, ANY
 
 
 @pytest.fixture(scope="function")
-@pytest.mark.usefixtures("dbsession", "transact")
 def issue_test_data(dbsession, transact):
     del transact
 

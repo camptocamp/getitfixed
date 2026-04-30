@@ -2,7 +2,6 @@ from pyramid.i18n import default_locale_negotiator
 from pyramid.settings import aslist
 from translationstring import TranslationStringFactory
 
-
 _ = TranslationStringFactory("getitfixed")
 
 

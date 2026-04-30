@@ -12,7 +12,6 @@ from getitfixed.models.getitfixed import USER_ADMIN, USER_REPORTER, Event, Issue
 
 from getitfixed.i18n import _
 
-
 _list_field = partial(ListField, Issue)
 
 base_schema = GeoFormSchemaNode(
