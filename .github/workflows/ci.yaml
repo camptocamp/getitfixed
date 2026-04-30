@@ -10,11 +10,11 @@ jobs:
     name: Continuous integration
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+    permissions:
+      id-token: write
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - name: Build
@@ -28,13 +28,17 @@ jobs:
         run: |
           docker compose logs
           docker compose down -v --remove-orphans
-      - name: Deploy PyPI
+      - name: Build for PyPI
         if: >
           github.repository == 'camptocamp/getitfixed'
           && success()
-          && (
-            startsWith(github.ref, 'refs/tags/')
-          )
+          && startsWith(github.ref, 'refs/tags/')
         run: |
-          python3 -m pip install setuptools twine wheel
-          scripts/deploy-pypi
+          python3 -m pip install setuptools wheel
+          scripts/build-pypi
+      - name: Publish to PyPI
+        if: >
+          github.repository == 'camptocamp/getitfixed'
+          && success()
+          && startsWith(github.ref, 'refs/tags/')
+        uses: pypa/gh-action-pypi-publish@release/v1
