@@ -1,4 +1,4 @@
-alembic>=1.18.4
+alembic>=1.13.3
 c2c.template>=2.4.2
 pyyaml-include>=2.2
 c2cgeoform>=2.5.1
